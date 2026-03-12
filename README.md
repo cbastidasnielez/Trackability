@@ -137,3 +137,6 @@ npm run dev
 ```
 
 Abre `http://localhost:5173`
+
+Versión 2.0
+
