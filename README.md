@@ -2,12 +2,12 @@
 
 Cuenta atrás para el cumpleaños de Mariapnel 🌚 — **25 de agosto**, hora de Orlando, Florida.
 
-Estética de disco de vinilo: fondo negro, ondas de sonido y un vinilo girando con su foto en el centro.
+Fondo negro, ondas de sonido y un emblema giratorio de "distancia y tiempo" con su foto en el centro.
 
 ## Qué hay ahora
 
 - Contador en vivo de días (y horas : minutos : segundos) hasta el 25/08
-- Vinilo giratorio con la foto de Mariapnel 🌚 como etiqueta
+- Emblema giratorio (círculo de flechas "Distancia y Tiempo") con la foto de Mariapnel 🌚 en el centro
 - Botón **"Presiona para desbloquear sorpresas 🌚"** con mensaje provisional
 - Responsive: funciona en móvil y ordenador
 
