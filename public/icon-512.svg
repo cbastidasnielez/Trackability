@@ -1,9 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="100" fill="#09090B"/>
-  <circle cx="256" cy="220" r="120" fill="none" stroke="#22C55E" stroke-width="16" stroke-dasharray="580 180" stroke-linecap="round" transform="rotate(-90 256 220)"/>
-  <circle cx="256" cy="220" r="90" fill="none" stroke="#F97316" stroke-width="14" stroke-dasharray="400 170" stroke-linecap="round" transform="rotate(-90 256 220)"/>
-  <circle cx="256" cy="220" r="60" fill="none" stroke="#3B82F6" stroke-width="12" stroke-dasharray="280 100" stroke-linecap="round" transform="rotate(-90 256 220)"/>
-  <text x="256" y="235" text-anchor="middle" fill="white" font-family="Arial" font-size="36" font-weight="bold">€</text>
-  <text x="256" y="410" text-anchor="middle" fill="#A1A1AA" font-family="Arial" font-size="32" font-weight="600">CONTROL</text>
-  <text x="256" y="450" text-anchor="middle" fill="#52525B" font-family="Arial" font-size="22">FINANCIERO</text>
+  <rect width="512" height="512" rx="100" fill="#050505"/>
+  <!-- luna nueva con carita 🌚 -->
+  <circle cx="256" cy="230" r="130" fill="#2b2b30" stroke="#4a4a52" stroke-width="6"/>
+  <circle cx="210" cy="205" r="14" fill="#0d0d10"/>
+  <circle cx="302" cy="205" r="14" fill="#0d0d10"/>
+  <path d="M200 265 Q256 310 312 265" fill="none" stroke="#0d0d10" stroke-width="12" stroke-linecap="round"/>
+  <!-- onda estilo AM -->
+  <path d="M60 430 L150 430 Q170 430 180 405 T210 380 Q230 355 240 430 T270 480 Q290 505 300 430 T330 405 Q350 380 362 430 L452 430"
+        fill="none" stroke="#f5f2ea" stroke-width="8" stroke-linecap="round" opacity="0.85"/>
 </svg>

@@ -1,27 +1,398 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Control Financiero para Gaby y Carlos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#09090B" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Finanzas" />
+  <link rel="icon" href="/icon-512.svg" />
   <link rel="apple-touch-icon" href="/icon-512.svg" />
+  <title>Mariapnel 🌚</title>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body,#root{height:100%;background:#09090B;overflow-x:hidden}
-    body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif}
-    input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
-    input[type=number]{-moz-appearance:textfield}
-    ::-webkit-scrollbar{width:0}
-    @supports(padding:max(0px)){#root{padding-bottom:env(safe-area-inset-bottom)}}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050505;
+      --ink: #f5f2ea;
+      --dim: rgba(245, 242, 234, 0.55);
+      --faint: rgba(245, 242, 234, 0.22);
+      --glow: rgba(245, 242, 234, 0.08);
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      background: radial-gradient(ellipse 120% 80% at 50% 30%, #101010 0%, var(--bg) 60%);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ---------- gran onda de fondo (portada AM) ---------- */
+    .bg-wave {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 160vw;
+      max-width: none;
+      transform: translate(-50%, -50%);
+      opacity: 0.12;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 640px;
+      padding: 48px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ---------- cabecera ---------- */
+    .side-label {
+      font-size: 11px;
+      letter-spacing: 0.55em;
+      text-indent: 0.55em; /* compensa la última letra para centrar */
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 8.5vw, 3.6rem);
+      font-weight: 200;
+      letter-spacing: 0.22em;
+      text-indent: 0.22em;
+      text-transform: uppercase;
+      text-shadow: 0 0 24px var(--glow), 0 0 60px var(--glow);
+      white-space: nowrap;
+    }
+
+    .wave-divider {
+      width: min(420px, 82vw);
+      margin: 22px 0 40px;
+      opacity: 0.8;
+    }
+
+    /* ---------- vinilo ---------- */
+    .vinyl-wrap {
+      position: relative;
+      width: min(320px, 74vw);
+      aspect-ratio: 1;
+      margin-bottom: 44px;
+      filter: drop-shadow(0 0 45px rgba(245, 242, 234, 0.10));
+    }
+
+    .vinyl {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background:
+        repeating-radial-gradient(circle at 50% 50%,
+          #0c0c0c 0px, #0c0c0c 3px,
+          #161616 4px, #161616 5px),
+        #0c0c0c;
+      border: 1px solid rgba(245, 242, 234, 0.14);
+      animation: spin 9s linear infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* brillo fijo sobre el disco, no gira con él */
+    .vinyl-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.10) 0%, transparent 45%, transparent 60%, rgba(255,255,255,0.05) 100%);
+      pointer-events: none;
+    }
+
+    .label {
+      width: 46%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid rgba(245, 242, 234, 0.25);
+      background: #fff;
+    }
+
+    .label img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* ---------- contador ---------- */
+    .countdown-lead {
+      font-size: 13px;
+      letter-spacing: 0.4em;
+      text-indent: 0.4em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 10px;
+    }
+
+    .days {
+      font-size: clamp(4rem, 18vw, 6.5rem);
+      font-weight: 100;
+      line-height: 1;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 30px var(--glow);
+    }
+
+    .days-caption {
+      font-size: clamp(1rem, 4vw, 1.25rem);
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      margin-top: 12px;
+      color: var(--ink);
+    }
+
+    .clock {
+      font-variant-numeric: tabular-nums;
+      font-size: 15px;
+      letter-spacing: 0.35em;
+      text-indent: 0.35em;
+      color: var(--dim);
+      margin-top: 18px;
+    }
+
+    .tz-note {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-top: 8px;
+    }
+
+    /* ---------- botón sorpresas ---------- */
+    .unlock-btn {
+      margin-top: 46px;
+      appearance: none;
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid rgba(245, 242, 234, 0.45);
+      border-radius: 999px;
+      padding: 16px 30px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.35s ease, box-shadow 0.35s ease, transform 0.15s ease;
+    }
+
+    .unlock-btn:hover {
+      background: rgba(245, 242, 234, 0.07);
+      box-shadow: 0 0 35px rgba(245, 242, 234, 0.15);
+    }
+
+    .unlock-btn:active { transform: scale(0.97); }
+
+    /* ---------- mensaje sorpresa ---------- */
+    .surprise {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.7s ease, opacity 0.9s ease, margin 0.7s ease;
+      margin-top: 0;
+    }
+
+    .surprise.open {
+      max-height: 420px;
+      opacity: 1;
+      margin-top: 36px;
+    }
+
+    .surprise-card {
+      border: 1px solid rgba(245, 242, 234, 0.18);
+      border-radius: 14px;
+      padding: 28px 26px;
+      background: rgba(255, 255, 255, 0.025);
+      backdrop-filter: blur(4px);
+      max-width: 460px;
+    }
+
+    .surprise-card p {
+      font-size: 15px;
+      line-height: 1.75;
+      letter-spacing: 0.05em;
+      color: var(--ink);
+    }
+
+    .surprise-card .stay-tuned {
+      display: block;
+      margin-top: 18px;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-indent: 0.35em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 0 24px 34px;
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-indent: 0.35em;
+      text-transform: uppercase;
+      color: var(--faint);
+      text-align: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .vinyl { animation: none; }
+    }
   </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
+
+  <!-- gran onda de fondo -->
+  <svg class="bg-wave" viewBox="0 0 1200 300" aria-hidden="true">
+    <path class="wave-path" fill="none" stroke="#f5f2ea" stroke-width="1.5" />
+  </svg>
+
+  <main>
+    <div class="side-label">Side A &middot; Track 01 &middot; 25&thinsp;/&thinsp;08</div>
+    <h1>Mariapnel 🌚</h1>
+
+    <svg class="wave-divider" viewBox="0 0 420 60" aria-hidden="true">
+      <path class="wave-path" fill="none" stroke="#f5f2ea" stroke-width="1.5" />
+    </svg>
+
+    <div class="vinyl-wrap">
+      <div class="vinyl">
+        <div class="label">
+          <img src="/mariapnel.jpeg" alt="Mariapnel 🌚" />
+        </div>
+      </div>
+    </div>
+
+    <div class="countdown-lead" id="lead">Faltan</div>
+    <div class="days" id="days">–</div>
+    <div class="days-caption" id="caption">días para tu cumpleaños 🌚</div>
+    <div class="clock" id="clock"></div>
+    <div class="tz-note">Hora de Orlando, Florida</div>
+
+    <button class="unlock-btn" id="unlockBtn">Presiona para desbloquear sorpresas 🌚</button>
+
+    <div class="surprise" id="surprise">
+      <div class="surprise-card">
+        <p>Las sorpresas se desbloquean 7 días antes de la fecha en que te pusieron ese nombre tan original 🌚</p>
+        <span class="stay-tuned">Stay tuned for more updates&hellip;</span>
+      </div>
+    </div>
+
+    <!--
+      Próximamente: calendario estilo adviento con 7 casillas "raspadito" /
+      cajas sorpresa, una por cada día de la semana previa al 25/08. 🌚
+    -->
+  </main>
+
+  <footer>&iquest;Do I wanna know? &middot; AM &middot; 🌚</footer>
+
+  <script>
+    // ---------- ondas estilo portada AM ----------
+    // seno modulado por una envolvente gaussiana: plano en los bordes,
+    // vibrante en el centro
+    function drawWave(svg, cycles) {
+      var vb = svg.viewBox.baseVal;
+      var w = vb.width, h = vb.height, mid = h / 2;
+      var pts = [];
+      var N = 400;
+      for (var i = 0; i <= N; i++) {
+        var x = (i / N) * w;
+        var t = i / N - 0.5;
+        var env = Math.exp(-(t * t) / 0.02);
+        var y = mid + Math.sin(t * Math.PI * 2 * cycles) * env * (h * 0.42);
+        pts.push((i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1));
+      }
+      svg.querySelector('.wave-path').setAttribute('d', pts.join(' '));
+    }
+    drawWave(document.querySelector('.bg-wave'), 26);
+    drawWave(document.querySelector('.wave-divider'), 14);
+
+    // ---------- cuenta atrás (hora de Orlando, FL) ----------
+    var TZ = 'America/New_York';
+    var BIRTH_MONTH = 8, BIRTH_DAY = 25;
+
+    function orlandoToday() {
+      var parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit'
+      }).formatToParts(new Date());
+      var o = {};
+      parts.forEach(function (p) { o[p.type] = p.value; });
+      return { year: +o.year, month: +o.month, day: +o.day };
+    }
+
+    function nextBirthday() {
+      var now = orlandoToday();
+      var year = now.year;
+      if (now.month > BIRTH_MONTH || (now.month === BIRTH_MONTH && now.day > BIRTH_DAY)) {
+        year += 1;
+      }
+      // el 25 de agosto Orlando siempre está en horario de verano (EDT, UTC-4)
+      return new Date(year + '-08-25T00:00:00-04:00');
+    }
+
+    var daysEl = document.getElementById('days');
+    var leadEl = document.getElementById('lead');
+    var captionEl = document.getElementById('caption');
+    var clockEl = document.getElementById('clock');
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function tick() {
+      var now = orlandoToday();
+      if (now.month === BIRTH_MONTH && now.day === BIRTH_DAY) {
+        leadEl.textContent = 'Hoy es el día';
+        daysEl.textContent = '🌚🎂';
+        captionEl.textContent = '¡Feliz cumpleaños, Mariapnel! 🌚';
+        clockEl.textContent = '';
+        return;
+      }
+      var diff = nextBirthday().getTime() - Date.now();
+      var days = Math.floor(diff / 86400000);
+      var hrs = Math.floor(diff / 3600000) % 24;
+      var min = Math.floor(diff / 60000) % 60;
+      var sec = Math.floor(diff / 1000) % 60;
+      leadEl.textContent = 'Faltan';
+      daysEl.textContent = days;
+      captionEl.textContent = (days === 1 ? 'día' : 'días') + ' para tu cumpleaños 🌚';
+      clockEl.textContent = pad(hrs) + ' : ' + pad(min) + ' : ' + pad(sec);
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    // ---------- botón de sorpresas ----------
+    var btn = document.getElementById('unlockBtn');
+    var surprise = document.getElementById('surprise');
+    btn.addEventListener('click', function () {
+      surprise.classList.toggle('open');
+    });
+  </script>
 </body>
 </html>
