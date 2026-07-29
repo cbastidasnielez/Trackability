@@ -5,7 +5,7 @@
   <circle cx="210" cy="205" r="14" fill="#0d0d10"/>
   <circle cx="302" cy="205" r="14" fill="#0d0d10"/>
   <path d="M200 265 Q256 310 312 265" fill="none" stroke="#0d0d10" stroke-width="12" stroke-linecap="round"/>
-  <!-- onda estilo AM -->
+  <!-- onda de sonido -->
   <path d="M60 430 L150 430 Q170 430 180 405 T210 380 Q230 355 240 430 T270 480 Q290 505 300 430 T330 405 Q350 380 362 430 L452 430"
         fill="none" stroke="#f5f2ea" stroke-width="8" stroke-linecap="round" opacity="0.85"/>
 </svg>

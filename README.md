@@ -2,7 +2,7 @@
 
 Cuenta atrás para el cumpleaños de Mariapnel 🌚 — **25 de agosto**, hora de Orlando, Florida.
 
-Diseño inspirado en el álbum *AM* de Arctic Monkeys: fondo negro, ondas de sonido y un vinilo girando con su foto en el centro.
+Estética de disco de vinilo: fondo negro, ondas de sonido y un vinilo girando con su foto en el centro.
 
 ## Qué hay ahora
 
