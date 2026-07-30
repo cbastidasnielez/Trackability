@@ -217,8 +217,8 @@
       margin-top: 0;
     }
 
+    /* la altura la calcula el JS según el contenido */
     .surprise.open {
-      max-height: 1400px;
       opacity: 1;
       margin-top: 36px;
     }
@@ -294,6 +294,190 @@
 
     /* el contenido va por encima de la nieve */
     .surprise-card > *:not(.snow) { position: relative; z-index: 1; }
+
+    /* ---------- la sorpresa ---------- */
+    .reveal[hidden], .mission[hidden] { display: none; }
+
+    .reveal-tag {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.4em;
+      text-indent: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .reveal-lead {
+      font-size: 15px;
+      line-height: 1.75;
+      letter-spacing: 0.05em;
+    }
+
+    .route {
+      display: block;
+      width: 100%;
+      margin: 18px 0 6px;
+    }
+
+    .route-code {
+      fill: var(--dim);
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    /* ---------- tarjeta de embarque ---------- */
+    .pass {
+      background: var(--ink);
+      color: #0b0b0b;
+      border-radius: 12px;
+      padding: 18px 20px 20px;
+      text-align: left;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+    }
+
+    .pass-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(11, 11, 11, 0.55);
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(11, 11, 11, 0.18);
+    }
+
+    .pass-route {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 16px 0 14px;
+    }
+
+    .pass-route strong {
+      display: block;
+      font-size: clamp(1.6rem, 8vw, 2.1rem);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      line-height: 1;
+    }
+
+    .pass-route small {
+      display: block;
+      margin-top: 5px;
+      font-size: 9px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: rgba(11, 11, 11, 0.55);
+    }
+
+    .pass-route div:last-of-type { text-align: right; }
+
+    .pass-plane {
+      font-size: 17px;
+      color: rgba(11, 11, 11, 0.45);
+    }
+
+    .pass-data {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 7px 16px;
+      padding: 14px 0;
+      border-top: 1px dashed rgba(11, 11, 11, 0.28);
+      border-bottom: 1px dashed rgba(11, 11, 11, 0.28);
+      font-size: 11px;
+    }
+
+    .pass-data dt {
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(11, 11, 11, 0.5);
+    }
+
+    .pass-data dd {
+      text-align: right;
+      letter-spacing: 0.1em;
+      font-weight: 400;
+    }
+
+    .pass-status {
+      margin: 14px 0 12px;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #1f7a54;
+    }
+
+    .barcode {
+      height: 34px;
+      background: repeating-linear-gradient(90deg,
+        #0b0b0b 0 2px, transparent 2px 5px,
+        #0b0b0b 5px 6px, transparent 6px 10px,
+        #0b0b0b 10px 13px, transparent 13px 15px);
+      opacity: 0.85;
+    }
+
+    /* ---------- distancia y tiempo, resueltos ---------- */
+    .resolve {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .resolve-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .resolve-key {
+      flex: 1;
+      text-align: left;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--dim);
+      font-size: 10px;
+    }
+
+    .resolve-old {
+      color: var(--faint);
+      text-decoration: line-through;
+      letter-spacing: 0.06em;
+    }
+
+    .resolve-arrow { color: var(--gold); }
+
+    .resolve-new {
+      color: var(--ink);
+      font-size: 15px;
+      letter-spacing: 0.06em;
+      min-width: 16px;
+      text-align: right;
+    }
+
+    .reveal-match {
+      margin-top: 20px;
+      font-size: 12px;
+      line-height: 1.7;
+      letter-spacing: 0.05em;
+      color: var(--gold);
+    }
+
+    .reveal-match[hidden] { display: none; }
+
+    .reveal-foot {
+      margin-top: 22px;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-indent: 0.35em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
 
     .surprise-card p {
       font-size: 15px;
@@ -565,6 +749,7 @@
       <div class="surprise-card">
         <div class="lights" aria-hidden="true"></div>
 
+        <div class="mission" id="mission">
         <p>Sigue intentándolo. Las sorpresas se desbloquean solo 7 días antes. Mientras tanto tu misión es buscar fechas disponibles en tu vida del 24 de diciembre al 8 de enero 🌚</p>
 
         <img class="mission-img" src="/mision.jpeg" alt="" />
@@ -593,6 +778,71 @@
         </form>
 
         <span class="stay-tuned">Stay tuned for more updates&hellip;</span>
+        </div>
+
+        <div class="reveal" id="reveal" hidden>
+          <span class="reveal-tag">Sorpresa desbloqueada</span>
+          <p class="reveal-lead">La misión era una excusa.<br />Los billetes ya estaban comprados 🌚</p>
+
+          <svg class="route" viewBox="0 0 400 132" aria-hidden="true">
+            <path id="route" d="M42 96 Q200 6 358 96" fill="none"
+                  stroke="rgba(245,242,234,0.35)" stroke-width="1.5" stroke-dasharray="4 7" />
+            <circle cx="42" cy="96" r="4" fill="var(--gold)" />
+            <circle cx="358" cy="96" r="4" fill="var(--gold)" />
+            <text class="route-code" x="42" y="120" text-anchor="middle">BCN</text>
+            <text class="route-code" x="358" y="120" text-anchor="middle">MCO</text>
+            <path class="plane" d="M-9,-5.5 L11,0 L-9,5.5 L-4.5,0 Z" fill="var(--gold)">
+              <animateMotion dur="7s" repeatCount="indefinite" rotate="auto" keyPoints="0;1"
+                             keyTimes="0;1" calcMode="linear">
+                <mpath href="#route" />
+              </animateMotion>
+            </path>
+          </svg>
+
+          <div class="pass">
+            <div class="pass-head">
+              <span>Boarding pass</span>
+              <span>🌚</span>
+            </div>
+            <div class="pass-route">
+              <div>
+                <strong>BCN</strong>
+                <small>Barcelona</small>
+              </div>
+              <span class="pass-plane">&#9992;</span>
+              <div>
+                <strong>MCO</strong>
+                <small>Orlando</small>
+              </div>
+            </div>
+            <dl class="pass-data">
+              <dt>Salida</dt><dd>SÁB 26 DIC 2026</dd>
+              <dt>Vuelta</dt><dd>VIE 8 ENE 2027</dd>
+              <dt>Pasajero</dt><dd>YO</dd>
+              <dt>Destino</dt><dd>TÚ</dd>
+            </dl>
+            <div class="pass-status">Reserva confirmada</div>
+            <div class="barcode" aria-hidden="true"></div>
+          </div>
+
+          <div class="resolve">
+            <div class="resolve-row">
+              <span class="resolve-key">Distancia</span>
+              <span class="resolve-old">7.450 km</span>
+              <span class="resolve-arrow">&rarr;</span>
+              <span class="resolve-new">0</span>
+            </div>
+            <div class="resolve-row">
+              <span class="resolve-key">Tiempo</span>
+              <span class="resolve-old" id="tripDays">—</span>
+              <span class="resolve-arrow">&rarr;</span>
+              <span class="resolve-new">0</span>
+            </div>
+          </div>
+
+          <p class="reveal-match" id="revealMatch" hidden></p>
+          <p class="reveal-foot">Nos vemos en Orlando 🌚</p>
+        </div>
       </div>
     </div>
 
@@ -684,11 +934,63 @@
     setInterval(tick, 1000);
 
     // ---------- botón de sorpresas ----------
+    // La sorpresa se abre sola 7 días antes del cumpleaños.
+    // Añadiendo ?preview a la URL se puede ver antes, para comprobarla.
+    var UNLOCK_DATE = '2026-08-18';   // 7 días antes del 25/08
+    var TRIP_START = '2026-12-26';
+    var TRIP_END = '2027-01-08';
+
     var btn = document.getElementById('unlockBtn');
     var surprise = document.getElementById('surprise');
+    var mission = document.getElementById('mission');
+    var reveal = document.getElementById('reveal');
+
+    function isoToday() {
+      var t = orlandoToday();
+      return t.year + '-' + pad(t.month) + '-' + pad(t.day);
+    }
+
+    var unlocked = isoToday() >= UNLOCK_DATE || /(^|[?&])preview\b/.test(location.search);
+
+    if (unlocked) {
+      mission.hidden = true;
+      reveal.hidden = false;
+
+      // el viaje, en días, para tachar el "tiempo"
+      var falta = Math.ceil((new Date(TRIP_START + 'T00:00:00-05:00') - Date.now()) / 86400000);
+      document.getElementById('tripDays').textContent =
+        falta > 0 ? falta + (falta === 1 ? ' día' : ' días') : '0 días';
+    }
+
+    // la altura del panel se ajusta al contenido que toque mostrar
+    function syncPanel() {
+      surprise.style.maxHeight = surprise.classList.contains('open')
+        ? surprise.scrollHeight + 'px'
+        : '0px';
+    }
+
     btn.addEventListener('click', function () {
       surprise.classList.toggle('open');
+      syncPanel();
     });
+
+    window.addEventListener('resize', syncPanel);
+    Array.prototype.forEach.call(document.querySelectorAll('.surprise img'), function (img) {
+      img.addEventListener('load', syncPanel);
+    });
+
+    // guiño final: las fechas que ella apuntó ya caían dentro del viaje
+    function updateMatch() {
+      var el = document.getElementById('revealMatch');
+      if (!unlocked) { el.hidden = true; return; }
+      var dentro = loadDates().filter(function (d) {
+        return d >= TRIP_START && d <= TRIP_END;
+      });
+      el.hidden = dentro.length === 0;
+      el.textContent = dentro.length === 1
+        ? 'Y la fecha que apuntaste cae justo dentro del viaje 🌚'
+        : 'Y las ' + dentro.length + ' fechas que apuntaste caen dentro del viaje 🌚';
+    }
 
     // ---------- decorado navideño de la misión ----------
     (function () {
@@ -796,6 +1098,8 @@
         ? 'Misión en curso: 1 fecha apuntada 🌚'
         : 'Misión en curso: ' + list.length + ' fechas apuntadas 🌚';
 
+      updateMatch();
+
       datesList.innerHTML = '';
       list.forEach(function (iso) {
         var li = document.createElement('li');
@@ -841,6 +1145,7 @@
       }
       dateInput.value = '';
       render();
+      syncPanel();
     });
 
     render();

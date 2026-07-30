@@ -34,6 +34,19 @@ recibido siempre refleja la agenda actual. Si falla la conexión, la fecha se
 guarda igualmente y se reintenta el envío al volver a abrir la página.
 - Responsive: funciona en móvil y ordenador
 
+## La sorpresa
+
+El botón esconde el desenlace: la tarjeta de embarque del vuelo Barcelona →
+Orlando (26 dic 2026 – 8 ene 2027), con la ruta animada y el lema del emblema
+resuelto (distancia y tiempo, tachados y puestos a cero).
+
+- Se desbloquea sola el **18 de agosto**, 7 días antes del cumpleaños
+  (constante `UNLOCK_DATE` en `index.html`).
+- Hasta entonces se ve la misión de las fechas.
+- Para verla antes: añade `?preview` a la URL, p. ej.
+  `https://undiaalavez.vercel.app/?preview`. No cambia nada para quien entre
+  por la URL normal.
+
 ## Próximamente
 
 Calendario estilo adviento con 7 casillas "raspadito" / cajas sorpresa, una por cada día de la semana previa al cumpleaños. Stay tuned 🌚
