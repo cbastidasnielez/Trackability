@@ -9,10 +9,9 @@ Fondo negro, ondas de sonido y un emblema giratorio de "distancia y tiempo" con 
 - Contador en vivo de días (y horas : minutos : segundos) hasta el 25/08
 - Emblema giratorio (círculo de flechas "Distancia y Tiempo") con la foto de Mariapnel 🌚 en el centro
 - Botón **"Presiona para desbloquear sorpresas 🌚"** con la misión provisional
-- Formulario para apuntar fechas disponibles del 24 de diciembre al 8 de enero,
-  que quedan visibles de forma permanente en la página
-- Las fechas se guardan en el navegador (`localStorage`) y, si Formspree está
-  configurado, se envían también por email
+- Lista permanente con las fechas que ya apuntó (se pueden quitar con la ×)
+- Las fechas viven en el navegador (`localStorage`) y cualquier cambio se
+  envía por email vía Formspree
 
 ## Recibir las fechas por email (Formspree)
 
@@ -44,8 +43,8 @@ resuelto (distancia y tiempo, tachados y puestos a cero).
 - Para esconderla hasta 7 días antes del cumpleaños, pon
   `var UNLOCK_DATE = '2026-08-18'` en `index.html` (ahora vale `null`).
   Con la fecha puesta, `?preview` en la URL permite verla igualmente.
-- El formulario de fechas sigue debajo de la sorpresa, pero ya pregunta
-  qué días está libre **durante el viaje** (26 dic – 8 ene).
+- El formulario para apuntar fechas ya no está: las que ella guardó siguen
+  listadas debajo, y borrar cualquiera vuelve a avisar por email.
 
 ## Próximamente
 
