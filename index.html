@@ -584,7 +584,13 @@
     });
 
     // ---------- fechas disponibles (24 dic – 8 ene) ----------
+    // Para recibir las fechas por email: crea un formulario en formspree.io
+    // y pega aquí su ID (lo que va después de /f/ en el endpoint).
+    // Mientras esté vacío, la página funciona igual pero sin enviar nada.
+    var FORMSPREE_ID = '';
+
     var STORE_KEY = 'fechas-navidad';
+    var PENDING_KEY = 'fechas-pendientes';
     var dateForm = document.getElementById('dateForm');
     var dateInput = document.getElementById('dateInput');
     var datesList = document.getElementById('datesList');
@@ -625,6 +631,29 @@
       return s.charAt(0).toUpperCase() + s.slice(1);
     }
 
+    // Cada envío lleva la lista completa, así el último correo recibido
+    // siempre refleja el estado actual de la agenda.
+    function sendDates(list) {
+      if (!FORMSPREE_ID) return Promise.resolve(null);
+      return fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'Fechas disponibles de Mariapnel 🌚',
+          fechas: list.length ? list.map(prettyDate).join('  ·  ') : '(ninguna)',
+          total: list.length,
+          actualizado: new Date().toLocaleString('es-ES')
+        })
+      }).then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        try { localStorage.removeItem(PENDING_KEY); } catch (e) {}
+        return true;
+      }).catch(function () {
+        try { localStorage.setItem(PENDING_KEY, '1'); } catch (e) {}
+        return false;
+      });
+    }
+
     function render() {
       var list = loadDates();
 
@@ -646,8 +675,10 @@
         del.textContent = '×';
         del.setAttribute('aria-label', 'Quitar ' + prettyDate(iso));
         del.addEventListener('click', function () {
-          saveDates(loadDates().filter(function (d) { return d !== iso; }));
+          var rest = loadDates().filter(function (d) { return d !== iso; });
+          saveDates(rest);
           render();
+          sendDates(rest);
         });
         li.appendChild(span);
         li.appendChild(del);
@@ -669,6 +700,10 @@
         list.sort();
         saveDates(list);
         formNote.textContent = 'Guardada. Ya está en la página 🌚';
+        sendDates(list).then(function (ok) {
+          if (ok === true) formNote.textContent = 'Guardada y enviada 🌚';
+          else if (ok === false) formNote.textContent = 'Guardada. Se enviará cuando vuelva la conexión 🌚';
+        });
       } else {
         formNote.textContent = 'Esa ya la tenías apuntada 🌚';
       }
@@ -677,6 +712,11 @@
     });
 
     render();
+
+    // si el último envío falló, se reintenta al volver a abrir la página
+    try {
+      if (localStorage.getItem(PENDING_KEY) && loadDates().length) sendDates(loadDates());
+    } catch (e) {}
   </script>
 </body>
 </html>
