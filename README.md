@@ -8,7 +8,9 @@ Fondo negro, ondas de sonido y un emblema giratorio de "distancia y tiempo" con 
 
 - Contador en vivo de días (y horas : minutos : segundos) hasta el 25/08
 - Emblema giratorio (círculo de flechas "Distancia y Tiempo") con la foto de Mariapnel 🌚 en el centro
-- Botón **"Presiona para desbloquear sorpresas 🌚"** con mensaje provisional
+- Botón **"Presiona para desbloquear sorpresas 🌚"** con la misión provisional
+- Formulario para apuntar fechas disponibles del 24 de diciembre al 8 de enero
+  (por ahora se guardan en `localStorage`, es decir, solo en el dispositivo de quien las apunta)
 - Responsive: funciona en móvil y ordenador
 
 ## Próximamente

@@ -217,7 +217,7 @@
     }
 
     .surprise.open {
-      max-height: 420px;
+      max-height: 1400px;
       opacity: 1;
       margin-top: 36px;
     }
@@ -240,12 +240,143 @@
 
     .surprise-card .stay-tuned {
       display: block;
-      margin-top: 18px;
+      margin-top: 22px;
       font-size: 11px;
       letter-spacing: 0.35em;
       text-indent: 0.35em;
       text-transform: uppercase;
       color: var(--dim);
+    }
+
+    .mission-img {
+      display: block;
+      width: 100%;
+      max-width: 240px;
+      margin: 22px auto 0;
+      border-radius: 12px;
+      border: 1px solid rgba(245, 242, 234, 0.15);
+    }
+
+    /* ---------- formulario de fechas ---------- */
+    .date-form {
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(245, 242, 234, 0.14);
+    }
+
+    .date-form label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 14px;
+    }
+
+    .date-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .date-form input[type="date"] {
+      flex: 1 1 150px;
+      min-width: 0;
+      appearance: none;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--ink);
+      border: 1px solid rgba(245, 242, 234, 0.28);
+      border-radius: 999px;
+      padding: 13px 18px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+
+    .date-form input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      opacity: 0.6;
+      cursor: pointer;
+    }
+
+    .date-form input[type="date"]:focus {
+      outline: none;
+      border-color: rgba(245, 242, 234, 0.6);
+      box-shadow: 0 0 22px rgba(245, 242, 234, 0.12);
+    }
+
+    .date-form .add-btn {
+      appearance: none;
+      background: rgba(245, 242, 234, 0.9);
+      color: #0a0a0a;
+      border: none;
+      border-radius: 999px;
+      padding: 13px 22px;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-indent: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease, transform 0.15s ease;
+    }
+
+    .date-form .add-btn:hover { box-shadow: 0 0 28px rgba(245, 242, 234, 0.3); }
+    .date-form .add-btn:active { transform: scale(0.97); }
+
+    .form-note {
+      font-size: 11px;
+      line-height: 1.6;
+      letter-spacing: 0.04em;
+      color: var(--faint);
+      margin-top: 12px;
+    }
+
+    .dates-list {
+      list-style: none;
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .dates-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 8px 11px 16px;
+      border: 1px solid rgba(245, 242, 234, 0.16);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .dates-list .del {
+      appearance: none;
+      background: none;
+      border: none;
+      color: var(--faint);
+      font-family: inherit;
+      font-size: 18px;
+      line-height: 1;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: color 0.25s ease;
+    }
+
+    .dates-list .del:hover { color: var(--ink); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: none; }
     }
 
     footer {
@@ -310,7 +441,21 @@
 
     <div class="surprise" id="surprise">
       <div class="surprise-card">
-        <p>Las sorpresas se desbloquean 7 días antes de la fecha en que te pusieron ese nombre tan original 🌚</p>
+        <p>Sigue intentándolo. Las sorpresas se desbloquean solo 7 días antes. Mientras tanto tu misión es buscar fechas disponibles en tu vida del 24 de diciembre al 8 de enero y algún diseño guapo que incluya la Navidad 🌚</p>
+
+        <img class="mission-img" src="/mision.jpeg" alt="" />
+
+        <form class="date-form" id="dateForm" novalidate>
+          <label for="dateInput">Apunta aquí tus fechas disponibles</label>
+          <div class="date-row">
+            <input type="date" id="dateInput" />
+            <button type="submit" class="add-btn">Guardar</button>
+          </div>
+          <p class="form-note" id="formNote"></p>
+        </form>
+
+        <ul class="dates-list" id="datesList"></ul>
+
         <span class="stay-tuned">Stay tuned for more updates&hellip;</span>
       </div>
     </div>
@@ -402,6 +547,91 @@
     btn.addEventListener('click', function () {
       surprise.classList.toggle('open');
     });
+
+    // ---------- fechas disponibles (24 dic – 8 ene) ----------
+    var STORE_KEY = 'fechas-navidad';
+    var dateForm = document.getElementById('dateForm');
+    var dateInput = document.getElementById('dateInput');
+    var datesList = document.getElementById('datesList');
+    var formNote = document.getElementById('formNote');
+
+    // temporada navideña vigente: si aún no ha pasado el 8 de enero,
+    // es la que empezó en diciembre del año anterior
+    function season() {
+      var t = orlandoToday();
+      var startYear = (t.month === 1 && t.day <= 8) ? t.year - 1 : t.year;
+      return { min: startYear + '-12-24', max: (startYear + 1) + '-01-08' };
+    }
+
+    var range = season();
+    dateInput.min = range.min;
+    dateInput.max = range.max;
+    formNote.textContent = 'Solo cuentan del 24 de diciembre al 8 de enero 🌚';
+
+    function loadDates() {
+      try {
+        var raw = localStorage.getItem(STORE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) { return []; }
+    }
+
+    function saveDates(list) {
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(list)); } catch (e) {}
+    }
+
+    function prettyDate(iso) {
+      var p = iso.split('-');
+      var d = new Date(+p[0], +p[1] - 1, +p[2]);
+      var s = d.toLocaleDateString('es-ES', {
+        weekday: 'long', day: 'numeric', month: 'long'
+      });
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    function render() {
+      var list = loadDates();
+      datesList.innerHTML = '';
+      list.forEach(function (iso) {
+        var li = document.createElement('li');
+        var span = document.createElement('span');
+        span.textContent = prettyDate(iso);
+        var del = document.createElement('button');
+        del.type = 'button';
+        del.className = 'del';
+        del.textContent = '×';
+        del.setAttribute('aria-label', 'Quitar ' + prettyDate(iso));
+        del.addEventListener('click', function () {
+          saveDates(loadDates().filter(function (d) { return d !== iso; }));
+          render();
+        });
+        li.appendChild(span);
+        li.appendChild(del);
+        datesList.appendChild(li);
+      });
+    }
+
+    dateForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var val = dateInput.value;
+      if (!val) return;
+      if (val < range.min || val > range.max) {
+        formNote.textContent = 'Esa fecha se sale de la misión: del 24 de diciembre al 8 de enero 🌚';
+        return;
+      }
+      var list = loadDates();
+      if (list.indexOf(val) === -1) {
+        list.push(val);
+        list.sort();
+        saveDates(list);
+        formNote.textContent = 'Guardada 🌚';
+      } else {
+        formNote.textContent = 'Esa ya la tenías apuntada 🌚';
+      }
+      dateInput.value = '';
+      render();
+    });
+
+    render();
   </script>
 </body>
 </html>
