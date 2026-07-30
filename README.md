@@ -40,12 +40,12 @@ El botón esconde el desenlace: la tarjeta de embarque del vuelo Barcelona →
 Orlando (26 dic 2026 – 8 ene 2027), con la ruta animada y el lema del emblema
 resuelto (distancia y tiempo, tachados y puestos a cero).
 
-- Se desbloquea sola el **18 de agosto**, 7 días antes del cumpleaños
-  (constante `UNLOCK_DATE` en `index.html`).
-- Hasta entonces se ve la misión de las fechas.
-- Para verla antes: añade `?preview` a la URL, p. ej.
-  `https://undiaalavez.vercel.app/?preview`. No cambia nada para quien entre
-  por la URL normal.
+- Está **abierta desde ya**: se ve al pulsar el botón.
+- Para esconderla hasta 7 días antes del cumpleaños, pon
+  `var UNLOCK_DATE = '2026-08-18'` en `index.html` (ahora vale `null`).
+  Con la fecha puesta, `?preview` en la URL permite verla igualmente.
+- El formulario de fechas sigue debajo de la sorpresa, pero ya pregunta
+  qué días está libre **durante el viaje** (26 dic – 8 ene).
 
 ## Próximamente
 

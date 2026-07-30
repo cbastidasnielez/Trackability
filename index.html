@@ -226,6 +226,8 @@
     .surprise-card {
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
       border: 1px solid rgba(245, 242, 234, 0.18);
       border-radius: 14px;
       padding: 26px 26px 28px;
@@ -296,7 +298,19 @@
     .surprise-card > *:not(.snow) { position: relative; z-index: 1; }
 
     /* ---------- la sorpresa ---------- */
-    .reveal[hidden], .mission[hidden] { display: none; }
+    /* la sorpresa se lee primero y el formulario queda debajo, aunque en el
+       HTML vayan al revés */
+    .lights      { order: 0; }
+    .tease       { order: 1; }
+    .reveal      { order: 2; }
+    .date-form   { order: 3; }
+    .stay-tuned  { order: 4; }
+    .reveal-foot { order: 5; }
+
+    /* .surprise-card .stay-tuned fija display:block, así que para ocultarlo
+       hace falta ganarle en especificidad */
+    .reveal[hidden], .tease[hidden], .reveal-foot[hidden],
+    .surprise-card .stay-tuned[hidden] { display: none; }
 
     .reveal-tag {
       display: block;
@@ -749,10 +763,10 @@
       <div class="surprise-card">
         <div class="lights" aria-hidden="true"></div>
 
-        <div class="mission" id="mission">
-        <p>Sigue intentándolo. Las sorpresas se desbloquean solo 7 días antes. Mientras tanto tu misión es buscar fechas disponibles en tu vida del 24 de diciembre al 8 de enero 🌚</p>
-
-        <img class="mission-img" src="/mision.jpeg" alt="" />
+        <div class="tease" id="tease">
+          <p>Sigue intentándolo. Las sorpresas se desbloquean solo 7 días antes. Mientras tanto tu misión es buscar fechas disponibles en tu vida del 24 de diciembre al 8 de enero 🌚</p>
+          <img class="mission-img" src="/mision.jpeg" alt="" />
+        </div>
 
         <form class="date-form" id="dateForm" novalidate>
           <svg class="snowflake" viewBox="0 0 40 40" aria-hidden="true">
@@ -777,8 +791,7 @@
           <p class="form-note" id="formNote"></p>
         </form>
 
-        <span class="stay-tuned">Stay tuned for more updates&hellip;</span>
-        </div>
+        <span class="stay-tuned" id="stayTuned">Stay tuned for more updates&hellip;</span>
 
         <div class="reveal" id="reveal" hidden>
           <span class="reveal-tag">Sorpresa desbloqueada</span>
@@ -841,8 +854,9 @@
           </div>
 
           <p class="reveal-match" id="revealMatch" hidden></p>
-          <p class="reveal-foot">Nos vemos en Orlando 🌚</p>
         </div>
+
+        <p class="reveal-foot" id="revealFoot" hidden>Nos vemos en Orlando 🌚</p>
       </div>
     </div>
 
@@ -934,15 +948,16 @@
     setInterval(tick, 1000);
 
     // ---------- botón de sorpresas ----------
-    // La sorpresa se abre sola 7 días antes del cumpleaños.
-    // Añadiendo ?preview a la URL se puede ver antes, para comprobarla.
-    var UNLOCK_DATE = '2026-08-18';   // 7 días antes del 25/08
+    // La sorpresa está abierta desde ya.
+    // Para volver a esconderla hasta 7 días antes del cumpleaños,
+    // basta con poner UNLOCK_DATE = '2026-08-18'.
+    var UNLOCK_DATE = null;
     var TRIP_START = '2026-12-26';
     var TRIP_END = '2027-01-08';
 
     var btn = document.getElementById('unlockBtn');
     var surprise = document.getElementById('surprise');
-    var mission = document.getElementById('mission');
+    var tease = document.getElementById('tease');
     var reveal = document.getElementById('reveal');
 
     function isoToday() {
@@ -950,11 +965,18 @@
       return t.year + '-' + pad(t.month) + '-' + pad(t.day);
     }
 
-    var unlocked = isoToday() >= UNLOCK_DATE || /(^|[?&])preview\b/.test(location.search);
+    var unlocked = !UNLOCK_DATE || isoToday() >= UNLOCK_DATE ||
+                   /(^|[?&])preview\b/.test(location.search);
 
     if (unlocked) {
-      mission.hidden = true;
+      tease.hidden = true;
       reveal.hidden = false;
+      document.getElementById('stayTuned').hidden = true;
+      document.getElementById('revealFoot').hidden = false;
+
+      // el formulario sigue ahí, pero ahora la pregunta es otra
+      document.querySelector('.date-form label').textContent =
+        '¿Qué días estás libre durante el viaje?';
 
       // el viaje, en días, para tachar el "tiempo"
       var falta = Math.ceil((new Date(TRIP_START + 'T00:00:00-05:00') - Date.now()) / 86400000);
@@ -1041,9 +1063,13 @@
     }
 
     var range = season();
+    // ya desvelado el viaje, lo que interesa son los días que caen dentro de él
+    if (unlocked) { range.min = TRIP_START; range.max = TRIP_END; }
     dateInput.min = range.min;
     dateInput.max = range.max;
-    formNote.textContent = 'Solo cuentan del 24 de diciembre al 8 de enero 🌚';
+    formNote.textContent = unlocked
+      ? 'Del 26 de diciembre al 8 de enero, que es lo que dura el viaje 🌚'
+      : 'Solo cuentan del 24 de diciembre al 8 de enero 🌚';
 
     function loadDates() {
       try {
@@ -1127,7 +1153,9 @@
       var val = dateInput.value;
       if (!val) return;
       if (val < range.min || val > range.max) {
-        formNote.textContent = 'Esa fecha se sale de la misión: del 24 de diciembre al 8 de enero 🌚';
+        formNote.textContent = unlocked
+          ? 'Esa fecha se sale del viaje: del 26 de diciembre al 8 de enero 🌚'
+          : 'Esa fecha se sale de la misión: del 24 de diciembre al 8 de enero 🌚';
         return;
       }
       var list = loadDates();
