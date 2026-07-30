@@ -337,6 +337,37 @@
       margin-top: 12px;
     }
 
+    /* ---------- agenda permanente de fechas ---------- */
+    .agenda {
+      width: 100%;
+      max-width: 420px;
+      margin-top: 46px;
+      padding: 24px 20px;
+      border: 1px solid rgba(245, 242, 234, 0.16);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.025);
+      animation: fadeIn 0.5s ease;
+    }
+
+    .agenda[hidden] { display: none; }
+
+    .agenda h2 {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .agenda .agenda-sub {
+      display: block;
+      margin-top: 10px;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--faint);
+    }
+
     .dates-list {
       list-style: none;
       margin-top: 18px;
@@ -454,11 +485,15 @@
           <p class="form-note" id="formNote"></p>
         </form>
 
-        <ul class="dates-list" id="datesList"></ul>
-
         <span class="stay-tuned">Stay tuned for more updates&hellip;</span>
       </div>
     </div>
+
+    <section class="agenda" id="agenda" hidden>
+      <h2>Fechas disponibles</h2>
+      <span class="agenda-sub" id="agendaSub"></span>
+      <ul class="dates-list" id="datesList"></ul>
+    </section>
 
     <!--
       Próximamente: calendario estilo adviento con 7 casillas "raspadito" /
@@ -554,6 +589,8 @@
     var dateInput = document.getElementById('dateInput');
     var datesList = document.getElementById('datesList');
     var formNote = document.getElementById('formNote');
+    var agenda = document.getElementById('agenda');
+    var agendaSub = document.getElementById('agendaSub');
 
     // temporada navideña vigente: si aún no ha pasado el 8 de enero,
     // es la que empezó en diciembre del año anterior
@@ -590,6 +627,14 @@
 
     function render() {
       var list = loadDates();
+
+      // la agenda solo aparece cuando ya hay alguna fecha apuntada,
+      // y a partir de ahí se queda fija en la página
+      agenda.hidden = list.length === 0;
+      agendaSub.textContent = list.length === 1
+        ? 'Misión en curso: 1 fecha apuntada 🌚'
+        : 'Misión en curso: ' + list.length + ' fechas apuntadas 🌚';
+
       datesList.innerHTML = '';
       list.forEach(function (iso) {
         var li = document.createElement('li');
@@ -623,7 +668,7 @@
         list.push(val);
         list.sort();
         saveDates(list);
-        formNote.textContent = 'Guardada 🌚';
+        formNote.textContent = 'Guardada. Ya está en la página 🌚';
       } else {
         formNote.textContent = 'Esa ya la tenías apuntada 🌚';
       }
