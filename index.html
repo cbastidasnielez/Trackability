@@ -304,8 +304,8 @@
     .tease       { order: 1; }
     .reveal      { order: 2; }
     .date-form   { order: 3; }
-    .stay-tuned  { order: 4; }
-    .reveal-foot { order: 5; }
+    .reveal-foot { order: 4; }
+    .stay-tuned  { order: 5; }
 
     /* .surprise-card .stay-tuned fija display:block, así que para ocultarlo
        hace falta ganarle en especificidad */
@@ -794,7 +794,7 @@
         <span class="stay-tuned" id="stayTuned">Stay tuned for more updates&hellip;</span>
 
         <div class="reveal" id="reveal" hidden>
-          <span class="reveal-tag">Sorpresa desbloqueada</span>
+          <span class="reveal-tag">Sorpresa 01 &middot; Desbloqueada</span>
           <p class="reveal-lead">La misión era una excusa.<br />Los billetes ya estaban comprados 🌚</p>
 
           <svg class="route" viewBox="0 0 400 132" aria-hidden="true">
@@ -971,8 +971,11 @@
     if (unlocked) {
       tease.hidden = true;
       reveal.hidden = false;
-      document.getElementById('stayTuned').hidden = true;
       document.getElementById('revealFoot').hidden = false;
+
+      // esto es la primera sorpresa, no la última
+      document.getElementById('stayTuned').textContent =
+        'Esto es solo la introducción · Stay tuned 🌚';
 
       // el formulario sigue ahí, pero ahora la pregunta es otra
       document.querySelector('.date-form label').textContent =
