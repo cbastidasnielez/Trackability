@@ -62,7 +62,8 @@ sorpresa está en camino.
 
 ## Próximamente
 
-Calendario estilo adviento con 7 casillas "raspadito" / cajas sorpresa, una por cada día de la semana previa al cumpleaños. Stay tuned 🌚
+Convertir las casillas en "raspaditos" de verdad, para descubrir cada sorpresa
+rascando en lugar de pulsando. Stay tuned 🌚
 
 ## Desarrollo local
 
