@@ -733,36 +733,68 @@
     }
 
     /* ---------- puerta discreta ---------- */
+    /* flota sobre la página para que no haya que buscarla */
     .mystery {
-      margin-top: 54px;
-      width: 42px;
-      height: 42px;
+      position: fixed;
+      right: 18px;
+      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+      z-index: 40;
+      width: 58px;
+      height: 58px;
       appearance: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 50%;
-      border: 1px solid rgba(227, 192, 122, 0.45);
-      background: transparent;
+      border: 1px solid rgba(227, 192, 122, 0.6);
+      background: rgba(10, 10, 12, 0.9);
+      backdrop-filter: blur(6px);
       color: var(--gold);
       font-family: inherit;
-      font-size: 15px;
+      font-size: 21px;
       font-weight: 300;
       cursor: pointer;
-      opacity: 0.7;
-      animation: knock 4s ease-in-out infinite;
-      transition: opacity 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+      box-shadow: 0 0 34px rgba(227, 192, 122, 0.28);
+      animation: dropIn 0.7s cubic-bezier(0.2, 1.3, 0.4, 1) 1.2s backwards;
+      transition: box-shadow 0.3s ease, transform 0.15s ease;
     }
 
     .mystery[hidden] { display: none; }
 
-    .mystery:hover {
-      opacity: 1;
-      box-shadow: 0 0 30px rgba(227, 192, 122, 0.35);
-    }
-
+    .mystery:hover { box-shadow: 0 0 46px rgba(227, 192, 122, 0.5); }
     .mystery:active { transform: scale(0.94); }
 
-    @keyframes knock {
-      0%, 100% { box-shadow: 0 0 0 rgba(227, 192, 122, 0); }
-      50%      { box-shadow: 0 0 26px rgba(227, 192, 122, 0.3); }
+    /* el signo respira */
+    .mystery-mark {
+      display: block;
+      line-height: 1;
+      animation: breathe-mark 2.6s ease-in-out infinite;
+    }
+
+    /* anillo que se expande, como una señal */
+    .mystery::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 50%;
+      border: 1px solid rgba(227, 192, 122, 0.65);
+      animation: ping 2.8s ease-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes ping {
+      0%        { transform: scale(1); opacity: 0.75; }
+      70%, 100% { transform: scale(1.85); opacity: 0; }
+    }
+
+    @keyframes breathe-mark {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0.5; }
+    }
+
+    @keyframes dropIn {
+      from { opacity: 0; transform: scale(0.4); }
+      to   { opacity: 1; transform: none; }
     }
 
     /* ---------- pop-up de la historia ---------- */
@@ -1019,14 +1051,16 @@
       <ul class="dates-list" id="datesList"></ul>
     </section>
 
-    <!-- puerta discreta: solo aparece durante su ventana de 2 días -->
-    <button class="mystery" id="mysteryBtn" hidden
-            aria-haspopup="dialog" aria-label="Algo escrito para ti">?</button>
-
     <!--
       Próximamente: convertir las casillas en raspaditos de verdad. 🌚
     -->
   </main>
+
+  <!-- puerta discreta: flota siempre a la vista, solo durante su ventana de 2 días -->
+  <button class="mystery" id="mysteryBtn" hidden
+          aria-haspopup="dialog" aria-label="Algo escrito para ti">
+    <span class="mystery-mark">?</span>
+  </button>
 
   <div class="modal" id="storyModal" hidden role="dialog" aria-modal="true"
        aria-labelledby="storyTitle">
@@ -1479,6 +1513,7 @@
       previoAlModal = document.activeElement;
       storyExpiry.textContent = textoCaducidad();
       storyModal.hidden = false;
+      mysteryBtn.hidden = true;          // que no asome tras el fondo
       document.body.classList.add('no-scroll');
       storyPanel.scrollTop = 0;
       storyPanel.focus();
@@ -1486,6 +1521,7 @@
 
     function cerrarHistoria() {
       storyModal.hidden = true;
+      mysteryBtn.hidden = !historiaVigente();
       document.body.classList.remove('no-scroll');
       if (previoAlModal) previoAlModal.focus();
     }
