@@ -33,18 +33,32 @@ recibido siempre refleja la agenda actual. Si falla la conexión, la fecha se
 guarda igualmente y se reintenta el envío al volver a abrir la página.
 - Responsive: funciona en móvil y ordenador
 
-## La sorpresa
+## Cómo está organizada
 
-El botón esconde el desenlace: la tarjeta de embarque del vuelo Barcelona →
-Orlando (26 dic 2026 – 8 ene 2027), con la ruta animada y el lema del emblema
-resuelto (distancia y tiempo, tachados y puestos a cero).
+- **Sorpresas reveladas**: siempre a la vista, sin pulsar nada. Ahora mismo
+  la Sorpresa 01 (tarjeta de embarque BCN → MCO, 26 dic 2026 – 8 ene 2027,
+  con la ruta animada y el lema del emblema tachado y puesto a cero).
+- **Sorpresas por revelar**: detrás del botón, las 7 casillas del calendario.
 
-- Está **abierta desde ya**: se ve al pulsar el botón.
-- Para esconderla hasta 7 días antes del cumpleaños, pon
-  `var UNLOCK_DATE = '2026-08-18'` en `index.html` (ahora vale `null`).
-  Con la fecha puesta, `?preview` en la URL permite verla igualmente.
-- El formulario para apuntar fechas ya no está: las que ella guardó siguen
-  listadas debajo, y borrar cualquiera vuelve a avisar por email.
+## Las 7 casillas
+
+Se abre una por día, del **18 al 24 de agosto** (los 7 días previos al
+cumpleaños); las fechas salen solas de `nextBirthday()`, así que no hay que
+tocarlas cada año. Antes de su día la casilla sale con candado y no se puede
+pulsar. Lo que ya se abrió queda guardado en `localStorage`.
+
+Para escribir el contenido de cada una, rellena el array `SORPRESAS` de
+`index.html`:
+
+```js
+var SORPRESAS = [
+  { titulo: 'Casilla 01', texto: 'Lo que quieras contarle aquí 🌚' },
+  ...
+];
+```
+
+Si una casilla llega a su día con el texto vacío, se abre igual y dice que la
+sorpresa está en camino.
 
 ## Próximamente
 
