@@ -732,6 +732,132 @@
       to   { opacity: 1; transform: none; }
     }
 
+    /* ---------- puerta discreta ---------- */
+    .mystery {
+      margin-top: 54px;
+      width: 42px;
+      height: 42px;
+      appearance: none;
+      border-radius: 50%;
+      border: 1px solid rgba(227, 192, 122, 0.45);
+      background: transparent;
+      color: var(--gold);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 300;
+      cursor: pointer;
+      opacity: 0.7;
+      animation: knock 4s ease-in-out infinite;
+      transition: opacity 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
+    }
+
+    .mystery[hidden] { display: none; }
+
+    .mystery:hover {
+      opacity: 1;
+      box-shadow: 0 0 30px rgba(227, 192, 122, 0.35);
+    }
+
+    .mystery:active { transform: scale(0.94); }
+
+    @keyframes knock {
+      0%, 100% { box-shadow: 0 0 0 rgba(227, 192, 122, 0); }
+      50%      { box-shadow: 0 0 26px rgba(227, 192, 122, 0.3); }
+    }
+
+    /* ---------- pop-up de la historia ---------- */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(3, 3, 3, 0.82);
+      backdrop-filter: blur(6px);
+      animation: fadeIn 0.35s ease;
+    }
+
+    .modal[hidden] { display: none; }
+
+    .modal-panel {
+      position: relative;
+      width: 100%;
+      max-width: 560px;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      padding: 46px 26px 30px;
+      border: 1px solid rgba(227, 192, 122, 0.28);
+      border-radius: 16px;
+      background: #0c0c0e;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+      text-align: left;
+      outline: none;
+      animation: riseIn 0.45s ease;
+    }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      appearance: none;
+      background: none;
+      border: none;
+      color: var(--faint);
+      font-family: inherit;
+      font-size: 26px;
+      line-height: 1;
+      padding: 6px 10px;
+      cursor: pointer;
+      transition: color 0.25s ease;
+    }
+
+    .modal-close:hover { color: var(--ink); }
+
+    .story-title {
+      font-size: clamp(1.05rem, 4.4vw, 1.35rem);
+      font-weight: 300;
+      line-height: 1.45;
+      letter-spacing: 0.02em;
+      color: var(--gold);
+      padding-bottom: 20px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(227, 192, 122, 0.22);
+    }
+
+    .story-body p {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 15px;
+      line-height: 1.85;
+      color: rgba(245, 242, 234, 0.9);
+      margin-bottom: 18px;
+    }
+
+    .story-body p:last-child {
+      margin-bottom: 0;
+      color: var(--ink);
+      font-style: italic;
+    }
+
+    .story-expiry {
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(245, 242, 234, 0.12);
+      font-size: 10px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--faint);
+      text-align: center;
+    }
+
+    body.no-scroll { overflow: hidden; }
+
     footer {
       position: relative;
       z-index: 1;
@@ -882,11 +1008,53 @@
       <ul class="dates-list" id="datesList"></ul>
     </section>
 
+    <!-- puerta discreta: solo aparece durante su ventana de 2 días -->
+    <button class="mystery" id="mysteryBtn" hidden
+            aria-haspopup="dialog" aria-label="Algo escrito para ti">?</button>
+
     <!--
-      Próximamente: calendario estilo adviento con 7 casillas "raspadito" /
-      cajas sorpresa, una por cada día de la semana previa al 25/08. 🌚
+      Próximamente: convertir las casillas en raspaditos de verdad. 🌚
     -->
   </main>
+
+  <div class="modal" id="storyModal" hidden role="dialog" aria-modal="true"
+       aria-labelledby="storyTitle">
+    <div class="modal-panel" id="storyPanel" tabindex="-1">
+      <button class="modal-close" id="storyClose" aria-label="Cerrar">&times;</button>
+
+      <h2 class="story-title" id="storyTitle">Pensamientos de una mente divagante tratando de organizar todo</h2>
+
+      <div class="story-body">
+        <p>A veces me pongo a calcular las probabilidades de todo esto y no me salen. Un mensaje de Facebook en 2013, dos adolescentes en ciudades distintas de un país que estaba a punto de romperse, y el hilo todavía vivo trece años después. No sé si llamarlo destino, pero estadística no es.</p>
+
+        <p>Empezó contigo en Lechería, con el Caribe delante, y conmigo en Valera, con la neblina de los Andes. Lo curioso es que mi vida ya estaba partida entre esas dos ciudades: mi mamá en una, mi papá en la otra. Llevaba años haciendo ese trayecto sin saber que era exactamente el que un día ibas a hacer tú.</p>
+
+        <p>Y lo hiciste. Te mudaste a Valera, y vino ese año o dos que solo existen a los dieciséis: tu familia, la mía, todo encajando con una facilidad que de adultos ya no se consigue. Después nos graduamos y la geografía hizo lo suyo. Yo a Lechería, tú te quedaste. Nadie traicionó a nadie, nadie se cansó. Y eso es lo raro de lo nuestro: no fracasamos, nos interrumpieron. Hay historias que terminan y hay historias que se quedan a mitad de frase.</p>
+
+        <p>Luego llegó lo de todos: tú a Nueva York, después a Orlando; yo a Barcelona. Y aun así el hilo aguantó, sin promesas ni reclamos.</p>
+
+        <p>Pero hay una parte que todavía me deja frío. En 2020 fui a Orlando con mi pareja de entonces, y tú fuiste nuestra guía. Trabajabas en el parque y nos metiste al parque. Caminamos contigo, nos reímos, me despedí y me monté en el avión sin sospechar nada. Seis años antes de tiempo yo ya estaba parado en la ciudad exacta, al lado de la persona exacta, dentro de mi propio futuro. Y no lo vi.</p>
+
+        <p>Ahí aprendí que no basta con el lugar correcto y la persona correcta: hace falta el momento. Los griegos tenían dos palabras para el tiempo. Chronos es el que se cuenta —los trece años, los mensajes sueltos, aquel día en el parque—. Kairos es el instante justo, la puerta que se abre una sola vez. En 2020 era Chronos: la puerta estaba ahí y ninguno tenía la llave.</p>
+
+        <p>Y hay algo más honesto que decir, y es que nunca estuvimos en fase. Entre 2013 y 2020 la que empujaba eras tú; tú estabas mucho más interesada, y yo andaba distraído en otra cosa. Después los papeles se invirtieron y en 2025 el que empezó a insistir fui yo. Es casi cómico: dos personas turnándose para quererse durante una década, siempre con un desfase de unos años. Una cuerda solo vibra cuando otra suena en su misma frecuencia; nosotros llevábamos toda la vida sonando en tiempos distintos.</p>
+
+        <p>Por eso creo que el tiempo no se perdió, se usó. Hay cosas que uno no puede recibir hasta que está al nivel de recibirlas; si te llegan antes se te caen de las manos. Yo a los dieciséis no estaba afinado, y en 2020 tampoco. Me hizo falta salir de mi país, empezar de cero donde no conocía a nadie, aprender a sostenerme, equivocarme en relaciones que no funcionaron y sacar algo de cada una. Durante años pensé que eso era sobrevivir. Hoy sospecho que era entrenamiento.</p>
+
+        <p>Y luego está lo que hiciste tú, que es la pieza que más me gusta de todo el rompecabezas: pusiste tu Instagram público. Sin decir nada, sin mandar nada, sin exponerte a un no. Dejaste una puerta entreabierta esperando que fuera yo el que pasara por delante. Yo creía que en esta historia el que empujaba era yo; resulta que del otro lado alguien estaba haciendo sitio. Eso ya no es casualidad: son dos personas estirando la mano en la oscuridad al mismo tiempo, después de trece años de desfase, y coincidiendo por fin.</p>
+
+        <p>Borges imaginaba un jardín de senderos que se bifurcan, todos los futuros creciendo a la vez. Lo que no dice es que solo uno se vuelve real, y se vuelve real porque alguien da un paso. Existe un universo muy cerca de este en el que no te escribo, o en el que tú no abres esa puerta, y ahí estamos los dos viviendo vidas correctas y tibias sin enterarnos de nada. Ese universo no ocurrió, y no ocurrió por poco.</p>
+
+        <p>Por eso compré el vuelo. En diciembre vuelvo a la misma ciudad de 2020. Todo igual menos yo.</p>
+
+        <p>Y no sé qué va a pasar. Puede que sea el principio de algo largo, o puede que sea simplemente un capítulo bonito que dos venezolanos se cuenten dentro de veinte años. No tengo ninguna certeza y tampoco la necesito. Me basta con saber que después de trece años, dos países y un parque en Orlando donde estuve a un metro de todo esto sin saberlo, por fin vamos a estar en el mismo sitio y en el mismo momento.</p>
+
+        <p>Aunque solo sea para terminar la frase que dejamos a medias.</p>
+      </div>
+
+      <p class="story-expiry" id="storyExpiry"></p>
+    </div>
+  </div>
 
   <footer>Stay tuned &middot; 🌚</footer>
 
@@ -1258,6 +1426,78 @@
     }
 
     render();
+
+    // ---------- la historia, disponible solo 2 días ----------
+    // Ventana de la puerta discreta: aparece el día HISTORIA_DESDE y se cierra
+    // sola al cabo de HISTORIA_DIAS. Fuera de esas fechas el botón no existe.
+    var HISTORIA_DESDE = '2026-07-31';
+    var HISTORIA_DIAS = 2;
+
+    var mysteryBtn = document.getElementById('mysteryBtn');
+    var storyModal = document.getElementById('storyModal');
+    var storyPanel = document.getElementById('storyPanel');
+    var storyExpiry = document.getElementById('storyExpiry');
+
+    // agosto en Orlando siempre es horario de verano (-04:00)
+    var historiaFin = new Date(HISTORIA_DESDE + 'T00:00:00-04:00').getTime() +
+                      HISTORIA_DIAS * 86400000;
+
+    function historiaVigente() {
+      return isoToday() >= HISTORIA_DESDE && Date.now() < historiaFin;
+    }
+
+    function textoCaducidad() {
+      var resta = historiaFin - Date.now();
+      if (resta <= 0) return 'Este mensaje ya se cerró';
+      var dias = Math.floor(resta / 86400000);
+      var horas = Math.floor(resta / 3600000) % 24;
+      if (dias > 0) {
+        return 'Este mensaje desaparece en ' + dias + (dias === 1 ? ' día ' : ' días ') +
+               'y ' + horas + (horas === 1 ? ' hora' : ' horas');
+      }
+      var mins = Math.floor(resta / 60000) % 60;
+      return 'Este mensaje desaparece en ' + horas + (horas === 1 ? ' hora ' : ' horas ') +
+             'y ' + mins + (mins === 1 ? ' minuto' : ' minutos');
+    }
+
+    var previoAlModal = null;
+
+    function abrirHistoria() {
+      previoAlModal = document.activeElement;
+      storyExpiry.textContent = textoCaducidad();
+      storyModal.hidden = false;
+      document.body.classList.add('no-scroll');
+      storyPanel.scrollTop = 0;
+      storyPanel.focus();
+    }
+
+    function cerrarHistoria() {
+      storyModal.hidden = true;
+      document.body.classList.remove('no-scroll');
+      if (previoAlModal) previoAlModal.focus();
+    }
+
+    mysteryBtn.hidden = !historiaVigente();
+    mysteryBtn.addEventListener('click', abrirHistoria);
+    document.getElementById('storyClose').addEventListener('click', cerrarHistoria);
+
+    // cerrar tocando fuera del panel o con Escape
+    storyModal.addEventListener('click', function (e) {
+      if (e.target === storyModal) cerrarHistoria();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !storyModal.hidden) cerrarHistoria();
+    });
+
+    // si caduca con la página abierta, la puerta se cierra sola
+    setInterval(function () {
+      if (!historiaVigente()) {
+        mysteryBtn.hidden = true;
+        if (!storyModal.hidden) cerrarHistoria();
+      } else if (!storyModal.hidden) {
+        storyExpiry.textContent = textoCaducidad();
+      }
+    }, 30000);
 
     // si el último envío falló, se reintenta al volver a abrir la página
     try {

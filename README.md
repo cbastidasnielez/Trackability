@@ -60,6 +60,25 @@ var SORPRESAS = [
 Si una casilla llega a su día con el texto vacío, se abre igual y dice que la
 sorpresa está en camino.
 
+## La puerta discreta
+
+Al final de la página aparece un botón sin etiqueta (`?`) que abre, en un
+pop-up, un texto largo titulado *Pensamientos de una mente divagante tratando
+de organizar todo*. No se mezcla con el resto de la página: se abre encima y
+se cierra con la ×, con Escape o tocando fuera.
+
+Solo está disponible **2 días**. La ventana se controla con dos constantes de
+`index.html`:
+
+```js
+var HISTORIA_DESDE = '2026-07-31';   // primer día que aparece el botón
+var HISTORIA_DIAS = 2;               // cuántos días se queda
+```
+
+Fuera de esas fechas el botón no se muestra. Si caduca con la página abierta,
+el botón desaparece y el pop-up se cierra solo. Dentro del texto hay un aviso
+del tiempo que queda.
+
 ## Próximamente
 
 Convertir las casillas en "raspaditos" de verdad, para descubrir cada sorpresa
