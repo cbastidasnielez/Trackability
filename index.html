@@ -1475,22 +1475,19 @@
     render();
 
     // ---------- la historia, disponible solo 2 días ----------
-    // Ventana de la puerta discreta: aparece el día HISTORIA_DESDE y se cierra
-    // sola al cabo de HISTORIA_DIAS. Fuera de esas fechas el botón no existe.
-    var HISTORIA_DESDE = '2026-07-31';
-    var HISTORIA_DIAS = 2;
+    // La puerta está abierta desde ya y se cierra sola en esta fecha y hora
+    // (horario de Orlando). Para alargarla, basta con mover el día.
+    var HISTORIA_HASTA = '2026-08-04T00:00:00-04:00';
 
     var mysteryBtn = document.getElementById('mysteryBtn');
     var storyModal = document.getElementById('storyModal');
     var storyPanel = document.getElementById('storyPanel');
     var storyExpiry = document.getElementById('storyExpiry');
 
-    // agosto en Orlando siempre es horario de verano (-04:00)
-    var historiaFin = new Date(HISTORIA_DESDE + 'T00:00:00-04:00').getTime() +
-                      HISTORIA_DIAS * 86400000;
+    var historiaFin = new Date(HISTORIA_HASTA).getTime();
 
     function historiaVigente() {
-      return isoToday() >= HISTORIA_DESDE && Date.now() < historiaFin;
+      return Date.now() < historiaFin;
     }
 
     function textoCaducidad() {

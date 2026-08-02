@@ -67,15 +67,13 @@ pop-up, un texto largo titulado *Pensamientos de una mente divagante tratando
 de organizar todo*. No se mezcla con el resto de la página: se abre encima y
 se cierra con la ×, con Escape o tocando fuera.
 
-Solo está disponible **2 días**. La ventana se controla con dos constantes de
-`index.html`:
+Está disponible hasta una fecha de cierre, que se fija en `index.html`:
 
 ```js
-var HISTORIA_DESDE = '2026-07-31';   // primer día que aparece el botón
-var HISTORIA_DIAS = 2;               // cuántos días se queda
+var HISTORIA_HASTA = '2026-08-04T00:00:00-04:00';   // hora de Orlando
 ```
 
-Fuera de esas fechas el botón no se muestra. Si caduca con la página abierta,
+Hasta ese momento el botón se ve; a partir de ahí desaparece. Si caduca con la página abierta,
 el botón desaparece y el pop-up se cierra solo. Dentro del texto hay un aviso
 del tiempo que queda.
 
