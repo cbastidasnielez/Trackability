@@ -62,7 +62,7 @@ sorpresa está en camino.
 
 ## La puerta discreta
 
-Al final de la página aparece un botón sin etiqueta (`?`) que abre, en un
+Un botón flotante sin etiqueta (`?`), fijo en la esquina, abre en un
 pop-up, un texto largo titulado *Pensamientos de una mente divagante tratando
 de organizar todo*. No se mezcla con el resto de la página: se abre encima y
 se cierra con la ×, con Escape o tocando fuera.
