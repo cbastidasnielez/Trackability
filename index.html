@@ -51,7 +51,7 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 640px;
+      max-width: 700px;
       padding: 48px 24px 64px;
       display: flex;
       flex-direction: column;
@@ -138,9 +138,34 @@
       to   { transform: rotate(360deg); }
     }
 
-    /* ---------- contador ---------- */
-    .countdown-lead {
-      font-size: 13px;
+    /* ---------- los dos contadores ---------- */
+    .timers {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 38px;
+    }
+
+    .timer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* en pantallas anchas, uno al lado del otro con una línea entre medias */
+    @media (min-width: 620px) {
+      .timers {
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+      }
+      .timer + .timer {
+        border-left: 1px solid rgba(245, 242, 234, 0.14);
+      }
+      .timer { padding: 0 18px; }
+    }
+
+    .timer-lead {
+      font-size: 12px;
       letter-spacing: 0.4em;
       text-indent: 0.4em;
       text-transform: uppercase;
@@ -148,29 +173,38 @@
       margin-bottom: 10px;
     }
 
-    .days {
-      font-size: clamp(4rem, 18vw, 6.5rem);
+    .timer-num {
+      font-size: clamp(3.4rem, 15vw, 5rem);
       font-weight: 100;
       line-height: 1;
       letter-spacing: 0.04em;
       text-shadow: 0 0 30px var(--glow);
     }
 
-    .days-caption {
-      font-size: clamp(1rem, 4vw, 1.25rem);
+    .timer-cap {
+      font-size: clamp(0.95rem, 3.6vw, 1.1rem);
       font-weight: 300;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       margin-top: 12px;
       color: var(--ink);
     }
 
-    .clock {
+    .timer-clock {
       font-variant-numeric: tabular-nums;
-      font-size: 15px;
-      letter-spacing: 0.35em;
-      text-indent: 0.35em;
+      font-size: 14px;
+      letter-spacing: 0.32em;
+      text-indent: 0.32em;
       color: var(--dim);
-      margin-top: 18px;
+      margin-top: 14px;
+    }
+
+    .timer-flight {
+      margin-top: 12px;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.85;
     }
 
     .tz-note {
@@ -179,7 +213,7 @@
       text-indent: 0.3em;
       text-transform: uppercase;
       color: var(--faint);
-      margin-top: 8px;
+      margin-top: 22px;
     }
 
     /* ---------- botón sorpresas ---------- */
@@ -523,6 +557,15 @@
     }
 
     .pass-route div:last-of-type { text-align: right; }
+
+    .pass-time {
+      display: block;
+      margin-top: 7px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      font-variant-numeric: tabular-nums;
+      color: rgba(11, 11, 11, 0.75);
+    }
 
     .pass-plane {
       font-size: 17px;
@@ -954,10 +997,23 @@
       </div>
     </div>
 
-    <div class="countdown-lead" id="lead">Faltan</div>
-    <div class="days" id="days">–</div>
-    <div class="days-caption" id="caption">días para tu cumpleaños 🌚</div>
-    <div class="clock" id="clock"></div>
+    <div class="timers">
+      <div class="timer">
+        <span class="timer-lead" id="lead">Faltan</span>
+        <span class="timer-num" id="days">–</span>
+        <span class="timer-cap" id="caption">días para tu cumpleaños 🌚</span>
+        <span class="timer-clock" id="clock"></span>
+      </div>
+
+      <div class="timer">
+        <span class="timer-lead" id="meetLead">Faltan</span>
+        <span class="timer-num" id="meetDays">–</span>
+        <span class="timer-cap" id="meetCaption">días para vernos 🌚</span>
+        <span class="timer-clock" id="meetClock"></span>
+        <span class="timer-flight">26 dic &middot; BCN 10:55 &rarr; MCO 19:10</span>
+      </div>
+    </div>
+
     <div class="tz-note">Hora de Orlando, Florida</div>
 
     <button class="unlock-btn" id="unlockBtn">Presiona para desbloquear sorpresas 🌚</button>
@@ -1005,15 +1061,18 @@
               <div>
                 <strong>BCN</strong>
                 <small>Barcelona</small>
+                <span class="pass-time">10:55</span>
               </div>
               <span class="pass-plane">&#9992;</span>
               <div>
                 <strong>MCO</strong>
                 <small>Orlando</small>
+                <span class="pass-time">19:10</span>
               </div>
             </div>
             <dl class="pass-data">
-              <dt>Salida</dt><dd>SÁB 26 DIC 2026</dd>
+              <dt>Salida</dt><dd>SÁB 26 DIC 2026 · 10:55</dd>
+              <dt>Llegada</dt><dd>MISMO DÍA · 19:10</dd>
               <dt>Vuelta</dt><dd>VIE 8 ENE 2027</dd>
               <dt>Pasajero</dt><dd>YO</dd>
               <dt>Destino</dt><dd>TÚ</dd>
@@ -1175,8 +1234,38 @@
       captionEl.textContent = (days === 1 ? 'día' : 'días') + ' para tu cumpleaños 🌚';
       clockEl.textContent = pad(hrs) + ' : ' + pad(min) + ' : ' + pad(sec);
     }
+    // ---------- cuenta atrás para vernos ----------
+    // el momento exacto es el aterrizaje en Orlando; en diciembre allí
+    // rige el horario de invierno (-05:00)
+    var ENCUENTRO = '2026-12-26T19:10:00-05:00';
+    var encuentroMs = new Date(ENCUENTRO).getTime();
+
+    var meetLead = document.getElementById('meetLead');
+    var meetDays = document.getElementById('meetDays');
+    var meetCaption = document.getElementById('meetCaption');
+    var meetClock = document.getElementById('meetClock');
+
+    function tickEncuentro() {
+      var diff = encuentroMs - Date.now();
+      if (diff <= 0) {
+        meetLead.textContent = 'Por fin';
+        meetDays.textContent = '🌚';
+        meetCaption.textContent = 'estamos en el mismo sitio 🌚';
+        meetClock.textContent = '';
+        return;
+      }
+      var dias = Math.floor(diff / 86400000);
+      meetLead.textContent = 'Faltan';
+      meetDays.textContent = dias;
+      meetCaption.textContent = (dias === 1 ? 'día' : 'días') + ' para vernos 🌚';
+      meetClock.textContent = pad(Math.floor(diff / 3600000) % 24) + ' : ' +
+                              pad(Math.floor(diff / 60000) % 60) + ' : ' +
+                              pad(Math.floor(diff / 1000) % 60);
+    }
+
     tick();
-    setInterval(tick, 1000);
+    tickEncuentro();
+    setInterval(function () { tick(); tickEncuentro(); }, 1000);
 
     // ---------- sorpresa 01, ya revelada ----------
     var TRIP_START = '2026-12-26';
@@ -1200,7 +1289,9 @@
     }
 
     // el viaje, en días, para tachar el "tiempo"
-    var falta = Math.ceil((new Date(TRIP_START + 'T00:00:00-05:00') - Date.now()) / 86400000);
+    // se cuenta hasta el mismo instante que el contador de arriba, para que
+    // las dos cifras no se contradigan
+    var falta = Math.floor((encuentroMs - Date.now()) / 86400000);
     document.getElementById('tripDays').textContent =
       falta > 0 ? falta + (falta === 1 ? ' día' : ' días') : '0 días';
 

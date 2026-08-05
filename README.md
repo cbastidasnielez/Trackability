@@ -6,7 +6,9 @@ Fondo negro, ondas de sonido y un emblema giratorio de "distancia y tiempo" con 
 
 ## Qué hay ahora
 
-- Contador en vivo de días (y horas : minutos : segundos) hasta el 25/08
+- Dos contadores en vivo (días y horas : minutos : segundos): el cumpleaños
+  (25/08) y el reencuentro, que apunta al aterrizaje en Orlando del 26/12 a
+  las 19:10 (`ENCUENTRO` en `index.html`)
 - Emblema giratorio (círculo de flechas "Distancia y Tiempo") con la foto de Mariapnel 🌚 en el centro
 - Botón **"Presiona para desbloquear sorpresas 🌚"** con la misión provisional
 - Lista permanente con las fechas que ya apuntó (se pueden quitar con la ×)
