@@ -106,10 +106,13 @@
     .ring text {
       fill: var(--dim);
       font-family: inherit;
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 300;
-      letter-spacing: 4px;
+      letter-spacing: 3px;
     }
+
+    /* las cifras, destacadas dentro de la lectura */
+    .ring-val { fill: var(--gold); }
 
     .photo {
       position: absolute;
@@ -979,18 +982,23 @@
 
     <div class="emblem-wrap">
       <svg class="ring" viewBox="0 0 400 400" aria-hidden="true">
-        <!-- círculo abierto por abajo, donde va el texto -->
-        <path d="M 95.3 334 A 170 170 0 1 1 304.7 334"
-              fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+        <!-- el círculo se abre arriba y abajo para dejar sitio a las lecturas -->
+        <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+          <path d="M 316.4 102.3 A 152 152 0 0 1 316.4 297.7" />
+          <path d="M 83.6 297.7 A 152 152 0 0 1 83.6 102.3" />
+        </g>
         <!-- flechas en sentido horario -->
         <g fill="currentColor">
-          <path d="M -9 -7 L 9 0 L -9 7 Z" transform="translate(200 30)" />
-          <path d="M -9 -7 L 9 0 L -9 7 Z" transform="translate(370 200) rotate(90)" />
-          <path d="M -9 -7 L 9 0 L -9 7 Z" transform="translate(52.8 285) rotate(240)" />
+          <path d="M -9 -7 L 9 0 L -9 7 Z" transform="translate(352 200) rotate(90)" />
+          <path d="M -9 -7 L 9 0 L -9 7 Z" transform="translate(316.4 297.7) rotate(130)" />
+          <path d="M -9 -7 L 9 0 L -9 7 Z" transform="translate(83.6 102.3) rotate(310)" />
         </g>
-        <!-- texto curvado en el arco inferior -->
-        <path id="textArc" d="M 69.8 309.3 A 170 170 0 0 0 330.2 309.3" fill="none" />
-        <text><textPath href="#textArc" startOffset="50%" text-anchor="middle">DISTANCIA Y TIEMPO</textPath></text>
+        <!-- arriba, lo que falta para vernos -->
+        <path id="arcTiempo" d="M 83.6 102.3 A 152 152 0 0 1 316.4 102.3" fill="none" />
+        <text><textPath href="#arcTiempo" startOffset="50%" text-anchor="middle">TIEMPO <tspan class="ring-val" id="ringTiempo">–</tspan></textPath></text>
+        <!-- abajo, lo que nos separa -->
+        <path id="arcDistancia" d="M 83.6 297.7 A 152 152 0 0 0 316.4 297.7" fill="none" />
+        <text><textPath href="#arcDistancia" startOffset="50%" text-anchor="middle">DISTANCIA <tspan class="ring-val" id="ringDistancia">–</tspan></textPath></text>
       </svg>
       <div class="photo">
         <img src="/mariapnel.jpeg" alt="Mariapnel 🌚" />
@@ -1244,6 +1252,14 @@
     var meetDays = document.getElementById('meetDays');
     var meetCaption = document.getElementById('meetCaption');
     var meetClock = document.getElementById('meetClock');
+    var ringTiempo = document.getElementById('ringTiempo');
+
+    // la distancia en línea recta entre Barcelona y Orlando
+    // (el punto de los miles se pone a mano: toLocaleString depende del
+    // idioma del navegador y no siempre lo aplica)
+    var DISTANCIA_KM = 7450;
+    document.getElementById('ringDistancia').textContent =
+      String(DISTANCIA_KM).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' KM';
 
     function tickEncuentro() {
       var diff = encuentroMs - Date.now();
@@ -1252,11 +1268,13 @@
         meetDays.textContent = '🌚';
         meetCaption.textContent = 'estamos en el mismo sitio 🌚';
         meetClock.textContent = '';
+        ringTiempo.textContent = '0';
         return;
       }
       var dias = Math.floor(diff / 86400000);
       meetLead.textContent = 'Faltan';
       meetDays.textContent = dias;
+      ringTiempo.textContent = dias + (dias === 1 ? ' DÍA' : ' DÍAS');
       meetCaption.textContent = (dias === 1 ? 'día' : 'días') + ' para vernos 🌚';
       meetClock.textContent = pad(Math.floor(diff / 3600000) % 24) + ' : ' +
                               pad(Math.floor(diff / 60000) % 60) + ' : ' +
