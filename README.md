@@ -58,8 +58,9 @@ var SORPRESAS = [
   {
     titulo: 'Tu primer regalo es una canción',
     texto: '...',
-    audio: { src: '/se-vence-en-diciembre.mp3', titulo: 'Se Vence en Diciembre',
-             version: 'Versión Fluida', artista: 'doncarlitin' },
+    audio: { src: '/se-vence-en-diciembre.mp3', portada: '/portada-cancion.jpg',
+             titulo: 'Se Vence en Diciembre', version: 'Versión Fluida',
+             artista: 'doncarlitin' },
     nota: '...'
   },
   { titulo: 'Casilla 02', texto: 'Lo que quieras contarle aquí 🌚' },
