@@ -112,6 +112,13 @@
       width: 100%;
       height: 100%;
       color: var(--ink);
+    }
+
+    /* Gira el contenido, no el <svg>: al rotar el elemento entero su caja
+       crecía en las diagonales, la página dejaba de caber a lo ancho y el
+       móvil la encogía para ajustarla una y otra vez. */
+    .ring-spin {
+      transform-origin: 200px 200px;
       animation: spin 36s linear infinite;
     }
 
@@ -1120,7 +1127,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .ring, .photo, .lights i { animation: none; }
+      .ring-spin, .photo, .lights i { animation: none; }
       .snow { display: none; }
     }
   </style>
@@ -1142,6 +1149,7 @@
 
     <div class="emblem-wrap">
       <svg class="ring" viewBox="0 0 400 400" aria-hidden="true">
+       <g class="ring-spin">
         <!-- el círculo se abre arriba y abajo para dejar sitio a las lecturas -->
         <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
           <path d="M 316.4 102.3 A 152 152 0 0 1 316.4 297.7" />
@@ -1159,6 +1167,7 @@
         <!-- abajo, lo que nos separa -->
         <path id="arcDistancia" d="M 83.6 297.7 A 152 152 0 0 0 316.4 297.7" fill="none" />
         <text><textPath href="#arcDistancia" startOffset="50%" text-anchor="middle">DISTANCIA <tspan class="ring-val" id="ringDistancia">–</tspan></textPath></text>
+       </g>
       </svg>
       <div class="photo">
         <img src="/mariapnel.jpeg" alt="Mariapnel 🌚" />
