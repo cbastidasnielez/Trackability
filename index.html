@@ -20,10 +20,22 @@
       --gold: #e3c07a;
     }
 
-    html, body { height: 100%; }
+    html, body { min-height: 100%; }
+
+    /* El degradado va fijo al viewport y no al body: si se midiera sobre el
+       body, al abrir un panel la página crecería y la elipse se reescalaría,
+       que en el móvil se ve como un zoom. */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(ellipse 120% 80% at 50% 30%, #101010 0%, var(--bg) 60%);
+      pointer-events: none;
+    }
 
     body {
-      background: radial-gradient(ellipse 120% 80% at 50% 30%, #101010 0%, var(--bg) 60%);
+      background: var(--bg);
       color: var(--ink);
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       font-weight: 300;
@@ -272,7 +284,6 @@
       border-radius: 14px;
       padding: 26px 26px 28px;
       background: rgba(255, 255, 255, 0.025);
-      backdrop-filter: blur(4px);
       max-width: 460px;
     }
 
@@ -344,7 +355,6 @@
       border-radius: 14px;
       padding: 26px 22px;
       background: rgba(255, 255, 255, 0.025);
-      backdrop-filter: blur(4px);
       max-width: 460px;
     }
 
@@ -1741,7 +1751,15 @@
       syncPanel();
     });
 
-    window.addEventListener('resize', syncPanel);
+    // En el móvil, al aparecer o esconderse la barra del navegador salta un
+    // resize sin que cambie el ancho. Recalcular ahí daba un salto de altura,
+    // así que solo se recalcula cuando el ancho cambia de verdad.
+    var anchoPrevio = window.innerWidth;
+    window.addEventListener('resize', function () {
+      if (window.innerWidth === anchoPrevio) return;
+      anchoPrevio = window.innerWidth;
+      syncPanel();
+    });
     Array.prototype.forEach.call(document.querySelectorAll('.surprise img'), function (img) {
       img.addEventListener('load', syncPanel);
     });
