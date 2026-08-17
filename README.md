@@ -50,17 +50,32 @@ tocarlas cada año. Antes de su día la casilla sale con candado y no se puede
 pulsar. Lo que ya se abrió queda guardado en `localStorage`.
 
 Para escribir el contenido de cada una, rellena el array `SORPRESAS` de
-`index.html`:
+`index.html`. Además de `titulo` y `texto`, una casilla admite `audio` (monta
+un reproductor) y `nota` (una línea en cursiva al final):
 
 ```js
 var SORPRESAS = [
-  { titulo: 'Casilla 01', texto: 'Lo que quieras contarle aquí 🌚' },
+  {
+    titulo: 'Tu primer regalo es una canción',
+    texto: '...',
+    audio: { src: '/se-vence-en-diciembre.mp3', titulo: 'Se Vence en Diciembre',
+             version: 'Versión Fluida', artista: 'doncarlitin' },
+    nota: '...'
+  },
+  { titulo: 'Casilla 02', texto: 'Lo que quieras contarle aquí 🌚' },
   ...
 ];
 ```
 
 Si una casilla llega a su día con el texto vacío, se abre igual y dice que la
 sorpresa está en camino.
+
+### Revisarlas antes de tiempo
+
+Añade `?test` a la URL (`https://undiaalavez.vercel.app/?test`) y todas las
+casillas quedan pulsables, sin esperar a su fecha. Es solo para comprobarlas:
+sale un aviso de que estás en modo prueba y **no se guarda nada**, así que las
+casillas siguen intactas. Por la URL normal la regla se cumple sin excepción.
 
 ## La puerta discreta
 
