@@ -472,6 +472,85 @@
     }
 
 
+    /* ---------- reseñas, al estilo cartel de cine ---------- */
+    .reviews {
+      margin-top: 24px;
+      border: 1px solid rgba(227, 192, 122, 0.28);
+      border-radius: 14px;
+      padding: 22px 18px 18px;
+      background: linear-gradient(180deg, rgba(227, 192, 122, 0.07), rgba(255, 255, 255, 0.015));
+    }
+
+    .reviews-head {
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(227, 192, 122, 0.25);
+    }
+
+    .reviews-head .stars {
+      color: var(--gold);
+      font-size: 16px;
+      letter-spacing: 7px;
+      text-indent: 7px;
+    }
+
+    .reviews-head .verdict {
+      margin-top: 11px;
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-indent: 0.32em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .review {
+      padding: 24px 2px;
+      border-bottom: 1px solid rgba(245, 242, 234, 0.09);
+    }
+
+    .review:last-child {
+      border-bottom: none;
+      padding-bottom: 6px;
+    }
+
+    .review-stars {
+      color: var(--gold);
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-indent: 4px;
+    }
+
+    /* la cita, en tipografía de prensa para que suene a reseña de verdad */
+    .review-quote {
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-size: clamp(1.02rem, 4.6vw, 1.2rem);
+      line-height: 1.55;
+      letter-spacing: 0.01em;
+      color: var(--ink);
+      margin: 13px 0 0;
+    }
+
+    .review-quote .sep {
+      color: var(--gold);
+      font-style: normal;
+      margin: 0 3px;
+    }
+
+    .review-author {
+      display: block;
+      margin-top: 13px;
+      font-size: 9px;
+      font-style: normal;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    /* la que todavía no ha llegado */
+    .review.pending .review-stars { color: var(--faint); }
+    .review.pending .review-quote { color: var(--faint); }
+
     /* ---------- la canción ---------- */
     .song {
       margin-top: 22px;
@@ -1498,7 +1577,17 @@
         },
         nota: 'Súbele el volumen. Y disculpa que no sea Taylor Swift, pero ella no te conoce 🌚'
       },
-      { titulo: '', texto: '' },   // casilla 2
+      {
+        titulo: 'Lo que causas en las personas',
+        texto: 'La sorpresa de hoy es simplemente un recordatorio de lo increíble que eres.',
+        criticas: [
+          { autor: 'Andrea Galindo', palabras: ['Luminosa', 'Inteligente', 'Amorosa'] },
+          { autor: 'María Valera', palabras: ['Atenta', 'Generosa', 'Divertida y sin prejuicios'] },
+          { autor: 'Carlos Bastidas', palabras: ['Valiente y echada para alante', 'Corazón puro y sincero', 'Sentido del humor anormal'] },
+          { autor: 'Roberto Perrotta', pendiente: true }
+        ],
+        nota: 'Cuatro personas distintas, en cuatro sitios distintos, y ninguna se puso de acuerdo con las demás. Eso es lo que más dice de ti 🌚'
+      },
       { titulo: '', texto: '' },   // casilla 3
       { titulo: '', texto: '' },   // casilla 4
       { titulo: '', texto: '' },   // casilla 5
@@ -1651,6 +1740,66 @@
       return caja;
     }
 
+    // monta el bloque de reseñas, al estilo de las citas de un cartel de cine
+    function montarCriticas(lista) {
+      var caja = document.createElement('div');
+      caja.className = 'reviews';
+
+      var head = document.createElement('div');
+      head.className = 'reviews-head';
+      var stars = document.createElement('div');
+      stars.className = 'stars';
+      stars.textContent = '★★★★★';
+      var verd = document.createElement('div');
+      verd.className = 'verdict';
+      verd.textContent = 'Unanimidad de la crítica';
+      head.appendChild(stars);
+      head.appendChild(verd);
+      caja.appendChild(head);
+
+      lista.forEach(function (c) {
+        var art = document.createElement('div');
+        art.className = 'review' + (c.pendiente ? ' pending' : '');
+
+        var est = document.createElement('div');
+        est.className = 'review-stars';
+        est.textContent = c.pendiente ? '☆☆☆☆☆' : '★★★★★';
+        art.appendChild(est);
+
+        var q = document.createElement('blockquote');
+        q.className = 'review-quote';
+        if (c.pendiente) {
+          q.textContent = 'Reseña en camino…';
+        } else {
+          q.appendChild(document.createTextNode('“'));
+          c.palabras.forEach(function (w, i) {
+            if (i) {
+              // los espacios van aparte: sin ellos la frase entera se lee como
+              // una sola palabra y no puede partirse al final de la línea
+              q.appendChild(document.createTextNode(' '));
+              var sep = document.createElement('span');
+              sep.className = 'sep';
+              sep.textContent = '·';
+              q.appendChild(sep);
+              q.appendChild(document.createTextNode(' '));
+            }
+            q.appendChild(document.createTextNode(w));
+          });
+          q.appendChild(document.createTextNode('”'));
+        }
+        art.appendChild(q);
+
+        var a = document.createElement('cite');
+        a.className = 'review-author';
+        a.textContent = c.autor;
+        art.appendChild(a);
+
+        caja.appendChild(art);
+      });
+
+      return caja;
+    }
+
     function abrirCasilla(n, fecha) {
       var s = SORPRESAS[n - 1] || {};
       boxOpen.hidden = false;
@@ -1664,6 +1813,7 @@
       p.textContent = s.texto || 'Esta sorpresa aún se está cocinando. Vuelve en un rato 🌚';
       boxOpen.appendChild(p);
 
+      if (s.criticas) boxOpen.appendChild(montarCriticas(s.criticas));
       if (s.audio) boxOpen.appendChild(montarCancion(s.audio));
 
       if (s.nota) {

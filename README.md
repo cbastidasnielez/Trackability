@@ -50,8 +50,9 @@ tocarlas cada año. Antes de su día la casilla sale con candado y no se puede
 pulsar. Lo que ya se abrió queda guardado en `localStorage`.
 
 Para escribir el contenido de cada una, rellena el array `SORPRESAS` de
-`index.html`. Además de `titulo` y `texto`, una casilla admite `audio` (monta
-un reproductor) y `nota` (una línea en cursiva al final):
+`index.html`. Además de `titulo` y `texto`, una casilla admite `audio` (monta un
+reproductor), `criticas` (bloque de reseñas al estilo cartel de cine) y
+`nota` (una línea en cursiva al final):
 
 ```js
 var SORPRESAS = [
@@ -63,7 +64,14 @@ var SORPRESAS = [
              artista: 'doncarlitin' },
     nota: '...'
   },
-  { titulo: 'Casilla 02', texto: 'Lo que quieras contarle aquí 🌚' },
+  {
+    titulo: 'Lo que causas en las personas',
+    texto: '...',
+    criticas: [
+      { autor: 'Andrea Galindo', palabras: ['Luminosa', 'Inteligente', 'Amorosa'] },
+      { autor: 'Roberto Perrotta', pendiente: true }   // sale como "Reseña en camino…"
+    ]
+  },
   ...
 ];
 ```
