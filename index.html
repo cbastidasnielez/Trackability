@@ -472,6 +472,178 @@
     }
 
 
+    /* ---------- el juego ---------- */
+    .game {
+      margin-top: 22px;
+      border: 1px solid rgba(227, 192, 122, 0.3);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #07070a;
+    }
+
+    .game canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      touch-action: manipulation;
+      cursor: pointer;
+    }
+
+    .game-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      border-top: 1px solid rgba(245, 242, 234, 0.1);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .game-score { color: var(--gold); }
+
+    /* ---------- el vale ---------- */
+    .vale {
+      margin-top: 22px;
+      position: relative;
+      background: var(--ink);
+      color: #0b0b0b;
+      border-radius: 14px;
+      padding: 22px 20px 20px;
+      text-align: center;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
+      animation: riseIn 0.5s ease;
+    }
+
+    .vale::before {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border: 1px dashed rgba(11, 11, 11, 0.35);
+      border-radius: 9px;
+      pointer-events: none;
+    }
+
+    .vale-tag {
+      font-size: 9px;
+      letter-spacing: 0.34em;
+      text-indent: 0.34em;
+      text-transform: uppercase;
+      color: rgba(11, 11, 11, 0.55);
+    }
+
+    .vale-title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.3rem, 6.4vw, 1.7rem);
+      font-weight: 400;
+      line-height: 1.25;
+      margin: 12px 0 4px;
+    }
+
+    .vale-sub {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: rgba(11, 11, 11, 0.65);
+      margin-bottom: 16px;
+    }
+
+    .vale-rule {
+      height: 1px;
+      background: rgba(11, 11, 11, 0.25);
+      margin: 16px 0;
+    }
+
+    .vale-data {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 14px;
+      text-align: left;
+      font-size: 11px;
+    }
+
+    .vale-data dt {
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(11, 11, 11, 0.5);
+    }
+
+    .vale-data dd { text-align: right; letter-spacing: 0.04em; }
+
+    .vale-fine {
+      margin-top: 16px;
+      font-size: 9px;
+      line-height: 1.7;
+      color: rgba(11, 11, 11, 0.55);
+      font-style: italic;
+    }
+
+    .vale-serie {
+      margin-top: 14px;
+      font-size: 9px;
+      letter-spacing: 0.28em;
+      color: rgba(11, 11, 11, 0.45);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .vale-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    /* los botones viven sobre el vale, que es claro: van en oscuro */
+    .vale-btn {
+      appearance: none;
+      border-radius: 999px;
+      padding: 12px 20px;
+      font-family: inherit;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-indent: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: 1px solid rgba(11, 11, 11, 0.4);
+      background: transparent;
+      color: #0b0b0b;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .vale-btn.primary {
+      background: #0b0b0b;
+      color: var(--ink);
+      border-color: #0b0b0b;
+    }
+
+    .vale-btn:hover { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22); }
+
+    /* solo el vale sale por la impresora, y en claro */
+    .print-area { display: none; }
+
+    @media print {
+      html, body { background: #fff !important; }
+      /* el degradado vive en un pseudoelemento fijo: si no se apaga,
+         sale como una gran mancha negra en el papel */
+      body::before { display: none !important; }
+      body > *:not(.print-area) { display: none !important; }
+      .print-area {
+        display: block;
+        background: #fff;
+        color: #000;
+        padding: 24px;
+      }
+      .print-area .vale {
+        box-shadow: none;
+        border: 2px solid #000;
+        max-width: 520px;
+        margin: 0 auto;
+        animation: none;
+      }
+      .print-area .vale-actions { display: none; }
+    }
+
     /* ---------- reseñas, al estilo cartel de cine ---------- */
     .reviews {
       margin-top: 24px;
@@ -1418,6 +1590,8 @@
     </div>
   </div>
 
+  <div class="print-area" id="printArea" aria-hidden="true"></div>
+
   <footer>Stay tuned &middot; 🌚</footer>
 
   <script>
@@ -1588,7 +1762,12 @@
         ],
         nota: 'Cuatro personas distintas, en cuatro sitios distintos, y ninguna se puso de acuerdo con las demás. Eso es lo que más dice de ti 🌚'
       },
-      { titulo: '', texto: '' },   // casilla 3
+      {
+        titulo: 'Hoy toca ganártelo',
+        texto: 'Sí, hoy la sorpresa no viene regalada: hay que jugársela. Consigue 10 puntos y se desbloquea el premio. Y sí, la que vuela eres tú.',
+        juego: { objetivo: 10, sprite: '/mariapnel.jpeg' },
+        nota: 'Si te estrellas, no pasa nada: se vuelve a empezar tocando la pantalla. El premio no caduca y el juego tampoco 🌚'
+      },
       { titulo: '', texto: '' },   // casilla 4
       { titulo: '', texto: '' },   // casilla 5
       { titulo: '', texto: '' },   // casilla 6
@@ -1740,6 +1919,309 @@
       return caja;
     }
 
+    // ---------- el juego de la casilla 03 ----------
+    var VALE_KEY = 'vale-masaje';
+    var juegoRAF = null;   // para poder parar el bucle al cambiar de casilla
+
+    function valeDesbloqueado() {
+      try { return localStorage.getItem(VALE_KEY) === '1'; } catch (e) { return false; }
+    }
+
+    function guardarVale() {
+      try { localStorage.setItem(VALE_KEY, '1'); } catch (e) {}
+    }
+
+    // el vale, tal cual se ve en pantalla y en el papel
+    function montarVale(alJugarDeNuevo, paraPapel) {
+      var v = document.createElement('div');
+      v.className = 'vale';
+      v.innerHTML =
+        '<div class="vale-tag">Vale canjeable</div>' +
+        '<div class="vale-title">Un masaje completo</div>' +
+        '<div class="vale-sub">A reclamar cuando te apetezca 🌚</div>' +
+        '<div class="vale-rule"></div>' +
+        '<dl class="vale-data">' +
+          '<dt>A nombre de</dt><dd>Mariapnel</dd>' +
+          '<dt>Masajista</dt><dd>Carlos Bastidas</dd>' +
+          '<dt>Duración</dt><dd>Hasta que te duermas</dd>' +
+          '<dt>Caducidad</dt><dd>Ninguna</dd>' +
+        '</dl>' +
+        '<div class="vale-rule"></div>' +
+        '<p class="vale-fine">Válido únicamente con el masajista Carlos Bastidas. ' +
+        'No transferible, no acumulable y no canjeable por dinero. ' +
+        'El establecimiento se reserva el derecho de admisión, pero contigo nunca lo ejerce. ' +
+        'Presentar este vale impreso o enseñarlo desde el móvil; ambas cosas valen.</p>' +
+        '<div class="vale-serie">N.º 0001 · Serie única</div>';
+
+      if (paraPapel) return v;
+
+      var acciones = document.createElement('div');
+      acciones.className = 'vale-actions';
+
+      var imprimir = document.createElement('button');
+      imprimir.type = 'button';
+      imprimir.className = 'vale-btn primary';
+      imprimir.textContent = 'Imprimir el vale';
+      imprimir.addEventListener('click', function () {
+        var area = document.getElementById('printArea');
+        area.innerHTML = '';
+        area.appendChild(montarVale(null, true));
+        window.print();
+      });
+      acciones.appendChild(imprimir);
+
+      if (alJugarDeNuevo) {
+        var otra = document.createElement('button');
+        otra.type = 'button';
+        otra.className = 'vale-btn';
+        otra.textContent = 'Jugar otra vez';
+        otra.addEventListener('click', alJugarDeNuevo);
+        acciones.appendChild(otra);
+      }
+
+      v.appendChild(acciones);
+      return v;
+    }
+
+    function montarJuego(cfg) {
+      var OBJETIVO = cfg.objetivo || 10;
+
+      var caja = document.createElement('div');
+      var envoltorio = document.createElement('div');
+      envoltorio.className = 'game';
+
+      var canvas = document.createElement('canvas');
+      var barra = document.createElement('div');
+      barra.className = 'game-bar';
+      var marcador = document.createElement('span');
+      marcador.className = 'game-score';
+      var ayuda = document.createElement('span');
+      ayuda.textContent = 'Toca para volar';
+      barra.appendChild(marcador);
+      barra.appendChild(ayuda);
+
+      envoltorio.appendChild(canvas);
+      envoltorio.appendChild(barra);
+      caja.appendChild(envoltorio);
+
+      var premio = document.createElement('div');
+      caja.appendChild(premio);
+
+      // --- medidas ---
+      var ANCHO = 320, ALTO = 380;          // coordenadas del juego
+      var ctx = canvas.getContext('2d');
+
+      // el alto lo deduce el CSS de la proporción del lienzo; fijarlo a mano
+      // deformaba el dibujo cuando aún no se conocía el ancho real
+      function ajustar() {
+        var dpr = Math.min(window.devicePixelRatio || 1, 3);
+        var w = envoltorio.clientWidth || ANCHO;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(w * (ALTO / ANCHO) * dpr);
+        escala = (w / ANCHO) * dpr;
+      }
+      var escala = 1;
+
+      // --- la cara ---
+      var cara = new Image();
+      var caraLista = false;
+      cara.onload = function () { caraLista = true; };
+      cara.src = cfg.sprite;
+
+      // --- estado ---
+      var RADIO = 21, GRAVEDAD = 1500, IMPULSO = -430;
+      var VEL = 132, HUECO = 136, CADA = 1.55;
+      var ave, tubos, puntos, estado, desdeUltimo, ganado;
+
+      function reiniciar() {
+        ave = { y: ALTO / 2, v: 0, x: 78 };
+        tubos = [];
+        puntos = 0;
+        desdeUltimo = CADA - 0.5;
+        estado = 'espera';
+        marcador.textContent = '0 / ' + OBJETIVO;
+      }
+
+      function volar() {
+        if (estado === 'fin' || estado === 'ganado') { reiniciar(); return; }
+        if (estado === 'espera') estado = 'juega';
+        ave.v = IMPULSO;
+      }
+
+      function nuevoTubo() {
+        var margen = 54;
+        var centro = margen + HUECO / 2 + Math.random() * (ALTO - HUECO - margen * 2);
+        tubos.push({ x: ANCHO + 34, centro: centro, contado: false });
+      }
+
+      function chocaCon(t) {
+        var ancho = 52, izq = t.x, der = t.x + ancho;
+        var arriba = t.centro - HUECO / 2, abajo = t.centro + HUECO / 2;
+        // círculo contra los dos rectángulos del tubo
+        var cx = Math.max(izq, Math.min(ave.x, der));
+        if (Math.abs(cx - ave.x) > RADIO) return false;
+        var cyArriba = Math.min(arriba, Math.max(0, ave.y));
+        var cyAbajo = Math.max(abajo, Math.min(ALTO, ave.y));
+        var dxA = ave.x - cx, dyA = ave.y - cyArriba;
+        var dxB = ave.x - cx, dyB = ave.y - cyAbajo;
+        return (dxA * dxA + dyA * dyA < RADIO * RADIO) ||
+               (dxB * dxB + dyB * dyB < RADIO * RADIO);
+      }
+
+      function actualizar(dt) {
+        if (estado !== 'juega') return;
+        ave.v += GRAVEDAD * dt;
+        ave.y += ave.v * dt;
+
+        desdeUltimo += dt;
+        if (desdeUltimo >= CADA) { desdeUltimo = 0; nuevoTubo(); }
+
+        for (var i = tubos.length - 1; i >= 0; i--) {
+          var t = tubos[i];
+          t.x -= VEL * dt;
+          if (!t.contado && t.x + 52 < ave.x - RADIO) {
+            t.contado = true;
+            puntos++;
+            marcador.textContent = puntos + ' / ' + OBJETIVO;
+            if (puntos >= OBJETIVO) { estado = 'ganado'; ganar(); return; }
+          }
+          if (t.x < -70) tubos.splice(i, 1);
+          if (chocaCon(t)) { estado = 'fin'; return; }
+        }
+
+        if (ave.y + RADIO > ALTO || ave.y - RADIO < 0) estado = 'fin';
+      }
+
+      function tubo(x, y0, y1) {
+        var g = ctx.createLinearGradient(x, 0, x + 52, 0);
+        g.addColorStop(0, '#2a2118');
+        g.addColorStop(0.5, '#4a3a24');
+        g.addColorStop(1, '#2a2118');
+        ctx.fillStyle = g;
+        ctx.fillRect(x, y0, 52, y1 - y0);
+        ctx.strokeStyle = 'rgba(227,192,122,0.55)';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(x + 0.75, y0 + 0.75, 50.5, y1 - y0 - 1.5);
+      }
+
+      function texto(t, y, tam, color) {
+        ctx.fillStyle = color;
+        ctx.font = '300 ' + tam + 'px "Helvetica Neue", Helvetica, Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(t, ANCHO / 2, y);
+      }
+
+      function pintar() {
+        ctx.setTransform(escala, 0, 0, escala, 0, 0);
+        ctx.clearRect(0, 0, ANCHO, ALTO);
+
+        // cielo
+        var cielo = ctx.createLinearGradient(0, 0, 0, ALTO);
+        cielo.addColorStop(0, '#0d0d12');
+        cielo.addColorStop(1, '#07070a');
+        ctx.fillStyle = cielo;
+        ctx.fillRect(0, 0, ANCHO, ALTO);
+
+        for (var i = 0; i < tubos.length; i++) {
+          var t = tubos[i];
+          tubo(t.x, -2, t.centro - HUECO / 2);
+          tubo(t.x, t.centro + HUECO / 2, ALTO + 2);
+        }
+
+        // la cara, girando un poco según cae o sube
+        ctx.save();
+        ctx.translate(ave.x, ave.y);
+        ctx.rotate(Math.max(-0.5, Math.min(0.9, ave.v / 700)));
+        ctx.beginPath();
+        ctx.arc(0, 0, RADIO, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.save();
+        ctx.clip();
+        if (caraLista) {
+          ctx.drawImage(cara, -RADIO, -RADIO, RADIO * 2, RADIO * 2);
+        } else {
+          ctx.fillStyle = '#e3c07a';
+          ctx.fill();
+        }
+        ctx.restore();
+        ctx.strokeStyle = 'rgba(245,242,234,0.75)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+
+        if (estado === 'espera') {
+          texto('Toca para empezar', ALTO / 2 - 62, 15, 'rgba(245,242,234,0.85)');
+          texto(OBJETIVO + ' puntos y hay premio', ALTO / 2 - 40, 11, 'rgba(245,242,234,0.45)');
+        } else if (estado === 'fin') {
+          ctx.fillStyle = 'rgba(5,5,7,0.72)';
+          ctx.fillRect(0, 0, ANCHO, ALTO);
+          texto('Casi', ALTO / 2 - 16, 26, '#f5f2ea');
+          texto(puntos + (puntos === 1 ? ' punto' : ' puntos') + ' · toca para reintentar',
+                ALTO / 2 + 12, 12, 'rgba(245,242,234,0.6)');
+        }
+      }
+
+      var previo = 0;
+      function bucle(t) {
+        if (!previo) previo = t;
+        var dt = Math.min((t - previo) / 1000, 0.05);
+        previo = t;
+        actualizar(dt);
+        pintar();
+        juegoRAF = requestAnimationFrame(bucle);
+      }
+
+      function ganar() {
+        guardarVale();
+        pintar();
+        marcador.textContent = OBJETIVO + ' / ' + OBJETIVO;
+        ayuda.textContent = '¡Conseguido!';
+        premio.appendChild(montarVale(function () {
+          premio.innerHTML = '';
+          ayuda.textContent = 'Toca para volar';
+          reiniciar();
+          syncPanel();
+        }));
+        syncPanel();
+      }
+
+      canvas.addEventListener('pointerdown', function (e) { e.preventDefault(); volar(); });
+      canvas.addEventListener('keydown', function (e) {
+        if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); volar(); }
+      });
+      canvas.tabIndex = 0;
+      canvas.setAttribute('aria-label', 'Juego: toca para volar');
+
+      ajustar();
+      // al montarse dentro del panel el ancho cambia, así que se remide solo
+      if (window.ResizeObserver) {
+        new ResizeObserver(ajustar).observe(envoltorio);
+      } else {
+        window.addEventListener('resize', ajustar);
+      }
+      reiniciar();
+
+      // sonda para poder probar el juego desde fuera (solo en modo prueba)
+      if (MODO_TEST) {
+        window.__juego = {
+          estado: function () { return { estado: estado, puntos: puntos, y: ave.y, tubos: tubos.length }; },
+          puntuar: function (n) { puntos = n; marcador.textContent = puntos + ' / ' + OBJETIVO; },
+          forzarVictoria: function () { puntos = OBJETIVO; estado = 'ganado'; ganar(); },
+          volar: volar
+        };
+      }
+
+      // si ya lo ganó antes, el vale sigue siendo suyo
+      if (valeDesbloqueado()) {
+        premio.appendChild(montarVale(null));
+      }
+
+      if (juegoRAF) cancelAnimationFrame(juegoRAF);
+      juegoRAF = requestAnimationFrame(bucle);
+
+      return caja;
+    }
+
     // monta el bloque de reseñas, al estilo de las citas de un cartel de cine
     function montarCriticas(lista) {
       var caja = document.createElement('div');
@@ -1802,6 +2284,8 @@
 
     function abrirCasilla(n, fecha) {
       var s = SORPRESAS[n - 1] || {};
+      // si venía un juego de otra casilla, se detiene su bucle
+      if (juegoRAF) { cancelAnimationFrame(juegoRAF); juegoRAF = null; }
       boxOpen.hidden = false;
       boxOpen.innerHTML = '';
 
@@ -1813,6 +2297,7 @@
       p.textContent = s.texto || 'Esta sorpresa aún se está cocinando. Vuelve en un rato 🌚';
       boxOpen.appendChild(p);
 
+      if (s.juego) boxOpen.appendChild(montarJuego(s.juego));
       if (s.criticas) boxOpen.appendChild(montarCriticas(s.criticas));
       if (s.audio) boxOpen.appendChild(montarCancion(s.audio));
 

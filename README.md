@@ -51,8 +51,8 @@ pulsar. Lo que ya se abrió queda guardado en `localStorage`.
 
 Para escribir el contenido de cada una, rellena el array `SORPRESAS` de
 `index.html`. Además de `titulo` y `texto`, una casilla admite `audio` (monta un
-reproductor), `criticas` (bloque de reseñas al estilo cartel de cine) y
-`nota` (una línea en cursiva al final):
+reproductor), `criticas` (reseñas al estilo cartel de cine), `juego`
+(el minijuego con premio) y `nota` (una línea en cursiva al final):
 
 ```js
 var SORPRESAS = [
@@ -85,6 +85,23 @@ Añade `?test` a la URL (`https://undiaalavez.vercel.app/?test`) y todas las
 casillas quedan pulsables, sin esperar a su fecha. Es solo para comprobarlas:
 sale un aviso de que estás en modo prueba y **no se guarda nada**, así que las
 casillas siguen intactas. Por la URL normal la regla se cumple sin excepción.
+
+## El juego de la casilla 03
+
+Un *flappy* en `<canvas>`, sin librerías: la cara de ella vuela entre columnas
+y a los **10 puntos** se desbloquea un vale de masaje imprimible.
+
+```js
+juego: { objetivo: 10, sprite: '/mariapnel.jpeg' }
+```
+
+- El vale queda guardado en `localStorage`, así que se conserva aunque cierre
+  la página o vuelva a jugar.
+- **Imprimir el vale** copia solo el vale a `#printArea` y llama a
+  `window.print()`. La hoja de estilos de impresión apaga el resto de la
+  página y el degradado de fondo, para que salga en claro y sin gastar tinta.
+- En modo prueba (`?test`) se expone `window.__juego` con `estado()`,
+  `puntuar(n)`, `forzarVictoria()` y `volar()`, para revisarlo sin jugar.
 
 ## La puerta discreta
 
