@@ -1765,7 +1765,7 @@
       {
         titulo: 'Hoy toca ganártelo',
         texto: 'Sí, hoy la sorpresa no viene regalada: hay que jugársela. Consigue 10 puntos y se desbloquea el premio. Y sí, la que vuela eres tú.',
-        juego: { objetivo: 10, sprite: '/mariapnel.jpeg' },
+        juego: { objetivo: 10, sprite: '/cara-juego.png', respaldo: '/mariapnel.jpeg' },
         nota: 'Si te estrellas, no pasa nada: se vuelve a empezar tocando la pantalla. El premio no caduca y el juego tampoco 🌚'
       },
       { titulo: '', texto: '' },   // casilla 4
@@ -2026,6 +2026,10 @@
       var cara = new Image();
       var caraLista = false;
       cara.onload = function () { caraLista = true; };
+      // si el recorte todavía no está subido, se usa la foto de siempre
+      cara.onerror = function () {
+        if (cfg.respaldo && cara.src.indexOf(cfg.respaldo) === -1) cara.src = cfg.respaldo;
+      };
       cara.src = cfg.sprite;
 
       // --- estado ---
