@@ -586,6 +586,15 @@
       font-variant-numeric: tabular-nums;
     }
 
+    .vale-once {
+      margin-top: 12px;
+      font-size: 10px;
+      line-height: 1.6;
+      letter-spacing: 0.04em;
+      color: rgba(11, 11, 11, 0.6);
+      font-style: italic;
+    }
+
     .vale-actions {
       display: flex;
       gap: 10px;
@@ -597,6 +606,8 @@
     /* los botones viven sobre el vale, que es claro: van en oscuro */
     .vale-btn {
       appearance: none;
+      display: inline-block;
+      text-decoration: none;
       border-radius: 999px;
       padding: 12px 20px;
       font-family: inherit;
@@ -1923,16 +1934,53 @@
     var VALE_KEY = 'vale-masaje';
     var juegoRAF = null;   // para poder parar el bucle al cambiar de casilla
 
-    function valeDesbloqueado() {
-      try { return localStorage.getItem(VALE_KEY) === '1'; } catch (e) { return false; }
+    // guarda la fecha de emisión: el vale es uno solo, no uno por partida
+    function valeEmitido() {
+      try {
+        var v = localStorage.getItem(VALE_KEY);
+        return v ? v : null;
+      } catch (e) { return null; }
     }
 
-    function guardarVale() {
-      try { localStorage.setItem(VALE_KEY, '1'); } catch (e) {}
+    function emitirVale() {
+      var ya = valeEmitido();
+      if (ya && ya !== '1') return ya;
+      var ahora = new Date().toISOString();
+      try { localStorage.setItem(VALE_KEY, ahora); } catch (e) {}
+      return ahora;
+    }
+
+    function fechaVale(iso) {
+      if (!iso || iso === '1') return '—';
+      var d = new Date(iso);
+      return isNaN(d) ? '—' : d.toLocaleDateString('es-ES',
+        { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
     // el vale, tal cual se ve en pantalla y en el papel
-    function montarVale(alJugarDeNuevo, paraPapel) {
+    // el vale en texto plano, para poder mandarlo por correo
+    function valeTexto(emitido) {
+      return [
+        'VALE CANJEABLE',
+        'UN MASAJE COMPLETO',
+        'A reclamar cuando te apetezca.',
+        '',
+        'A nombre de:  Mariapnel',
+        'Masajista:    Carlos Bastidas',
+        'Duración:     Hasta que te duermas',
+        'Caducidad:    Ninguna',
+        'Emitido el:   ' + fechaVale(emitido),
+        '',
+        'Válido únicamente con el masajista Carlos Bastidas.',
+        'Vale de un solo uso. No transferible, no acumulable',
+        'y no canjeable por dinero.',
+        '',
+        'N.º 0001 · Serie única',
+        'undiaalavez.vercel.app'
+      ].join('\n');
+    }
+
+    function montarVale(alJugarDeNuevo, paraPapel, emitido, repetido) {
       var v = document.createElement('div');
       v.className = 'vale';
       v.innerHTML =
@@ -1945,15 +1993,23 @@
           '<dt>Masajista</dt><dd>Carlos Bastidas</dd>' +
           '<dt>Duración</dt><dd>Hasta que te duermas</dd>' +
           '<dt>Caducidad</dt><dd>Ninguna</dd>' +
+          '<dt>Emitido el</dt><dd>' + fechaVale(emitido) + '</dd>' +
         '</dl>' +
         '<div class="vale-rule"></div>' +
         '<p class="vale-fine">Válido únicamente con el masajista Carlos Bastidas. ' +
-        'No transferible, no acumulable y no canjeable por dinero. ' +
+        'Vale de un solo uso, no transferible, no acumulable y no canjeable por dinero. ' +
         'El establecimiento se reserva el derecho de admisión, pero contigo nunca lo ejerce. ' +
         'Presentar este vale impreso o enseñarlo desde el móvil; ambas cosas valen.</p>' +
         '<div class="vale-serie">N.º 0001 · Serie única</div>';
 
       if (paraPapel) return v;
+
+      if (repetido) {
+        var aviso = document.createElement('p');
+        aviso.className = 'vale-once';
+        aviso.textContent = 'Este vale ya estaba emitido. Solo existe uno, y sigue siendo tuyo 🌚';
+        v.insertBefore(aviso, v.querySelector('.vale-serie').nextSibling);
+      }
 
       var acciones = document.createElement('div');
       acciones.className = 'vale-actions';
@@ -1961,14 +2017,22 @@
       var imprimir = document.createElement('button');
       imprimir.type = 'button';
       imprimir.className = 'vale-btn primary';
-      imprimir.textContent = 'Imprimir el vale';
+      imprimir.textContent = 'Imprimir';
       imprimir.addEventListener('click', function () {
         var area = document.getElementById('printArea');
         area.innerHTML = '';
-        area.appendChild(montarVale(null, true));
+        area.appendChild(montarVale(null, true, emitido));
         window.print();
       });
       acciones.appendChild(imprimir);
+
+      // por si no hay impresora a mano
+      var correo = document.createElement('a');
+      correo.className = 'vale-btn';
+      correo.href = 'mailto:?subject=' + encodeURIComponent('Vale por un masaje 🌚') +
+                    '&body=' + encodeURIComponent(valeTexto(emitido));
+      correo.textContent = 'Enviar por correo';
+      acciones.appendChild(correo);
 
       if (alJugarDeNuevo) {
         var otra = document.createElement('button');
@@ -2172,16 +2236,19 @@
       }
 
       function ganar() {
-        guardarVale();
+        var yaLoTenia = !!valeEmitido();
+        var emitido = emitirVale();
         pintar();
         marcador.textContent = OBJETIVO + ' / ' + OBJETIVO;
         ayuda.textContent = '¡Conseguido!';
+        // se vacía antes: nunca puede haber dos vales en pantalla
+        premio.innerHTML = '';
         premio.appendChild(montarVale(function () {
           premio.innerHTML = '';
           ayuda.textContent = 'Toca para volar';
           reiniciar();
           syncPanel();
-        }));
+        }, false, emitido, yaLoTenia));
         syncPanel();
       }
 
@@ -2212,8 +2279,10 @@
       }
 
       // si ya lo ganó antes, el vale sigue siendo suyo
-      if (valeDesbloqueado()) {
-        premio.appendChild(montarVale(null));
+      var yaEmitido = valeEmitido();
+      if (yaEmitido) {
+        premio.innerHTML = '';
+        premio.appendChild(montarVale(null, false, yaEmitido, false));
       }
 
       if (juegoRAF) cancelAnimationFrame(juegoRAF);

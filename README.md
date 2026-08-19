@@ -95,8 +95,11 @@ y a los **10 puntos** se desbloquea un vale de masaje imprimible.
 juego: { objetivo: 10, sprite: '/mariapnel.jpeg' }
 ```
 
-- El vale queda guardado en `localStorage`, así que se conserva aunque cierre
-  la página o vuelva a jugar.
+- **El vale se emite una sola vez.** Se guarda en `localStorage` con su fecha
+  de emisión; volver a ganar no crea otro ni cambia la fecha, solo recuerda que
+  ya lo tiene. Nunca aparecen dos vales a la vez.
+- **Enviar por correo** abre el cliente de email con el vale en texto, por si no
+  hay impresora a mano.
 - **Imprimir el vale** copia solo el vale a `#printArea` y llama a
   `window.print()`. La hoja de estilos de impresión apaga el resto de la
   página y el degradado de fondo, para que salga en claro y sin gastar tinta.
