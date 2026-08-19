@@ -70,7 +70,9 @@ var SORPRESAS = [
     criticas: [
       { autor: 'Andrea Galindo', palabras: ['Luminosa', 'Inteligente', 'Amorosa'] },
       { autor: 'Roberto Perrotta', pendiente: true }   // sale como "Reseña en camino…"
-    ]
+    ],
+    // tira de fotos al pie del bloque, con visor al tocarlas
+    recuerdos: { pie: '...', imagenes: ['/recuerdo-1.jpg', '/recuerdo-2.jpg'] }
   },
   ...
 ];

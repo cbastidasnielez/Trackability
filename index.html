@@ -472,6 +472,96 @@
     }
 
 
+    /* ---------- las fotos, como pie del bloque de reseñas ---------- */
+    .recuerdos {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(245, 242, 234, 0.1);
+    }
+
+    .recuerdos-pie {
+      font-size: 9px;
+      letter-spacing: 0.26em;
+      text-indent: 0.26em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 12px;
+    }
+
+    .recuerdos-tira {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .recuerdo {
+      appearance: none;
+      padding: 0;
+      border: 1px solid rgba(245, 242, 234, 0.14);
+      border-radius: 8px;
+      overflow: hidden;
+      background: none;
+      cursor: pointer;
+      aspect-ratio: 1;
+      transition: border-color 0.3s ease, transform 0.15s ease;
+    }
+
+    .recuerdo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      /* discretas de fondo; al pasar por encima recuperan su color */
+      filter: grayscale(0.5) brightness(0.82);
+      transition: filter 0.35s ease;
+    }
+
+    .recuerdo:hover { border-color: rgba(227, 192, 122, 0.6); }
+    .recuerdo:hover img { filter: none; }
+    .recuerdo:active { transform: scale(0.97); }
+
+    /* ---------- la foto, a tamaño grande ---------- */
+    .visor {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(3, 3, 3, 0.9);
+      backdrop-filter: blur(6px);
+      animation: fadeIn 0.3s ease;
+      cursor: zoom-out;
+    }
+
+    .visor[hidden] { display: none; }
+
+    .visor img {
+      max-width: 100%;
+      max-height: calc(100vh - 90px);
+      border-radius: 10px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+      animation: riseIn 0.35s ease;
+    }
+
+    .visor-cerrar {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      appearance: none;
+      background: none;
+      border: none;
+      color: var(--dim);
+      font-family: inherit;
+      font-size: 28px;
+      line-height: 1;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    .visor-cerrar:hover { color: var(--ink); }
+
     /* ---------- el juego ---------- */
     .game {
       margin-top: 22px;
@@ -1601,6 +1691,11 @@
     </div>
   </div>
 
+  <div class="visor" id="visor" hidden role="dialog" aria-modal="true" aria-label="Foto ampliada">
+    <button class="visor-cerrar" id="visorCerrar" aria-label="Cerrar">&times;</button>
+    <img id="visorImg" src="" alt="" />
+  </div>
+
   <div class="print-area" id="printArea" aria-hidden="true"></div>
 
   <footer>Stay tuned &middot; 🌚</footer>
@@ -1771,6 +1866,10 @@
           { autor: 'Carlos Bastidas', palabras: ['Valiente y echada para alante', 'Corazón puro y sincero', 'Sentido del humor anormal'] },
           { autor: 'Roberto Perrotta', palabras: ['Está aunque no hablemos', 'Me escuchó cuando ni yo me entendía', 'Me presentó al amor de mi vida'] }
         ],
+        recuerdos: {
+          pie: 'Tres pruebas, aportadas por Roberto',
+          imagenes: ['/recuerdo-1.jpg', '/recuerdo-2.jpg', '/recuerdo-3.jpg']
+        },
         nota: 'Cuatro personas distintas, en cuatro sitios distintos, y ninguna se puso de acuerdo con las demás. Eso es lo que más dice de ti 🌚'
       },
       {
@@ -2291,8 +2390,33 @@
       return caja;
     }
 
+    // ---------- visor de fotos ----------
+    var visor = document.getElementById('visor');
+    var visorImg = document.getElementById('visorImg');
+    var antesDelVisor = null;
+
+    function abrirVisor(src) {
+      antesDelVisor = document.activeElement;
+      visorImg.src = src;
+      visor.hidden = false;
+      document.body.classList.add('no-scroll');
+    }
+
+    function cerrarVisor() {
+      visor.hidden = true;
+      visorImg.src = '';
+      document.body.classList.remove('no-scroll');
+      if (antesDelVisor) antesDelVisor.focus();
+    }
+
+    visor.addEventListener('click', cerrarVisor);
+    document.getElementById('visorCerrar').addEventListener('click', cerrarVisor);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !visor.hidden) cerrarVisor();
+    });
+
     // monta el bloque de reseñas, al estilo de las citas de un cartel de cine
-    function montarCriticas(lista) {
+    function montarCriticas(lista, extra) {
       var caja = document.createElement('div');
       caja.className = 'reviews';
 
@@ -2348,6 +2472,36 @@
         caja.appendChild(art);
       });
 
+      // las fotos van al pie de todo el bloque, no dentro de una reseña:
+      // así ninguna crítica pesa más que las demás
+      if (extra && extra.imagenes && extra.imagenes.length) {
+        var pie = document.createElement('div');
+        pie.className = 'recuerdos';
+
+        var leyenda = document.createElement('div');
+        leyenda.className = 'recuerdos-pie';
+        leyenda.textContent = extra.pie || 'Del archivo';
+        pie.appendChild(leyenda);
+
+        var tira = document.createElement('div');
+        tira.className = 'recuerdos-tira';
+        extra.imagenes.forEach(function (src, i) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'recuerdo';
+          b.setAttribute('aria-label', 'Ver foto ' + (i + 1));
+          var im = document.createElement('img');
+          im.src = src;
+          im.alt = '';
+          im.loading = 'lazy';
+          b.appendChild(im);
+          b.addEventListener('click', function () { abrirVisor(src); });
+          tira.appendChild(b);
+        });
+        pie.appendChild(tira);
+        caja.appendChild(pie);
+      }
+
       return caja;
     }
 
@@ -2367,7 +2521,7 @@
       boxOpen.appendChild(p);
 
       if (s.juego) boxOpen.appendChild(montarJuego(s.juego));
-      if (s.criticas) boxOpen.appendChild(montarCriticas(s.criticas));
+      if (s.criticas) boxOpen.appendChild(montarCriticas(s.criticas, s.recuerdos));
       if (s.audio) boxOpen.appendChild(montarCancion(s.audio));
 
       if (s.nota) {
