@@ -2136,21 +2136,17 @@
         ctx.save();
         ctx.translate(ave.x, ave.y);
         ctx.rotate(Math.max(-0.5, Math.min(0.9, ave.v / 700)));
-        ctx.beginPath();
-        ctx.arc(0, 0, RADIO, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.save();
-        ctx.clip();
         if (caraLista) {
-          ctx.drawImage(cara, -RADIO, -RADIO, RADIO * 2, RADIO * 2);
+          // el recorte ya viene con su silueta: se dibuja tal cual, algo más
+          // grande que el área de choque para que perdone los roces
+          var d = RADIO * 2.7;
+          ctx.drawImage(cara, -d / 2, -d / 2, d, d);
         } else {
+          ctx.beginPath();
+          ctx.arc(0, 0, RADIO, 0, Math.PI * 2);
           ctx.fillStyle = '#e3c07a';
           ctx.fill();
         }
-        ctx.restore();
-        ctx.strokeStyle = 'rgba(245,242,234,0.75)';
-        ctx.lineWidth = 2;
-        ctx.stroke();
         ctx.restore();
 
         if (estado === 'espera') {
