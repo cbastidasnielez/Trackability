@@ -51,8 +51,9 @@ pulsar. Lo que ya se abrió queda guardado en `localStorage`.
 
 Para escribir el contenido de cada una, rellena el array `SORPRESAS` de
 `index.html`. Además de `titulo` y `texto`, una casilla admite `audio` (monta un
-reproductor), `criticas` (reseñas al estilo cartel de cine), `juego`
-(el minijuego con premio) y `nota` (una línea en cursiva al final):
+reproductor), `criticas` (reseñas al estilo cartel de cine), `recuerdos`
+(tira de fotos con visor), `regalo` (tarjeta regalo), `juego` (el minijuego
+con premio) y `nota` (una línea en cursiva al final):
 
 ```js
 var SORPRESAS = [
@@ -107,6 +108,14 @@ juego: { objetivo: 10, sprite: '/mariapnel.jpeg' }
   página y el degradado de fondo, para que salga en claro y sin gastar tinta.
 - En modo prueba (`?test`) se expone `window.__juego` con `estado()`,
   `puntuar(n)`, `forzarVictoria()` y `volar()`, para revisarlo sin jugar.
+
+## Nota sobre la tarjeta regalo
+
+La casilla 04 lleva el código de una tarjeta regalo. Aunque se descubra al
+tocarlo, **está en el código fuente de la página**: cualquiera con la URL
+podría canjearlo. La web lleva `noindex` para que no aparezca en buscadores,
+pero si prefieres no exponerlo, borra el campo `codigo` (y `enlace`) del
+objeto `regalo` y pásaselo por privado.
 
 ## La puerta discreta
 
