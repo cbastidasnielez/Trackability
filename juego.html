@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/icon-512.svg" />
+  <title>Vuela 🌚</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050505;
+      --ink: #f5f2ea;
+      --dim: rgba(245, 242, 234, 0.55);
+      --faint: rgba(245, 242, 234, 0.22);
+      --gold: #e3c07a;
+    }
+
+    html, body { min-height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 20px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(ellipse 120% 80% at 50% 35%, #101010 0%, var(--bg) 60%);
+      pointer-events: none;
+    }
+
+    main {
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 8vw, 2.2rem);
+      font-weight: 200;
+      letter-spacing: 0.24em;
+      text-indent: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .sub {
+      margin-top: 12px;
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-indent: 0.28em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .marcadores {
+      display: flex;
+      justify-content: center;
+      gap: 34px;
+      margin: 26px 0 18px;
+    }
+
+    .marcador span {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 6px;
+    }
+
+    .marcador strong {
+      font-size: 30px;
+      font-weight: 100;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .marcador.record strong { color: var(--gold); }
+
+    /* mismos estilos del juego que en la web principal */
+    .game {
+      border: 1px solid rgba(227, 192, 122, 0.3);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #07070a;
+    }
+
+    .game canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      touch-action: manipulation;
+      cursor: pointer;
+    }
+
+    .game-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      border-top: 1px solid rgba(245, 242, 234, 0.1);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .game-score { color: var(--gold); }
+
+    footer {
+      margin-top: 26px;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Vuela</h1>
+    <div class="sub">Esquiva las columnas 🌚</div>
+
+    <div class="marcadores">
+      <div class="marcador"><span>Ahora</span><strong id="ahora">0</strong></div>
+      <div class="marcador record"><span>Tu récord</span><strong id="record">0</strong></div>
+    </div>
+
+    <div id="hueco"></div>
+
+    <footer>Sin premio, solo orgullo</footer>
+  </main>
+
+  <script src="/flappy.js"></script>
+  <script>
+    var RECORD_KEY = 'flappy-record';
+
+    function leerRecord() {
+      try { return parseInt(localStorage.getItem(RECORD_KEY), 10) || 0; } catch (e) { return 0; }
+    }
+
+    function guardarRecord(n) {
+      try { localStorage.setItem(RECORD_KEY, String(n)); } catch (e) {}
+    }
+
+    var elAhora = document.getElementById('ahora');
+    var elRecord = document.getElementById('record');
+    elRecord.textContent = leerRecord();
+
+    var juego = window.crearFlappy({
+      sprite: '/cara-juego.png',
+      respaldo: '/mariapnel.jpeg',
+      objetivo: 0,                       // sin meta: se juega a récord
+      pista: 'A ver cuánto aguantas',
+      alPerder: function (puntos) {
+        elAhora.textContent = puntos;
+        if (puntos > leerRecord()) {
+          guardarRecord(puntos);
+          elRecord.textContent = puntos;
+        }
+      }
+    });
+
+    document.getElementById('hueco').appendChild(juego);
+  </script>
+</body>
+</html>

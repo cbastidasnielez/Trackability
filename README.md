@@ -109,6 +109,17 @@ juego: { objetivo: 10, sprite: '/mariapnel.jpeg' }
 - En modo prueba (`?test`) se expone `window.__juego` con `estado()`,
   `puntuar(n)`, `forzarVictoria()` y `volar()`, para revisarlo sin jugar.
 
+## Página de visitantes
+
+`/juego.html` es una página independiente con el juego y nada más: sirve para
+compartirlo sin enseñar las sorpresas. No contiene ni la carta, ni la tarjeta
+regalo, ni las reseñas — no están escondidas, es que no están en su código.
+En Vercel responde también en `/juego`.
+
+El juego vive en `public/flappy.js` (`window.crearFlappy`) y lo usan las dos
+páginas. En la casilla 03 va con meta de 10 puntos y premio; en la de
+visitantes va sin meta, jugando a batir el récord (guardado en `localStorage`).
+
 ## Nota sobre la tarjeta regalo
 
 La casilla 04 lleva el código de una tarjeta regalo. Aunque se descubra al
