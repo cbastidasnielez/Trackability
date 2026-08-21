@@ -123,12 +123,11 @@ visitantes va sin meta, jugando a batir el récord (guardado en `localStorage`).
 ## El ahorcado de la casilla 05
 
 Mismo juego de siempre, pero en vez del muñeco **mengua una luna**: seis fases,
-y cuando desaparece se pierde la partida. La palabra es `MADRUGADA`, pista
-indirecta del regalo de cumpleaños (un vinilo de *AM*) — no lo nombra, solo
-cobra sentido después.
+y cuando desaparece se pierde la partida. La palabra es `VINILO`: dice el formato del regalo de cumpleaños pero no el
+disco, así que el *AM* sigue siendo sorpresa hasta el día 25.
 
 ```js
-ahorcado: { palabra: 'MADRUGADA', pista: '...', vidas: 6, derrotasMax: 5,
+ahorcado: { palabra: 'VINILO', pista: '...', vidas: 6, derrotasMax: 5,
             alGanar: '...', alAgotarse: '...' }
 ```
 
