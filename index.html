@@ -563,6 +563,121 @@
 
     .visor-cerrar:hover { color: var(--ink); }
 
+    /* ---------- el ahorcado (con luna en vez de horca) ---------- */
+    .ahorcado {
+      margin-top: 22px;
+      border: 1px solid rgba(245, 242, 234, 0.16);
+      border-radius: 14px;
+      padding: 20px 16px 16px;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .luna-fases {
+      display: block;
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 6px;
+    }
+
+    .ahorcado-vidas {
+      font-size: 9px;
+      letter-spacing: 0.26em;
+      text-indent: 0.26em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 18px;
+    }
+
+    .ahorcado-pista {
+      font-size: 12px;
+      line-height: 1.6;
+      letter-spacing: 0.03em;
+      color: var(--dim);
+      font-style: italic;
+      margin-bottom: 18px;
+    }
+
+    .ahorcado-palabra {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 7px;
+      margin-bottom: 20px;
+    }
+
+    .letra {
+      width: 22px;
+      font-size: 19px;
+      line-height: 1.5;
+      letter-spacing: 0;
+      border-bottom: 1px solid rgba(245, 242, 234, 0.35);
+      color: var(--ink);
+    }
+
+    .letra.puesta { border-bottom-color: var(--gold); }
+
+    .teclado {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .tecla {
+      appearance: none;
+      aspect-ratio: 1;
+      border: 1px solid rgba(245, 242, 234, 0.18);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .tecla:hover:not(:disabled) { background: rgba(245, 242, 234, 0.12); }
+    .tecla:disabled { cursor: default; }
+    .tecla.acierto { border-color: var(--gold); color: var(--gold); background: rgba(227, 192, 122, 0.1); }
+    .tecla.fallo { color: var(--faint); border-color: rgba(245, 242, 234, 0.08); background: none; }
+
+    .ahorcado-aviso {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(245, 242, 234, 0.12);
+      font-size: 13px;
+      line-height: 1.7;
+      letter-spacing: 0.03em;
+      color: var(--ink);
+      animation: fadeIn 0.4s ease;
+    }
+
+    .ahorcado-aviso .revelada {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 18px;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      color: var(--gold);
+    }
+
+    .ahorcado-btn {
+      margin-top: 16px;
+      appearance: none;
+      border: 1px solid rgba(245, 242, 234, 0.4);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-indent: 0.2em;
+      text-transform: uppercase;
+      padding: 11px 20px;
+      cursor: pointer;
+    }
+
+    .ahorcado-btn:hover { background: rgba(245, 242, 234, 0.08); }
+
     /* ---------- tarjeta regalo ---------- */
     .regalo {
       margin-top: 22px;
@@ -2023,7 +2138,19 @@
         },
         nota: 'El café de tu casa sigue ganando, que quede claro. Esto es solo mientras llego 🌚'
       },
-      { titulo: '', texto: '' },   // casilla 5
+      {
+        titulo: 'Una pista, si te la ganas',
+        texto: 'Tu primer regalo de cumpleaños ya está comprado, pero de eso no te digo nada. Lo que sí te doy es una palabra. Adivínala y tendrás la pista; el día 25 entenderás por qué era esa y no otra.',
+        ahorcado: {
+          palabra: 'MADRUGADA',
+          pista: 'Esa hora en la que ya no queda nadie despierto y todo lo que suena, suena distinto.',
+          vidas: 6,
+          derrotasMax: 5,
+          alGanar: 'Ahí la tienes. Guárdatela y no le des más vueltas de las necesarias: el día 25 encaja sola 🌚',
+          alAgotarse: 'Se acabaron los intentos. La pista se queda conmigo hasta el día 25 — que, mira, tampoco falta tanto 🌚'
+        },
+        nota: 'Seis fases de luna por partida y cinco partidas en total. Nadie dijo que las pistas fueran gratis 🌚'
+      },
       { titulo: '', texto: '' },   // casilla 6
       { titulo: '', texto: '' }    // casilla 7
     ];
@@ -2342,6 +2469,200 @@
       if (e.key === 'Escape' && !visor.hidden) cerrarVisor();
     });
 
+    // ---------- el ahorcado ----------
+    // La luna mengua con cada fallo; cuando desaparece, se pierde la partida.
+    // A las derrotas máximas la casilla se cierra para siempre.
+    var AHORCADO_KEY = 'ahorcado-estado';
+
+    function leerAhorcado() {
+      try {
+        var v = JSON.parse(localStorage.getItem(AHORCADO_KEY));
+        return (v && typeof v === 'object') ? v : { derrotas: 0, ganado: false };
+      } catch (e) { return { derrotas: 0, ganado: false }; }
+    }
+
+    function guardarAhorcado(v) {
+      try { localStorage.setItem(AHORCADO_KEY, JSON.stringify(v)); } catch (e) {}
+    }
+
+    function montarAhorcado(cfg) {
+      var PALABRA = cfg.palabra.toUpperCase();
+      var VIDAS = cfg.vidas || 6;
+      var TOPE = cfg.derrotasMax || 5;
+
+      var caja = document.createElement('div');
+      caja.className = 'ahorcado';
+      var guardado = leerAhorcado();
+
+      // --- ya no hay partida que jugar ---
+      function desenlace(texto, revelar) {
+        caja.innerHTML = '';
+        var av = document.createElement('div');
+        av.className = 'ahorcado-aviso';
+        av.style.borderTop = 'none';
+        av.style.paddingTop = '0';
+        av.style.marginTop = '0';
+        if (revelar) {
+          var r = document.createElement('span');
+          r.className = 'revelada';
+          r.textContent = PALABRA;
+          av.appendChild(r);
+        }
+        av.appendChild(document.createTextNode(texto));
+        caja.appendChild(av);
+      }
+
+      if (guardado.ganado) { desenlace(cfg.alGanar, true); return caja; }
+      if (guardado.derrotas >= TOPE) { desenlace(cfg.alAgotarse, false); return caja; }
+
+      // --- la luna, que mengua ---
+      var NS = 'http://www.w3.org/2000/svg';
+      var svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('class', 'luna-fases');
+      svg.setAttribute('viewBox', '0 0 100 100');
+      svg.setAttribute('aria-hidden', 'true');
+      var defs = document.createElementNS(NS, 'defs');
+      var mask = document.createElementNS(NS, 'mask');
+      mask.setAttribute('id', 'mLuna');
+      var base = document.createElementNS(NS, 'circle');
+      base.setAttribute('cx', '50'); base.setAttribute('cy', '50');
+      base.setAttribute('r', '38'); base.setAttribute('fill', '#fff');
+      var tapa = document.createElementNS(NS, 'circle');
+      tapa.setAttribute('cy', '50'); tapa.setAttribute('r', '38');
+      tapa.setAttribute('fill', '#000'); tapa.setAttribute('cx', '-100');
+      mask.appendChild(base); mask.appendChild(tapa);
+      defs.appendChild(mask);
+      var borde = document.createElementNS(NS, 'circle');
+      borde.setAttribute('cx', '50'); borde.setAttribute('cy', '50');
+      borde.setAttribute('r', '38');
+      borde.setAttribute('fill', 'none');
+      borde.setAttribute('stroke', 'rgba(245,242,234,0.14)');
+      var disco = document.createElementNS(NS, 'circle');
+      disco.setAttribute('cx', '50'); disco.setAttribute('cy', '50');
+      disco.setAttribute('r', '38');
+      disco.setAttribute('fill', '#e8e2d2');
+      disco.setAttribute('mask', 'url(#mLuna)');
+      svg.appendChild(defs); svg.appendChild(borde); svg.appendChild(disco);
+      caja.appendChild(svg);
+
+      var vidasEl = document.createElement('div');
+      vidasEl.className = 'ahorcado-vidas';
+      caja.appendChild(vidasEl);
+
+      var pista = document.createElement('p');
+      pista.className = 'ahorcado-pista';
+      pista.textContent = cfg.pista;
+      caja.appendChild(pista);
+
+      var palabraEl = document.createElement('div');
+      palabraEl.className = 'ahorcado-palabra';
+      caja.appendChild(palabraEl);
+
+      var teclado = document.createElement('div');
+      teclado.className = 'teclado';
+      caja.appendChild(teclado);
+
+      var acertadas = [], fallos = 0, terminada = false;
+
+      function pintarLuna() {
+        // El disco que la tapa tiene el mismo radio: en cx = 50-2r no la roza
+        // (luna llena) y en cx = 50 la cubre entera (luna nueva).
+        var t = fallos / VIDAS;
+        tapa.setAttribute('cx', String(-26 + t * 76));
+      }
+
+      function pintarPalabra() {
+        palabraEl.innerHTML = '';
+        PALABRA.split('').forEach(function (ch) {
+          var d = document.createElement('span');
+          d.className = 'letra';
+          if (acertadas.indexOf(ch) !== -1) {
+            d.textContent = ch;
+            d.classList.add('puesta');
+          } else {
+            d.innerHTML = '&nbsp;';
+          }
+          palabraEl.appendChild(d);
+        });
+      }
+
+      function completa() {
+        return PALABRA.split('').every(function (ch) { return acertadas.indexOf(ch) !== -1; });
+      }
+
+      function rematar(gano) {
+        terminada = true;
+        Array.prototype.forEach.call(teclado.children, function (b) { b.disabled = true; });
+        var est = leerAhorcado();
+        if (gano) { est.ganado = true; } else { est.derrotas = (est.derrotas || 0) + 1; }
+        guardarAhorcado(est);
+
+        var av = document.createElement('div');
+        av.className = 'ahorcado-aviso';
+        if (gano) {
+          var r = document.createElement('span');
+          r.className = 'revelada';
+          r.textContent = PALABRA;
+          av.appendChild(r);
+          av.appendChild(document.createTextNode(cfg.alGanar));
+        } else if (est.derrotas >= TOPE) {
+          // sin intentos: fuera el teclado, que no quede nada muerto en pantalla
+          desenlace(cfg.alAgotarse, false);
+          syncPanel();
+          return;
+        } else {
+          var quedan = TOPE - est.derrotas;
+          av.appendChild(document.createTextNode(
+            'La luna se apagó. Te quedan ' + quedan +
+            (quedan === 1 ? ' intento' : ' intentos') + ' 🌚'));
+          var otra = document.createElement('button');
+          otra.type = 'button';
+          otra.className = 'ahorcado-btn';
+          otra.textContent = 'Probar otra vez';
+          otra.addEventListener('click', function () {
+            var nuevo = montarAhorcado(cfg);
+            caja.parentNode.replaceChild(nuevo, caja);
+            syncPanel();
+          });
+          av.appendChild(document.createElement('br'));
+          av.appendChild(otra);
+        }
+        caja.appendChild(av);
+        syncPanel();
+      }
+
+      function probar(ch, boton) {
+        if (terminada) return;
+        boton.disabled = true;
+        if (PALABRA.indexOf(ch) !== -1) {
+          acertadas.push(ch);
+          boton.classList.add('acierto');
+          pintarPalabra();
+          if (completa()) rematar(true);
+        } else {
+          fallos++;
+          boton.classList.add('fallo');
+          pintarLuna();
+          vidasEl.textContent = (VIDAS - fallos) + ' de ' + VIDAS + ' fases';
+          if (fallos >= VIDAS) rematar(false);
+        }
+      }
+
+      'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'.split('').forEach(function (ch) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'tecla';
+        b.textContent = ch;
+        b.addEventListener('click', function () { probar(ch, b); });
+        teclado.appendChild(b);
+      });
+
+      vidasEl.textContent = VIDAS + ' de ' + VIDAS + ' fases';
+      pintarLuna();
+      pintarPalabra();
+      return caja;
+    }
+
     // monta la tarjeta regalo
     function montarRegalo(g) {
       var caja = document.createElement('div');
@@ -2517,6 +2838,7 @@
       p.textContent = s.texto || 'Esta sorpresa aún se está cocinando. Vuelve en un rato 🌚';
       boxOpen.appendChild(p);
 
+      if (s.ahorcado) boxOpen.appendChild(montarAhorcado(s.ahorcado));
       if (s.regalo) boxOpen.appendChild(montarRegalo(s.regalo));
       if (s.juego) boxOpen.appendChild(montarJuego(s.juego));
       if (s.criticas) boxOpen.appendChild(montarCriticas(s.criticas, s.recuerdos));

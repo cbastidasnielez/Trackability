@@ -120,6 +120,22 @@ El juego vive en `public/flappy.js` (`window.crearFlappy`) y lo usan las dos
 páginas. En la casilla 03 va con meta de 10 puntos y premio; en la de
 visitantes va sin meta, jugando a batir el récord (guardado en `localStorage`).
 
+## El ahorcado de la casilla 05
+
+Mismo juego de siempre, pero en vez del muñeco **mengua una luna**: seis fases,
+y cuando desaparece se pierde la partida. La palabra es `MADRUGADA`, pista
+indirecta del regalo de cumpleaños (un vinilo de *AM*) — no lo nombra, solo
+cobra sentido después.
+
+```js
+ahorcado: { palabra: 'MADRUGADA', pista: '...', vidas: 6, derrotasMax: 5,
+            alGanar: '...', alAgotarse: '...' }
+```
+
+A las **5 derrotas** la casilla se cierra: desaparece el teclado y queda solo el
+mensaje, para siempre. Si acierta, la palabra se queda a la vista y ya no se
+vuelve a jugar. Todo en `localStorage` (`ahorcado-estado`).
+
 ## Nota sobre la tarjeta regalo
 
 La casilla 04 lleva el código de una tarjeta regalo. Aunque se descubra al
