@@ -150,6 +150,15 @@ del tiempo que queda.
 Convertir las casillas en "raspaditos" de verdad, para descubrir cada sorpresa
 rascando en lugar de pulsando. Stay tuned 🌚
 
+## Analíticas
+
+Vercel Web Analytics, vía `@vercel/analytics`. La llamada a `inject()` vive en
+`src/analytics.js` y ambas páginas la cargan como módulo aparte, para no tocar
+sus scripts clásicos. En local no envía nada.
+
+Hay que activarlo una vez en el panel: **proyecto → Analytics → Enable**. Sin
+ese paso el script se carga pero no se registra ninguna visita.
+
 ## Desarrollo local
 
 ```bash
