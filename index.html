@@ -581,33 +581,104 @@
       justify-content: center;
     }
 
-    .bola.agitando { animation: agitar 0.75s ease-in-out; }
+    .bola.agitando { animation: agitar 0.9s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
 
+    /* sacudida seca, como cuando revuelves el líquido de verdad */
     @keyframes agitar {
       0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      15% { transform: translate(-7px, 3px) rotate(-7deg); }
-      32% { transform: translate(6px, -4px) rotate(6deg); }
-      50% { transform: translate(-5px, -3px) rotate(-5deg); }
-      68% { transform: translate(5px, 4px) rotate(4deg); }
-      85% { transform: translate(-3px, 2px) rotate(-2deg); }
+      8%   { transform: translate(-13px, 7px) rotate(-12deg); }
+      20%  { transform: translate(12px, -9px) rotate(11deg); }
+      33%  { transform: translate(-11px, -7px) rotate(-9deg); }
+      46%  { transform: translate(10px, 8px) rotate(8deg); }
+      60%  { transform: translate(-7px, 4px) rotate(-5deg); }
+      75%  { transform: translate(5px, -3px) rotate(3deg); }
+      88%  { transform: translate(-2px, 1px) rotate(-1deg); }
     }
 
-    .bola-ocho {
-      width: 52px;
-      height: 52px;
+    /* onda que sale de la bola al revelar */
+    .bola::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
       border-radius: 50%;
+      border: 1px solid rgba(169, 139, 216, 0.7);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .bola.revelando::after { animation: onda 1.2s ease-out; }
+
+    @keyframes onda {
+      0%   { transform: scale(1); opacity: 0.9; }
+      100% { transform: scale(1.75); opacity: 0; }
+    }
+
+    .bola.revelando {
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 70px rgba(169, 139, 216, 0.5);
+    }
+
+    /* la ventanita: se oscurece como el líquido al agitarse */
+    .bola-ventana {
+      position: relative;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      overflow: hidden;
       background: var(--ink);
-      color: #14101c;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: background 0.45s ease;
+    }
+
+    .bola.agitando .bola-ventana,
+    .bola.revelando .bola-ventana { background: #0c0616; }
+
+    .bola-ocho {
+      color: #14101c;
       font-family: Georgia, "Times New Roman", serif;
       font-size: 30px;
       line-height: 1;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.35s ease, transform 0.35s ease;
     }
 
-    .bola.agitando .bola-ocho { opacity: 0.35; }
+    .bola.agitando .bola-ocho,
+    .bola.revelando .bola-ocho { opacity: 0; transform: scale(0.6); }
+
+    /* el triángulo que sube desde el fondo */
+    .bola-triangulo {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+    }
+
+    .bola-triangulo::before {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      background: linear-gradient(160deg, #8e6fd4 0%, #4b2f80 55%, #2a1848 100%);
+      clip-path: polygon(50% 6%, 97% 94%, 3% 94%);
+    }
+
+    .bola-triangulo span {
+      position: relative;
+      margin-top: 9px;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .bola.revelando .bola-triangulo {
+      animation: emerger 0.95s cubic-bezier(0.2, 0.9, 0.25, 1) forwards;
+    }
+
+    @keyframes emerger {
+      0%   { opacity: 0; transform: scale(0.2) rotate(-28deg); filter: blur(9px); }
+      55%  { opacity: 1; transform: scale(1.14) rotate(5deg); filter: blur(1.5px); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); filter: blur(0); }
+    }
 
     .bola-pregunta {
       font-size: 12px;
@@ -1864,6 +1935,8 @@
 
     @media (prefers-reduced-motion: reduce) {
       .ring-spin, .photo, .lights i { animation: none; }
+      .bola.agitando, .bola.revelando::after { animation: none; }
+      .bola.revelando .bola-triangulo { animation: none; opacity: 1; }
       .snow { display: none; }
     }
   </style>
@@ -2886,10 +2959,18 @@
       wrap.className = 'bola-wrap';
       var bola = document.createElement('div');
       bola.className = 'bola';
+      var ventana = document.createElement('div');
+      ventana.className = 'bola-ventana';
       var ocho = document.createElement('div');
       ocho.className = 'bola-ocho';
       ocho.textContent = '8';
-      bola.appendChild(ocho);
+      var triangulo = document.createElement('div');
+      triangulo.className = 'bola-triangulo';
+      var icono = document.createElement('span');
+      triangulo.appendChild(icono);
+      ventana.appendChild(ocho);
+      ventana.appendChild(triangulo);
+      bola.appendChild(ventana);
       wrap.appendChild(bola);
       caja.appendChild(wrap);
 
@@ -2928,11 +3009,20 @@
           b.classList.toggle('elegida', b === boton);
         });
 
-        bola.classList.remove('agitando');
-        void bola.offsetWidth;          // reinicia la animación
+        // 1) se agita
+        bola.classList.remove('agitando', 'revelando');
+        salida.hidden = true;
+        void bola.offsetWidth;          // reinicia las animaciones
         bola.classList.add('agitando');
 
-        // la respuesta aparece cuando la bola termina de agitarse
+        // 2) del líquido sube el triángulo, con el icono de lo que eligió
+        setTimeout(function () {
+          icono.textContent = em.icono;
+          bola.classList.remove('agitando');
+          bola.classList.add('revelando');
+        }, 820);
+
+        // 3) y detrás llega la respuesta
         setTimeout(function () {
           var r = elegir(em);
           salida.innerHTML = '';
@@ -2947,10 +3037,9 @@
           salida.appendChild(c);
           salida.appendChild(n);
           salida.hidden = false;
-          bola.classList.remove('agitando');
           ocupada = false;
           syncPanel();
-        }, 780);
+        }, 1280);
       }
 
       cfg.emociones.forEach(function (em) {
