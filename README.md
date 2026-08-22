@@ -120,6 +120,24 @@ El juego vive en `public/flappy.js` (`window.crearFlappy`) y lo usan las dos
 páginas. En la casilla 03 va con meta de 10 puntos y premio; en la de
 visitantes va sin meta, jugando a batir el récord (guardado en `localStorage`).
 
+## La bola del 8 (casilla 06)
+
+Ella elige cómo se siente entre seis emociones y la bola le devuelve un
+versículo con su reflexión. Cada emoción guarda **tres respuestas** y se sortea
+una al azar, evitando repetir la anterior, así que puede volver cuando quiera.
+Es el único bloque en morado (`--morado`), su color.
+
+```js
+bola: {
+  pregunta: '¿Cómo está tu alma hoy?',
+  emociones: [
+    { id: 'triste', icono: '🌧️', nombre: 'Triste', respuestas: [
+      { cita: '...', ref: 'Salmo 56:8', nota: '...' }, ...
+    ] }, ...
+  ]
+}
+```
+
 ## El ahorcado de la casilla 05
 
 Mismo juego de siempre, pero en vez del muñeco **mengua una luna**: seis fases,

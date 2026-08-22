@@ -19,6 +19,7 @@
       --faint: rgba(245, 242, 234, 0.22);
       --glow: rgba(245, 242, 234, 0.08);
       --gold: #e3c07a;
+      --morado: #a98bd8;
     }
 
     html, body { min-height: 100%; }
@@ -562,6 +563,143 @@
     }
 
     .visor-cerrar:hover { color: var(--ink); }
+
+    /* ---------- la bola del 8 ---------- */
+    .bola-bloque { margin-top: 24px; }
+
+    .bola-wrap { display: flex; justify-content: center; margin-bottom: 22px; }
+
+    .bola {
+      position: relative;
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 34% 28%, #6b52a0 0%, #33204f 38%, #140d20 72%, #08050d 100%);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 44px rgba(169, 139, 216, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bola.agitando { animation: agitar 0.75s ease-in-out; }
+
+    @keyframes agitar {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      15% { transform: translate(-7px, 3px) rotate(-7deg); }
+      32% { transform: translate(6px, -4px) rotate(6deg); }
+      50% { transform: translate(-5px, -3px) rotate(-5deg); }
+      68% { transform: translate(5px, 4px) rotate(4deg); }
+      85% { transform: translate(-3px, 2px) rotate(-2deg); }
+    }
+
+    .bola-ocho {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #14101c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .bola.agitando .bola-ocho { opacity: 0.35; }
+
+    .bola-pregunta {
+      font-size: 12px;
+      letter-spacing: 0.26em;
+      text-indent: 0.26em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .emociones {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+      gap: 9px;
+    }
+
+    .emocion {
+      appearance: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 13px 6px;
+      border: 1px solid rgba(169, 139, 216, 0.3);
+      border-radius: 12px;
+      background: rgba(169, 139, 216, 0.06);
+      color: var(--dim);
+      font-family: inherit;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease, transform 0.15s ease;
+    }
+
+    .emocion i { font-style: normal; font-size: 19px; line-height: 1; }
+
+    .emocion:hover {
+      border-color: var(--morado);
+      background: rgba(169, 139, 216, 0.14);
+      color: var(--ink);
+    }
+
+    .emocion:active { transform: scale(0.96); }
+
+    .emocion.elegida {
+      border-color: var(--morado);
+      background: rgba(169, 139, 216, 0.18);
+      color: var(--ink);
+      box-shadow: 0 0 22px rgba(169, 139, 216, 0.22);
+    }
+
+    .revelacion {
+      margin-top: 22px;
+      padding: 22px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(169, 139, 216, 0.3);
+      background: linear-gradient(170deg, rgba(169, 139, 216, 0.12), rgba(255, 255, 255, 0.015));
+      animation: riseIn 0.5s ease;
+    }
+
+    .revelacion[hidden] { display: none; }
+
+    .revelacion blockquote {
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-size: clamp(1.02rem, 4.5vw, 1.18rem);
+      line-height: 1.6;
+      color: var(--ink);
+    }
+
+    .revelacion cite {
+      display: block;
+      margin-top: 12px;
+      font-style: normal;
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      color: var(--morado);
+    }
+
+    .revelacion .reflexion {
+      margin-top: 16px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(169, 139, 216, 0.22);
+      font-size: 13px;
+      line-height: 1.75;
+      letter-spacing: 0.02em;
+      color: var(--dim);
+    }
 
     /* ---------- el ahorcado (con luna en vez de horca) ---------- */
     .ahorcado {
@@ -2151,7 +2289,82 @@
         },
         nota: 'Seis fases de luna por partida y cinco partidas en total. Nadie dijo que las pistas fueran gratis 🌚'
       },
-      { titulo: '', texto: '' },   // casilla 6
+      {
+        titulo: 'La bola del 8',
+        texto: 'Es tu número, pero esta no adivina el futuro. Dile cómo estás hoy y te devuelve algo mucho mejor que un consejo mío.',
+        bola: {
+          pregunta: '¿Cómo está tu alma hoy?',
+          emociones: [
+            {
+              id: 'feliz', icono: '☀️', nombre: 'Feliz',
+              respuestas: [
+                { cita: 'Has cambiado mi lamento en baile; desataste mi cilicio, y me ceñiste de alegría.', ref: 'Salmo 30:11',
+                  nota: 'Hay alegrías que solo entienden quienes alguna vez conocieron profundamente el dolor.' },
+                { cita: 'Este es el día que hizo Jehová; nos gozaremos y alegraremos en él.', ref: 'Salmo 118:24',
+                  nota: 'No porque todos los días sean perfectos, sino porque algunos días el simple hecho de estar vivo se siente como un regalo.' },
+                { cita: 'Me mostrarás la senda de la vida; en tu presencia hay plenitud de gozo.', ref: 'Salmo 16:11',
+                  nota: 'Existe una alegría que no necesita ruido. La que simplemente te hace pensar: “Aquí. Ahora. Esto es suficiente.”' }
+              ]
+            },
+            {
+              id: 'triste', icono: '🌧️', nombre: 'Triste',
+              respuestas: [
+                { cita: 'Tú has contado mis angustias; pon mis lágrimas en tu redoma. ¿No están ellas en tu libro?', ref: 'Salmo 56:8',
+                  nota: 'Como si cada lágrima que nadie vio hubiera sido recogida por alguien.' },
+                { cita: 'El Señor está cerca de los quebrantados de corazón.', ref: 'Salmo 34:18',
+                  nota: 'Quizá hay momentos en los que tocar fondo no significa que Dios esté lejos, sino que es allí donde se acerca más.' },
+                { cita: 'Jesús lloró.', ref: 'Juan 11:35',
+                  nota: 'A veces, dos palabras bastan para recordar que llorar no es falta de fe. Incluso Jesús conoció ese lenguaje del alma.' }
+              ]
+            },
+            {
+              id: 'enfadada', icono: '🔥', nombre: 'Enfadada',
+              respuestas: [
+                { cita: 'En mi angustia invoqué a Jehová, y clamé a mi Dios.', ref: 'Salmo 18:6',
+                  nota: 'Hay una ira que debajo de sí misma esconde dolor, impotencia y el grito de algo que nunca debió suceder.' },
+                { cita: 'Airaos, pero no pequéis; meditad en vuestro corazón estando en vuestra cama, y callad.', ref: 'Salmo 4:4',
+                  nota: 'No todo lo que sientes debe convertirse en lo que haces. A veces la mayor fuerza es no permitir que una herida decida quién eres.' },
+                { cita: 'La blanda respuesta quita la ira.', ref: 'Proverbios 15:1',
+                  nota: 'Porque hay guerras que se apagan cuando alguien decide no alimentar el fuego.' }
+              ]
+            },
+            {
+              id: 'ansiosa', icono: '🌊', nombre: 'Ansiosa',
+              respuestas: [
+                { cita: 'Cuando pases por las aguas, yo estaré contigo; y si por los ríos, no te anegarán.', ref: 'Isaías 43:2',
+                  nota: 'No se te promete que nunca habrá aguas profundas. Se te promete algo más íntimo: que habrá una presencia contigo dentro de ellas.' },
+                { cita: 'Cuando la ansiedad se multiplicaba dentro de mí, tus consuelos alegraban mi alma.', ref: 'Salmo 94:19',
+                  nota: 'Qué hermoso saber que la Biblia no dice simplemente “no estés ansioso”. Habla de cuando la ansiedad se multiplica dentro de ti.' },
+                { cita: 'Estad quietos, y conoced que yo soy Dios.', ref: 'Salmo 46:10',
+                  nota: 'Quizá no tienes que resolver tu vida esta noche. Quizá, por ahora, solo tienes que respirar y soltar aquello que nunca estuvo realmente en tus manos.' }
+              ]
+            },
+            {
+              id: 'sola', icono: '🌙', nombre: 'Sola',
+              respuestas: [
+                { cita: 'Aunque mi padre y mi madre me dejaran, con todo, Jehová me recogerá.', ref: 'Salmo 27:10',
+                  nota: 'Hay abandonos que parecen decir: “No eres digno de ser elegido”. Y este versículo responde: “Aunque todos se vayan, yo todavía te recogeré.”' },
+                { cita: '¿A dónde me iré de tu Espíritu? ¿Y a dónde huiré de tu presencia?', ref: 'Salmo 139:7',
+                  nota: 'No existe una habitación, una noche, una ciudad ni una tristeza lo suficientemente profunda como para quedar fuera de Su presencia.' },
+                { cita: 'Todos me abandonaron… pero el Señor estuvo a mi lado y me dio fuerzas.', ref: '2 Timoteo 4:16-17',
+                  nota: 'Quizá la soledad no siempre significa que no hay nadie. A veces significa descubrir quién permanece cuando todos los demás se han ido.' }
+              ]
+            },
+            {
+              id: 'agradecida', icono: '🤍', nombre: 'Agradecida',
+              respuestas: [
+                { cita: '¿Qué pagaré a Jehová por todos sus beneficios para conmigo?', ref: 'Salmo 116:12',
+                  nota: 'Hay momentos en que miras tu vida y no sabes cómo agradecer todo aquello que sobreviviste, todo aquello que recibiste y todo lo que, sin darte cuenta, te sostuvo.' },
+                { cita: 'Hasta aquí nos ayudó Jehová.', ref: '1 Samuel 7:12',
+                  nota: 'Cuántas veces has pensado que no podrías continuar. Y, sin embargo, estás aquí. Hasta aquí.' },
+                { cita: 'Por la misericordia de Jehová no hemos sido consumidos… nuevas son cada mañana.', ref: 'Lamentaciones 3:22-23',
+                  nota: 'Tal vez la gratitud más profunda no consiste en decir: “Mi vida ha sido perfecta”, sino en mirar atrás y susurrar: “No entiendo cómo llegué hasta aquí… pero gracias por no soltarme.”' }
+              ]
+            }
+          ]
+        },
+        nota: 'Tres respuestas guardadas para cada estado de ánimo, y la bola evita repetirte la última. Vuelve las veces que haga falta 🌚'
+      },
       { titulo: '', texto: '' }    // casilla 7
     ];
 
@@ -2663,6 +2876,99 @@
       return caja;
     }
 
+    // monta la bola del 8: ella elige cómo se siente y recibe un versículo
+    function montarBola(cfg) {
+      var caja = document.createElement('div');
+      caja.className = 'bola-bloque';
+
+      var wrap = document.createElement('div');
+      wrap.className = 'bola-wrap';
+      var bola = document.createElement('div');
+      bola.className = 'bola';
+      var ocho = document.createElement('div');
+      ocho.className = 'bola-ocho';
+      ocho.textContent = '8';
+      bola.appendChild(ocho);
+      wrap.appendChild(bola);
+      caja.appendChild(wrap);
+
+      var preg = document.createElement('div');
+      preg.className = 'bola-pregunta';
+      preg.textContent = cfg.pregunta || '¿Cómo te sientes hoy?';
+      caja.appendChild(preg);
+
+      var rejilla = document.createElement('div');
+      rejilla.className = 'emociones';
+      caja.appendChild(rejilla);
+
+      var salida = document.createElement('div');
+      salida.className = 'revelacion';
+      salida.hidden = true;
+      salida.setAttribute('aria-live', 'polite');
+      caja.appendChild(salida);
+
+      var ultimas = {};   // para no repetir la respuesta anterior de cada emoción
+      var ocupada = false;
+
+      function elegir(em) {
+        var opciones = em.respuestas;
+        if (opciones.length === 1) return opciones[0];
+        var i, previo = ultimas[em.id];
+        do { i = Math.floor(Math.random() * opciones.length); } while (i === previo);
+        ultimas[em.id] = i;
+        return opciones[i];
+      }
+
+      function responder(em, boton) {
+        if (ocupada) return;
+        ocupada = true;
+
+        Array.prototype.forEach.call(rejilla.children, function (b) {
+          b.classList.toggle('elegida', b === boton);
+        });
+
+        bola.classList.remove('agitando');
+        void bola.offsetWidth;          // reinicia la animación
+        bola.classList.add('agitando');
+
+        // la respuesta aparece cuando la bola termina de agitarse
+        setTimeout(function () {
+          var r = elegir(em);
+          salida.innerHTML = '';
+          var q = document.createElement('blockquote');
+          q.textContent = '«' + r.cita + '»';
+          var c = document.createElement('cite');
+          c.textContent = r.ref;
+          var n = document.createElement('p');
+          n.className = 'reflexion';
+          n.textContent = r.nota;
+          salida.appendChild(q);
+          salida.appendChild(c);
+          salida.appendChild(n);
+          salida.hidden = false;
+          bola.classList.remove('agitando');
+          ocupada = false;
+          syncPanel();
+        }, 780);
+      }
+
+      cfg.emociones.forEach(function (em) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'emocion';
+        var ic = document.createElement('i');
+        ic.textContent = em.icono;
+        var tx = document.createElement('span');
+        tx.textContent = em.nombre;
+        b.appendChild(ic);
+        b.appendChild(tx);
+        b.addEventListener('click', function () { responder(em, b); });
+        rejilla.appendChild(b);
+      });
+
+      return caja;
+    }
+
     // monta la tarjeta regalo
     function montarRegalo(g) {
       var caja = document.createElement('div');
@@ -2839,6 +3145,7 @@
       boxOpen.appendChild(p);
 
       if (s.ahorcado) boxOpen.appendChild(montarAhorcado(s.ahorcado));
+      if (s.bola) boxOpen.appendChild(montarBola(s.bola));
       if (s.regalo) boxOpen.appendChild(montarRegalo(s.regalo));
       if (s.juego) boxOpen.appendChild(montarJuego(s.juego));
       if (s.criticas) boxOpen.appendChild(montarCriticas(s.criticas, s.recuerdos));
