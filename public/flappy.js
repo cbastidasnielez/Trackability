@@ -12,8 +12,9 @@
     var OBJETIVO = cfg.objetivo || 0;      // 0 = sin meta, se juega a récord
     var alGanar = cfg.alGanar || function () {};
     var alCrecer = cfg.alCrecer || function () {};
+    var premiado = false;   // la meta se cobra una sola vez
 
-    function etiquetaMarcador(p) { return p + (OBJETIVO ? ' / ' + OBJETIVO : ''); }
+    function etiquetaMarcador(p) { return p + (OBJETIVO && !premiado ? ' / ' + OBJETIVO : ''); }
 
 
     var caja = document.createElement('div');
@@ -117,7 +118,17 @@
           t.contado = true;
           puntos++;
           marcador.textContent = etiquetaMarcador(puntos);
-          if (OBJETIVO && puntos >= OBJETIVO) { estado = 'ganado'; ganar(); return; }
+          if (OBJETIVO && !premiado && puntos >= OBJETIVO) {
+            premiado = true;
+            if (cfg.seguirTrasMeta) {
+              // se cobra el premio pero la partida continúa
+              ganar();
+            } else {
+              estado = 'ganado';
+              ganar();
+              return;
+            }
+          }
         }
         if (t.x < -70) tubos.splice(i, 1);
         if (chocaCon(t)) {
@@ -239,7 +250,12 @@
       window.__juego = {
         estado: function () { return { estado: estado, puntos: puntos, y: ave.y, tubos: tubos.length }; },
         puntuar: function (n) { puntos = n; marcador.textContent = etiquetaMarcador(puntos); },
-        forzarVictoria: function () { puntos = OBJETIVO; estado = 'ganado'; ganar(); },
+        forzarVictoria: function () {
+          puntos = OBJETIVO;
+          premiado = true;
+          if (!cfg.seguirTrasMeta) estado = 'ganado';
+          ganar();
+        },
         volar: volar
       };
     }

@@ -92,10 +92,12 @@ casillas siguen intactas. Por la URL normal la regla se cumple sin excepción.
 ## El juego de la casilla 03
 
 Un *flappy* en `<canvas>`, sin librerías: la cara de ella vuela entre columnas
-y a los **10 puntos** se desbloquea un vale de masaje imprimible.
+y a los **10 puntos** se desbloquea un vale de masaje imprimible. La partida
+**no se detiene al llegar a la meta** (`seguirTrasMeta`): el vale aparece
+debajo y los puntos siguen subiendo.
 
 ```js
-juego: { objetivo: 10, sprite: '/mariapnel.jpeg' }
+juego: { objetivo: 10, sprite: '/cara-juego.png', respaldo: '/mariapnel.jpeg' }
 ```
 
 - **El vale se emite una sola vez.** Se guarda en `localStorage` con su fecha

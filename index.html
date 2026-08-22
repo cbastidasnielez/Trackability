@@ -2636,6 +2636,7 @@
         respaldo: cfg.respaldo,
         objetivo: cfg.objetivo || 10,
         pista: (cfg.objetivo || 10) + ' puntos y hay premio',
+        seguirTrasMeta: true,   // el premio no acaba la partida
         depurar: MODO_TEST,
         alCrecer: syncPanel,
         alMontar: function (ctx) {
@@ -2649,9 +2650,9 @@
         alGanar: function (ctx) {
           var yaLoTenia = !!valeEmitido();
           var emitido = emitirVale();
-          ctx.ayuda.textContent = '¡Conseguido!';
+          ctx.ayuda.textContent = 'Sigue volando 🌚';
           ctx.premio.innerHTML = '';
-          ctx.premio.appendChild(montarVale(ctx.reiniciar, false, emitido, yaLoTenia));
+          ctx.premio.appendChild(montarVale(null, false, emitido, yaLoTenia));
           syncPanel();
         }
       });
