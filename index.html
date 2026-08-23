@@ -783,6 +783,47 @@
     .album button:hover img { filter: none; }
     .album button:active { transform: scale(0.97); }
 
+    /* el marco que todavía no tiene foto */
+    .album .pendiente {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      border: 1px dashed rgba(227, 192, 122, 0.5);
+      background: rgba(227, 192, 122, 0.05);
+      color: var(--gold);
+      cursor: default;
+      animation: latir 3.2s ease-in-out infinite;
+    }
+
+    .album .pendiente b {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .album .pendiente span {
+      font-size: 7px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    @keyframes latir {
+      0%, 100% { border-color: rgba(227, 192, 122, 0.5); }
+      50%      { border-color: rgba(227, 192, 122, 0.16); }
+    }
+
+    .album-pie {
+      margin-top: 12px;
+      font-size: 11.5px;
+      line-height: 1.7;
+      font-style: italic;
+      color: var(--dim);
+    }
+
     /* ---------- el raspadito ---------- */
     .rasca {
       margin-top: 26px;
@@ -2732,7 +2773,13 @@
             'No he conocido nada nuevo este mes. Nada que no supiera ya: que eres una persona llena de vida, de ocurrencias, digna de admirar. Que verte a ti es, para mí, un ejemplo del hombre que quiero llegar a ser.',
             'Me alegro por tu vida. Y me alegro de haber formado parte de ella estos días.'
           ],
-          fotos: ['/nosotros-1.jpg', '/nosotros-2.jpg', '/nosotros-3.jpg', '/nosotros-4.jpg', '/nosotros-5.jpg'],
+          fotos: ['/nosotros-1.jpg', '/nosotros-2.jpg', '/nosotros-3.jpg',
+                  '/nosotros-4.jpg', '/nosotros-5.jpg', '/nosotros-6.jpg'],
+          marcoVacio: {
+            fecha: '26/12',
+            etiqueta: 'Pendiente',
+            pie: 'El último marco está vacío a propósito. Esa foto todavía no existe, pero ya tiene fecha.'
+          },
           rasca: { pie: 'Una cosa más', texto: 'Para más sorpresas, Churra' }
         },
         nota: 'Las cuatro fechas ya estaban ahí antes de que yo me diera cuenta. Solo hacía falta ponerlas en fila 🌚'
@@ -3405,7 +3452,29 @@
           b.addEventListener('click', function () { abrirVisor(src); });
           album.appendChild(b);
         });
+
+        // el hueco de la foto que todavía no existe
+        if (cfg.marcoVacio) {
+          var hueco = document.createElement('div');
+          hueco.className = 'pendiente';
+          hueco.setAttribute('aria-label', 'Foto pendiente: ' + cfg.marcoVacio.pie);
+          var f = document.createElement('b');
+          f.textContent = cfg.marcoVacio.fecha;
+          var t = document.createElement('span');
+          t.textContent = cfg.marcoVacio.etiqueta;
+          hueco.appendChild(f);
+          hueco.appendChild(t);
+          album.appendChild(hueco);
+        }
+
         dentro.appendChild(album);
+
+        if (cfg.marcoVacio && cfg.marcoVacio.pie) {
+          var pieAlbum = document.createElement('p');
+          pieAlbum.className = 'album-pie';
+          pieAlbum.textContent = cfg.marcoVacio.pie;
+          dentro.appendChild(pieAlbum);
+        }
       }
 
       if (cfg.rasca) {

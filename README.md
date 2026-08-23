@@ -125,8 +125,9 @@ visitantes va sin meta, jugando a batir el récord (guardado en `localStorage`).
 ## El candado (casilla 07)
 
 Cuatro ruedas con cuatro fechas de su historia: **24 · 25 · 26 · 2013**. Al
-abrirlo aparecen los tres días seguidos, la carta de despedida, cinco fotos con
-visor y un raspadito con el mensaje final. Queda abierto para siempre
+abrirlo aparecen los tres días seguidos, la carta de despedida, seis fotos con
+visor más un marco vacío para la de diciembre, y un raspadito con el mensaje
+final. Queda abierto para siempre
 (`candado-abierto` en `localStorage`).
 
 El raspadito es un `<canvas>` con `destination-out`: se borra con el dedo y a
@@ -139,6 +140,7 @@ candado: {
   seguidilla: { numeros: ['24','25','26'], texto: '...' },
   carta: ['...'],                       // el último párrafo sale en cursiva
   fotos: ['/nosotros-1.jpg', ...],
+  marcoVacio: { fecha: '26/12', etiqueta: 'Pendiente', pie: '...' },
   rasca: { pie: 'Una cosa más', texto: '...' }
 }
 ```
