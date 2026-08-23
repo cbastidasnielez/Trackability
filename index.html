@@ -564,6 +564,274 @@
 
     .visor-cerrar:hover { color: var(--ink); }
 
+    /* ---------- el candado ---------- */
+    .candado { margin-top: 24px; }
+
+    .candado-cuerpo {
+      border: 1px solid rgba(227, 192, 122, 0.32);
+      border-radius: 16px;
+      padding: 24px 18px 20px;
+      background: linear-gradient(170deg, rgba(227, 192, 122, 0.08), rgba(255, 255, 255, 0.015));
+    }
+
+    .candado-cuerpo.temblando { animation: agitar 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+
+    .ruedas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .rueda {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .rueda input {
+      width: 100%;
+      appearance: none;
+      -moz-appearance: textfield;
+      border: 1px solid rgba(245, 242, 234, 0.22);
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 26px;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+      padding: 12px 2px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+    }
+
+    .rueda input::-webkit-outer-spin-button,
+    .rueda input::-webkit-inner-spin-button { appearance: none; margin: 0; }
+
+    .rueda input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 22px rgba(227, 192, 122, 0.22);
+    }
+
+    .rueda.correcta input {
+      border-color: rgba(227, 192, 122, 0.75);
+      color: var(--gold);
+    }
+
+    .rueda-flechas { display: flex; gap: 4px; }
+
+    .rueda-flechas button {
+      appearance: none;
+      width: 28px;
+      height: 22px;
+      border: 1px solid rgba(245, 242, 234, 0.16);
+      border-radius: 7px;
+      background: transparent;
+      color: var(--faint);
+      font-family: inherit;
+      font-size: 9px;
+      line-height: 1;
+      cursor: pointer;
+      transition: color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .rueda-flechas button:hover { color: var(--ink); border-color: var(--gold); }
+
+    .pistas {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(227, 192, 122, 0.22);
+    }
+
+    .pistas li {
+      display: flex;
+      gap: 11px;
+      align-items: baseline;
+      font-size: 12.5px;
+      line-height: 1.6;
+      letter-spacing: 0.02em;
+      color: var(--dim);
+      text-align: left;
+    }
+
+    .pistas b {
+      flex: 0 0 auto;
+      font-weight: 400;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+    }
+
+    .candado-btn {
+      width: 100%;
+      margin-top: 20px;
+      appearance: none;
+      border: 1px solid rgba(227, 192, 122, 0.6);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--gold);
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-indent: 0.28em;
+      text-transform: uppercase;
+      padding: 15px;
+      cursor: pointer;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .candado-btn:hover {
+      background: rgba(227, 192, 122, 0.12);
+      box-shadow: 0 0 28px rgba(227, 192, 122, 0.24);
+    }
+
+    .candado-aviso {
+      margin-top: 14px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--dim);
+      min-height: 1.2em;
+    }
+
+    /* ---------- lo que hay dentro ---------- */
+    .abierto { animation: riseIn 0.6s ease; }
+
+    .seguidilla {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 4px 0 16px;
+    }
+
+    .seguidilla span {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.9rem, 9vw, 2.5rem);
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .seguidilla i {
+      font-style: normal;
+      color: var(--faint);
+      font-size: 14px;
+    }
+
+    .seguidilla-pie {
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: var(--dim);
+      margin-bottom: 6px;
+    }
+
+    .carta-final {
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(245, 242, 234, 0.12);
+    }
+
+    .carta-final p {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 14.5px;
+      line-height: 1.85;
+      color: rgba(245, 242, 234, 0.92);
+      margin-bottom: 16px;
+    }
+
+    .carta-final p:last-child { margin-bottom: 0; }
+
+    .carta-final .cierre {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    /* la tira de fotos del final */
+    .album {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+      gap: 8px;
+      margin-top: 22px;
+    }
+
+    .album button {
+      appearance: none;
+      padding: 0;
+      border: 1px solid rgba(245, 242, 234, 0.14);
+      border-radius: 9px;
+      overflow: hidden;
+      background: none;
+      cursor: pointer;
+      aspect-ratio: 1;
+      transition: border-color 0.3s ease, transform 0.15s ease;
+    }
+
+    .album img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(0.4) brightness(0.88);
+      transition: filter 0.35s ease;
+    }
+
+    .album button:hover { border-color: var(--gold); }
+    .album button:hover img { filter: none; }
+    .album button:active { transform: scale(0.97); }
+
+    /* ---------- el raspadito ---------- */
+    .rasca {
+      margin-top: 26px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(245, 242, 234, 0.12);
+    }
+
+    .rasca-pie {
+      font-size: 9px;
+      letter-spacing: 0.28em;
+      text-indent: 0.28em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 12px;
+    }
+
+    .rasca-caja {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(227, 192, 122, 0.35);
+      background: #0f0b16;
+      min-height: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px 16px;
+    }
+
+    .rasca-premio {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.1rem, 5.4vw, 1.4rem);
+      line-height: 1.4;
+      color: var(--gold);
+      text-align: center;
+    }
+
+    .rasca-caja canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+      touch-action: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .rasca-caja.limpia canvas { opacity: 0; pointer-events: none; }
+
     /* ---------- la bola del 8 ---------- */
     .bola-bloque { margin-top: 24px; }
 
@@ -2438,7 +2706,37 @@
         },
         nota: 'Tres respuestas guardadas para cada estado de ánimo, y la bola evita repetirte la última. Vuelve las veces que haga falta 🌚'
       },
-      { titulo: '', texto: '' }    // casilla 7
+      {
+        titulo: 'Lo último que queda cerrado',
+        texto: 'Cuatro fechas abren esto. Las sabes todas, aunque quizá nunca te hayas parado a ponerlas juntas.',
+        candado: {
+          cifras: [
+            { valor: 24, min: 1, max: 31, inicio: 1, pista: 'El día que nos vimos por última vez, en enero de 2022.' },
+            { valor: 25, min: 1, max: 31, inicio: 1, pista: 'El día en que naciste.' },
+            { valor: 26, min: 1, max: 31, inicio: 1, pista: 'El día de julio en que por fin te dije lo que sentía.' },
+            { valor: 2013, min: 2000, max: 2026, inicio: 2000, pista: 'El año en que te escribí por primera vez.' }
+          ],
+          animo: [
+            'Todavía no. Piensa en fechas, no en números 🌚',
+            'Casi. Son días del mes, menos la última, que es un año 🌚',
+            'Sigue. Te prometo que las cuatro las sabes 🌚'
+          ],
+          seguidilla: {
+            numeros: ['24', '25', '26'],
+            texto: 'Fíjate bien: la última vez que nos vimos, el día en que naciste y el día en que me atreví a hablar. Veinticuatro, veinticinco, veintiséis. Tres años distintos, tres motivos distintos, y salen seguidos como si alguien los hubiera colocado. Y el 26 es par, como el de diciembre en que aterrizo. Yo ya no sé si esto son coincidencias o es que hay fechas que se buscan entre ellas.'
+          },
+          carta: [
+            'Se acabaron las sorpresas, pero tu cumpleaños está a punto de empezar.',
+            'Es increíble lo que has removido en mí en un solo mes. Y me siento afortunado de que, después de todas esas fechas, esta vez sí voy a estar a tu lado para celebrar tu vida.',
+            'Ha sido un placer despertarte cada mañana con algo nuevo. Esta página ha sido mi manera de estar físicamente lo más cerca de ti que me deja la distancia.',
+            'No he conocido nada nuevo este mes. Nada que no supiera ya: que eres una persona llena de vida, de ocurrencias, digna de admirar. Que verte a ti es, para mí, un ejemplo del hombre que quiero llegar a ser.',
+            'Me alegro por tu vida. Y me alegro de haber formado parte de ella estos días.'
+          ],
+          fotos: ['/nosotros-1.jpg', '/nosotros-2.jpg', '/nosotros-3.jpg', '/nosotros-4.jpg', '/nosotros-5.jpg'],
+          rasca: { pie: 'Una cosa más', texto: 'Para más sorpresas, Churra' }
+        },
+        nota: 'Las cuatro fechas ya estaban ahí antes de que yo me diera cuenta. Solo hacía falta ponerlas en fila 🌚'
+      }
     ];
 
     // ?test abre todas las casillas sin esperar a su día, para poder revisarlas
@@ -2950,6 +3248,288 @@
       return caja;
     }
 
+    // ---------- el candado final ----------
+    var CANDADO_KEY = 'candado-abierto';
+
+    function candadoAbierto() {
+      try { return localStorage.getItem(CANDADO_KEY) === '1'; } catch (e) { return false; }
+    }
+
+    // el raspadito: una capa que se borra con el dedo
+    function montarRasca(cfg) {
+      var bloque = document.createElement('div');
+      bloque.className = 'rasca';
+
+      var pie = document.createElement('div');
+      pie.className = 'rasca-pie';
+      pie.textContent = cfg.pie || 'Rasca aquí';
+      bloque.appendChild(pie);
+
+      var caja = document.createElement('div');
+      caja.className = 'rasca-caja';
+      var premio = document.createElement('div');
+      premio.className = 'rasca-premio';
+      premio.textContent = cfg.texto;
+      var lienzo = document.createElement('canvas');
+      caja.appendChild(premio);
+      caja.appendChild(lienzo);
+      bloque.appendChild(caja);
+
+      var ctx = lienzo.getContext('2d', { willReadFrequently: true });
+      var listo = false, rascando = false, limpio = false;
+
+      function preparar() {
+        var r = caja.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        var dpr = Math.min(window.devicePixelRatio || 1, 3);
+        lienzo.width = Math.round(r.width * dpr);
+        lienzo.height = Math.round(r.height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        // capa plateada con un poco de grano
+        var g = ctx.createLinearGradient(0, 0, r.width, r.height);
+        g.addColorStop(0, '#6f6a7d');
+        g.addColorStop(0.45, '#a9a2bb');
+        g.addColorStop(0.55, '#8e879f');
+        g.addColorStop(1, '#5d5870');
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, r.width, r.height);
+        for (var i = 0; i < 900; i++) {
+          ctx.fillStyle = 'rgba(255,255,255,' + (Math.random() * 0.06) + ')';
+          ctx.fillRect(Math.random() * r.width, Math.random() * r.height, 2, 2);
+        }
+        ctx.fillStyle = 'rgba(20,16,28,0.5)';
+        ctx.font = '300 10px "Helvetica Neue", Helvetica, Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('R A S C A', r.width / 2, r.height / 2 + 3);
+        listo = true;
+      }
+
+      function borrar(e) {
+        if (!listo || limpio) return;
+        var r = lienzo.getBoundingClientRect();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(e.clientX - r.left, e.clientY - r.top, 21, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // cuando ya hay bastante despejado, se descubre sola
+      function medir() {
+        if (limpio || !listo) return;
+        var d = ctx.getImageData(0, 0, lienzo.width, lienzo.height).data;
+        var vacios = 0, total = 0;
+        for (var i = 3; i < d.length; i += 4 * 40) {
+          total++;
+          if (d[i] < 40) vacios++;
+        }
+        if (total && vacios / total > 0.5) {
+          limpio = true;
+          caja.classList.add('limpia');
+          if (cfg.alDescubrir) cfg.alDescubrir();
+        }
+      }
+
+      lienzo.addEventListener('pointerdown', function (e) {
+        e.preventDefault();
+        rascando = true;
+        lienzo.setPointerCapture(e.pointerId);
+        borrar(e);
+      });
+      lienzo.addEventListener('pointermove', function (e) {
+        if (rascando) { e.preventDefault(); borrar(e); }
+      });
+      lienzo.addEventListener('pointerup', function () { rascando = false; medir(); });
+      lienzo.addEventListener('pointercancel', function () { rascando = false; medir(); });
+      lienzo.addEventListener('pointerleave', function () { if (rascando) { rascando = false; medir(); } });
+
+      // el tamaño real solo se conoce una vez está en la página
+      if (window.ResizeObserver) {
+        var ro = new ResizeObserver(function () { if (!listo) preparar(); });
+        ro.observe(caja);
+      }
+      setTimeout(preparar, 60);
+
+      return bloque;
+    }
+
+    // lo que aparece cuando se abre
+    function montarInterior(cfg) {
+      var dentro = document.createElement('div');
+      dentro.className = 'abierto';
+
+      if (cfg.seguidilla) {
+        var fila = document.createElement('div');
+        fila.className = 'seguidilla';
+        cfg.seguidilla.numeros.forEach(function (n, i) {
+          if (i) {
+            var sep = document.createElement('i');
+            sep.textContent = '·';
+            fila.appendChild(sep);
+          }
+          var v = document.createElement('span');
+          v.textContent = n;
+          fila.appendChild(v);
+        });
+        dentro.appendChild(fila);
+
+        var pie = document.createElement('p');
+        pie.className = 'seguidilla-pie';
+        pie.textContent = cfg.seguidilla.texto;
+        dentro.appendChild(pie);
+      }
+
+      var carta = document.createElement('div');
+      carta.className = 'carta-final';
+      cfg.carta.forEach(function (parrafo, i) {
+        var pa = document.createElement('p');
+        if (i === cfg.carta.length - 1) pa.className = 'cierre';
+        pa.textContent = parrafo;
+        carta.appendChild(pa);
+      });
+      dentro.appendChild(carta);
+
+      if (cfg.fotos && cfg.fotos.length) {
+        var album = document.createElement('div');
+        album.className = 'album';
+        cfg.fotos.forEach(function (src, i) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.setAttribute('aria-label', 'Ver foto ' + (i + 1));
+          var im = document.createElement('img');
+          im.src = src;
+          im.alt = '';
+          im.loading = 'lazy';
+          b.appendChild(im);
+          b.addEventListener('click', function () { abrirVisor(src); });
+          album.appendChild(b);
+        });
+        dentro.appendChild(album);
+      }
+
+      if (cfg.rasca) {
+        dentro.appendChild(montarRasca({
+          pie: cfg.rasca.pie,
+          texto: cfg.rasca.texto,
+          alDescubrir: syncPanel
+        }));
+      }
+
+      return dentro;
+    }
+
+    function montarCandado(cfg) {
+      var caja = document.createElement('div');
+      caja.className = 'candado';
+
+      var cuerpo = document.createElement('div');
+      cuerpo.className = 'candado-cuerpo';
+      caja.appendChild(cuerpo);
+
+      function abrir(conAnimacion) {
+        try { localStorage.setItem(CANDADO_KEY, '1'); } catch (e) {}
+        caja.innerHTML = '';
+        var dentro = montarInterior(cfg);
+        if (!conAnimacion) dentro.classList.remove('abierto');
+        caja.appendChild(dentro);
+        syncPanel();
+      }
+
+      if (candadoAbierto()) { abrir(false); return caja; }
+
+      var ruedas = document.createElement('div');
+      ruedas.className = 'ruedas';
+      var campos = [];
+
+      cfg.cifras.forEach(function (c) {
+        var r = document.createElement('div');
+        r.className = 'rueda';
+        var inp = document.createElement('input');
+        inp.type = 'number';
+        inp.inputMode = 'numeric';
+        inp.setAttribute('aria-label', c.pista);
+        inp.value = c.inicio;
+        inp.min = c.min;
+        inp.max = c.max;
+
+        var flechas = document.createElement('div');
+        flechas.className = 'rueda-flechas';
+        [['▲', 1], ['▼', -1]].forEach(function (par) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.textContent = par[0];
+          b.setAttribute('aria-label', par[1] > 0 ? 'Subir' : 'Bajar');
+          b.addEventListener('click', function () {
+            var v = parseInt(inp.value, 10);
+            if (isNaN(v)) v = c.inicio;
+            v += par[1];
+            if (v > c.max) v = c.min;
+            if (v < c.min) v = c.max;
+            inp.value = v;
+            marcar();
+          });
+          flechas.appendChild(b);
+        });
+
+        inp.addEventListener('input', marcar);
+        r.appendChild(inp);
+        r.appendChild(flechas);
+        ruedas.appendChild(r);
+        campos.push({ inp: inp, r: r, valor: c.valor });
+      });
+
+      function marcar() {
+        campos.forEach(function (c) {
+          c.r.classList.toggle('correcta', parseInt(c.inp.value, 10) === c.valor);
+        });
+      }
+
+      cuerpo.appendChild(ruedas);
+
+      var lista = document.createElement('ul');
+      lista.className = 'pistas';
+      cfg.cifras.forEach(function (c, i) {
+        var li = document.createElement('li');
+        var b = document.createElement('b');
+        b.textContent = String(i + 1);
+        var t = document.createElement('span');
+        t.textContent = c.pista;
+        li.appendChild(b);
+        li.appendChild(t);
+        lista.appendChild(li);
+      });
+      cuerpo.appendChild(lista);
+
+      var boton = document.createElement('button');
+      boton.type = 'button';
+      boton.className = 'candado-btn';
+      boton.textContent = 'Abrir';
+      cuerpo.appendChild(boton);
+
+      var aviso = document.createElement('p');
+      aviso.className = 'candado-aviso';
+      aviso.setAttribute('aria-live', 'polite');
+      cuerpo.appendChild(aviso);
+
+      var fallos = 0;
+      boton.addEventListener('click', function () {
+        var bien = campos.every(function (c) { return parseInt(c.inp.value, 10) === c.valor; });
+        if (bien) { aviso.textContent = ''; abrir(true); return; }
+        fallos++;
+        cuerpo.classList.remove('temblando');
+        void cuerpo.offsetWidth;
+        cuerpo.classList.add('temblando');
+        var cuantas = campos.filter(function (c) { return parseInt(c.inp.value, 10) === c.valor; }).length;
+        aviso.textContent = cuantas
+          ? 'Vas por buen camino: ' + cuantas + ' de ' + campos.length + ' encajan 🌚'
+          : (cfg.animo[Math.min(fallos - 1, cfg.animo.length - 1)]);
+      });
+
+      marcar();
+      return caja;
+    }
+
     // monta la bola del 8: ella elige cómo se siente y recibe un versículo
     function montarBola(cfg) {
       var caja = document.createElement('div');
@@ -3235,6 +3815,7 @@
       boxOpen.appendChild(p);
 
       if (s.ahorcado) boxOpen.appendChild(montarAhorcado(s.ahorcado));
+      if (s.candado) boxOpen.appendChild(montarCandado(s.candado));
       if (s.bola) boxOpen.appendChild(montarBola(s.bola));
       if (s.regalo) boxOpen.appendChild(montarRegalo(s.regalo));
       if (s.juego) boxOpen.appendChild(montarJuego(s.juego));

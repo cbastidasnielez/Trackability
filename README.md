@@ -122,6 +122,27 @@ El juego vive en `public/flappy.js` (`window.crearFlappy`) y lo usan las dos
 páginas. En la casilla 03 va con meta de 10 puntos y premio; en la de
 visitantes va sin meta, jugando a batir el récord (guardado en `localStorage`).
 
+## El candado (casilla 07)
+
+Cuatro ruedas con cuatro fechas de su historia: **24 · 25 · 26 · 2013**. Al
+abrirlo aparecen los tres días seguidos, la carta de despedida, cinco fotos con
+visor y un raspadito con el mensaje final. Queda abierto para siempre
+(`candado-abierto` en `localStorage`).
+
+El raspadito es un `<canvas>` con `destination-out`: se borra con el dedo y a
+partir del 50% descubierto se retira solo.
+
+```js
+candado: {
+  cifras: [{ valor: 24, min: 1, max: 31, inicio: 1, pista: '...' }, ...],
+  animo: ['...'],                       // lo que dice al fallar
+  seguidilla: { numeros: ['24','25','26'], texto: '...' },
+  carta: ['...'],                       // el último párrafo sale en cursiva
+  fotos: ['/nosotros-1.jpg', ...],
+  rasca: { pie: 'Una cosa más', texto: '...' }
+}
+```
+
 ## La bola del 8 (casilla 06)
 
 Ella elige cómo se siente entre seis emociones y la bola le devuelve un
