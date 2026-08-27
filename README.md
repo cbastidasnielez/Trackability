@@ -44,10 +44,13 @@ guarda igualmente y se reintenta el envío al volver a abrir la página.
 
 ## Las 7 casillas
 
-Se abre una por día, del **18 al 24 de agosto** (los 7 días previos al
-cumpleaños); las fechas salen solas de `nextBirthday()`, así que no hay que
-tocarlas cada año. Antes de su día la casilla sale con candado y no se puede
-pulsar. Lo que ya se abrió queda guardado en `localStorage`.
+Se abre una por día, del **18 al 24 de agosto de 2026** (los 7 días previos al
+cumpleaños). Antes de su día la casilla sale con candado y no se puede pulsar;
+una vez pasada la fecha se queda abierta para siempre.
+
+El año va **fijo** en la constante `TEMPORADA`. Antes se calculaba con
+`nextBirthday()` y eso tenía un fallo: al pasar el 25 de agosto las fechas
+saltaban al año siguiente y las siete casillas volvían a cerrarse.
 
 Para escribir el contenido de cada una, rellena el array `SORPRESAS` de
 `index.html`. Además de `titulo` y `texto`, una casilla admite `audio` (monta un

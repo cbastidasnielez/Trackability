@@ -2794,9 +2794,14 @@
     var boxesNote = document.getElementById('boxesNote');
     var boxOpen = document.getElementById('boxOpen');
 
-    // una casilla por día, desde 7 días antes del cumpleaños hasta la víspera
+    // Una casilla por día, desde 7 días antes del cumpleaños hasta la víspera.
+    // El año va fijo a propósito: si se calculara con nextBirthday(), al pasar
+    // el cumpleaños las fechas saltarían al año siguiente y las casillas se
+    // volverían a cerrar. Una vez abiertas, son suyas para siempre.
+    var TEMPORADA = '2026-08-25T00:00:00-04:00';
+
     function fechasCasillas() {
-      var cumple = nextBirthday();
+      var cumple = new Date(TEMPORADA);
       var out = [];
       for (var i = 7; i >= 1; i--) {
         out.push(isoDe(new Date(cumple.getTime() - i * 86400000)));
