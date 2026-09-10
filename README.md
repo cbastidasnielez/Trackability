@@ -221,7 +221,7 @@ rascando en lugar de pulsando. Stay tuned 🐧
 
 Sección fija antes de la del pingüino: la palabra en árabe, su traducción y el
 recuento de coincidencias de la historia — 2013, Lechería y Valera, el parque de
-Orlando en 2020, el 24-25-26, el disco de ese mismo año y el 26 de diciembre en
+Orlando en 2022, el 24-25-26, el disco de ese mismo año y el 26 de diciembre en
 sábado. Cierra matizando que maktub no es esperar sentado: lo escrito no ocurre
 hasta que alguien da el paso.
 
