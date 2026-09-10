@@ -215,6 +215,14 @@ del tiempo que queda.
 Convertir las casillas en "raspaditos" de verdad, para descubrir cada sorpresa
 rascando en lugar de pulsando. Stay tuned 🐧
 
+## Por qué un pingüino
+
+Al final de la página hay una sección fija que explica el motivo: los pingüinos
+de Magallanes y de Adelia se emparejan de por vida, vuelven al mismo nido
+temporada tras temporada y esperan a la misma pareja — no por romanticismo,
+sino porque volver con quien ya te conoce ahorra el trabajo de empezar de cero.
+Es la idea que sostiene toda la web, así que va escrita, no solo insinuada.
+
 ## Analíticas
 
 Vercel Web Analytics, vía `@vercel/analytics`. La llamada a `inject()` vive en
