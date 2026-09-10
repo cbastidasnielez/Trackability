@@ -16,6 +16,8 @@ giratorio de "distancia y tiempo" con su foto en el centro.
   cuenta es el del reencuentro
 - Emblema giratorio (círculo de flechas "Distancia y Tiempo") con la foto de Mariapnel 🐧 en el centro
 - Botón **"Presiona para desbloquear sorpresas 🐧"** con la misión provisional
+- Botón **"Quiero entrenar 🐧"**, que lleva a `/entrenar`: su plan semanal
+  con checklist (ver más abajo)
 - Lista permanente con las fechas que ya apuntó (se pueden quitar con la ×)
 - Las fechas viven en el navegador (`localStorage`) y cualquier cambio se
   envía por email vía Formspree
@@ -92,7 +94,7 @@ sorpresa está en camino.
 
 ### Revisarlas antes de tiempo
 
-Añade `?test` a la URL (`https://undiaalavez.vercel.app/?test`) y todas las
+Añade `?test` a la URL (`https://project-undiaalavez.vercel.app/?test`) y todas las
 casillas quedan pulsables, sin esperar a su fecha. Es solo para comprobarlas:
 sale un aviso de que estás en modo prueba y **no se guarda nada**, así que las
 casillas siguen intactas. Por la URL normal la regla se cumple sin excepción.
@@ -233,10 +235,33 @@ temporada tras temporada y esperan a la misma pareja — no por romanticismo,
 sino porque volver con quien ya te conoce ahorra el trabajo de empezar de cero.
 Es la idea que sostiene toda la web, así que va escrita, no solo insinuada.
 
+## Quiero entrenar
+
+`/entrenar.html` (en Vercel también `/entrenar`) es la página del plan de
+entrenamiento, el *Manual de cuerpa para que Carlos te coma*. Se llega desde
+el botón **"Quiero entrenar 🐧"** de la portada.
+
+- Siete pestañas, una por día (L a D), con el día de hoy marcado y un anillo
+  de progreso en cada una. Al entrar se abre el día actual.
+- Cada día muestra su rutina como checklist: lunes (jalón), martes (pilates),
+  miércoles (empuje), jueves (descanso activo), viernes (glúteo + tren
+  superior + core, en tres bloques), sábado (Hyrox) y domingo (descanso).
+- Botones **"Marcar todo el día"** y **"Reiniciar día"**, y un contador
+  semanal (días hechos / 7).
+- Lo marcado se guarda en el navegador por semana (`entreno-<lunes>` en
+  `localStorage`). Cada lunes la lista empieza limpia; las semanas anteriores
+  quedan guardadas por si algún día se quieren consultar.
+- El sábado menciona la guía *Hyrox Weekends*. El enlace va en `HYROX_URL`
+  dentro de `entrenar.html`: ahora está vacío, y mientras lo esté el sábado
+  lo nombra sin enlazar.
+
+El plan vive en `PLAN` dentro de `entrenar.html`. Para cambiar un ejercicio
+basta con editar ahí el texto; no hay nada más que tocar.
+
 ## Analíticas
 
 Vercel Web Analytics, vía `@vercel/analytics`. La llamada a `inject()` vive en
-`src/analytics.js` y ambas páginas la cargan como módulo aparte, para no tocar
+`src/analytics.js` y las tres páginas la cargan como módulo aparte, para no tocar
 sus scripts clásicos. En local no envía nada.
 
 Hay que activarlo una vez en el panel: **proyecto → Analytics → Enable**. Sin

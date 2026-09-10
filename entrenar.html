@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/icon-512.svg" />
+  <title>Quiero entrenar 🐧</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050505;
+      --ink: #f5f2ea;
+      --dim: rgba(245, 242, 234, 0.55);
+      --faint: rgba(245, 242, 234, 0.22);
+      --gold: #e3c07a;
+      --hielo: #9ec9e6;
+    }
+
+    html, body { min-height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 18px 60px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(ellipse 120% 80% at 50% 30%, #101010 0%, var(--bg) 60%);
+      pointer-events: none;
+    }
+
+    main { width: 100%; max-width: 520px; }
+
+    .volver {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--faint);
+      text-decoration: none;
+      margin-bottom: 22px;
+    }
+
+    .volver:hover { color: var(--ink); }
+
+    h1 {
+      font-size: clamp(1.1rem, 5.4vw, 1.8rem);
+      white-space: nowrap;
+      font-weight: 200;
+      letter-spacing: 0.18em;
+      text-indent: 0.18em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .manual {
+      margin-top: 10px;
+      text-align: center;
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-size: 13.5px;
+      color: var(--dim);
+    }
+
+    /* ---------- resumen semanal ---------- */
+    .semana {
+      margin-top: 26px;
+      padding: 16px 14px 14px;
+      border: 1px solid rgba(245, 242, 234, 0.14);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .semana-cab {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 9px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 12px;
+    }
+
+    .semana-cab b { color: var(--gold); font-weight: 400; }
+
+    .dias {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .dia-btn {
+      appearance: none;
+      border: 1px solid rgba(245, 242, 234, 0.14);
+      border-radius: 10px;
+      background: transparent;
+      color: var(--dim);
+      font-family: inherit;
+      padding: 9px 2px 8px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease;
+    }
+
+    .dia-btn span { font-size: 10px; letter-spacing: 0.1em; }
+
+    .dia-btn i {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(245, 242, 234, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-style: normal;
+      font-size: 10px;
+      color: var(--faint);
+      background: conic-gradient(var(--gold) calc(var(--p, 0) * 1%), transparent 0);
+      -webkit-mask: radial-gradient(circle, transparent 55%, #000 57%);
+              mask: radial-gradient(circle, transparent 55%, #000 57%);
+    }
+
+    .dia-btn.hoy { border-color: rgba(158, 201, 230, 0.55); }
+    .dia-btn.activo { background: rgba(227, 192, 122, 0.1); border-color: var(--gold); color: var(--ink); }
+    .dia-btn.hecho i { background: var(--gold); -webkit-mask: none; mask: none; border-color: var(--gold); }
+    .dia-btn.descanso i { opacity: 0.35; }
+
+    /* ---------- el día ---------- */
+    .dia {
+      margin-top: 18px;
+      padding: 22px 18px 18px;
+      border: 1px solid rgba(227, 192, 122, 0.24);
+      border-radius: 14px;
+      background: linear-gradient(170deg, rgba(227, 192, 122, 0.06), rgba(255, 255, 255, 0.012));
+      animation: aparecer 0.35s ease;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .dia-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+
+    .dia-nombre {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .dia-tipo {
+      margin-top: 8px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.15rem, 5.4vw, 1.45rem);
+      line-height: 1.2;
+    }
+
+    .dia-foco {
+      margin-top: 6px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--dim);
+    }
+
+    .dia-prog {
+      flex: 0 0 auto;
+      font-variant-numeric: tabular-nums;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--dim);
+      padding-top: 2px;
+    }
+
+    .barra {
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(245, 242, 234, 0.12);
+      margin: 16px 0 6px;
+      overflow: hidden;
+    }
+
+    .barra span { display: block; height: 100%; width: 0; background: var(--gold); transition: width 0.4s ease; }
+
+    .bloque-titulo {
+      margin: 20px 0 8px;
+      font-size: 9px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--hielo);
+    }
+
+    .bloque-nota { font-size: 11px; color: var(--faint); margin-bottom: 8px; letter-spacing: 0.02em; }
+
+    .ejercicios { list-style: none; }
+
+    .ej {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 4px;
+      border-bottom: 1px solid rgba(245, 242, 234, 0.08);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .ej:last-child { border-bottom: none; }
+
+    .ej input { position: absolute; opacity: 0; pointer-events: none; }
+
+    .caja {
+      flex: 0 0 auto;
+      width: 22px;
+      height: 22px;
+      margin-top: 1px;
+      border-radius: 7px;
+      border: 1.5px solid rgba(245, 242, 234, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #0a0a0a;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .ej.ok .caja { background: var(--gold); border-color: var(--gold); }
+
+    .ej-txt { flex: 1; min-width: 0; }
+
+    .ej-nombre { font-size: 14px; line-height: 1.4; transition: color 0.2s ease; }
+
+    .ej-det { margin-top: 3px; font-size: 12px; color: var(--dim); line-height: 1.5; }
+
+    .ej.ok .ej-nombre { color: var(--dim); text-decoration: line-through; text-decoration-color: rgba(227,192,122,0.5); }
+
+    .descanso-msg {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 10px;
+      border: 1px dashed rgba(158, 201, 230, 0.3);
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--dim);
+      text-align: center;
+    }
+
+    .enlace {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(227,192,122,0.4);
+    }
+
+    .acciones { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+
+    .btn {
+      flex: 1 1 auto;
+      appearance: none;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-family: inherit;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-indent: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: 1px solid rgba(245, 242, 234, 0.3);
+      background: transparent;
+      color: var(--ink);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn.primario { border-color: var(--gold); color: var(--gold); }
+    .btn:hover { background: rgba(245, 242, 234, 0.06); }
+
+    .hecho-msg {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--gold);
+      min-height: 1.2em;
+    }
+
+    footer {
+      margin-top: 34px;
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="volver" href="/">&larr; Volver</a>
+    <h1>Quiero entrenar 🐧</h1>
+    <p class="manual" id="manual"></p>
+
+    <section class="semana">
+      <div class="semana-cab">
+        <span id="semanaTxt">Semana</span>
+        <span>Hecho: <b id="semanaProg">0 / 7</b></span>
+      </div>
+      <div class="dias" id="dias"></div>
+    </section>
+
+    <section class="dia" id="dia"></section>
+
+    <footer>Una semana a la vez 🐧</footer>
+  </main>
+
+  <script type="module" src="/src/analytics.js"></script>
+  <script>
+    // ---------- el plan ----------
+    var TITULO = 'Manual de cuerpa para que Carlos te coma';
+
+    // El enlace a la guía "Hyrox Weekends" (4 fines de semana). Si está
+    // vacío, el sábado lo menciona sin enlazar.
+    var HYROX_URL = '';
+
+    var PLAN = [
+      { dia: 'Lunes', corto: 'L', tipo: 'Gym · Jalón', foco: 'Glúteo e isquios + espalda y bíceps',
+        bloques: [{ ejercicios: [
+          { n: 'Hip thrust', d: '3 × (8 normales / 8 con pausa / 8 pulsos)' },
+          { n: 'Peso muerto rumano', d: '4 × 12' },
+          { n: 'Leg curl', d: '3 × 12, aguantando 2 s' },
+          { n: 'Jalón al pecho', d: '4 × 12' },
+          { n: 'Remo con mancuerna', d: '3 × 12 por brazo' },
+          { n: 'Curl de bíceps o martillo', d: '3 × 12' }
+        ] }] },
+      { dia: 'Martes', corto: 'M', tipo: 'Pilates', foco: 'Sesión completa',
+        bloques: [{ ejercicios: [ { n: 'Pilates', d: 'La clase de siempre' } ] }] },
+      { dia: 'Miércoles', corto: 'X', tipo: 'Gym · Empuje', foco: 'Cuádriceps + hombro y tríceps',
+        bloques: [{ ejercicios: [
+          { n: 'Hack squat', d: '4 × 12 (si no hay máquina, sentadilla con barra)' },
+          { n: 'Prensa', d: '4 × 12' },
+          { n: 'Sentadilla búlgara', d: '3 × 10 por pierna' },
+          { n: 'Extensiones de cuádriceps', d: '3 × 15' },
+          { n: 'Press de hombro con mancuernas', d: '4 × 12' },
+          { n: 'Elevaciones laterales', d: '3 × 12' },
+          { n: 'Tríceps en polea', d: '3 × 15' }
+        ] }] },
+      { dia: 'Jueves', corto: 'J', tipo: 'Descanso activo', foco: 'Caminar, estirar, moverse sin prisa',
+        descanso: true,
+        bloques: [{ ejercicios: [ { n: 'Descanso activo', d: 'Un paseo o estiramientos suaves' } ] }] },
+      { dia: 'Viernes', corto: 'V', tipo: 'Gym · Glúteo + tren superior + core', foco: 'Tres bloques',
+        bloques: [
+          { titulo: 'Bloque 1 · Glúteo pesado', ejercicios: [
+            { n: 'Hip thrust', d: '4 × 10, drop set en la última (baja un 30 % del peso y sigue hasta el fallo)' },
+            { n: 'Hiperextensión enfocada a glúteo con disco', d: '3 × 12 + 10 pulsos' },
+            { n: 'Abducción en máquina', d: '3 × (15 sentada erguida + 15 inclinada hacia delante)' },
+            { n: 'Patada de glúteo en polea', d: '3 × 12 por pierna, aguantando 1 s arriba' }
+          ] },
+          { titulo: 'Bloque 2 · Tren superior', nota: 'Superseries, 60 s de descanso', ejercicios: [
+            { n: 'Jalón al pecho + flexiones', d: '3 × 12 + 3 × máx. (en rodillas si hace falta)' },
+            { n: 'Remo en polea baja + elevaciones laterales', d: '3 × 12 + 3 × 15' }
+          ] },
+          { titulo: 'Bloque 3 · Finisher de core', nota: '3 rondas sin pausa', ejercicios: [
+            { n: 'Plancha', d: '45 s' },
+            { n: 'Dead bug', d: '12 por lado' },
+            { n: 'Russian twist con disco', d: '20' },
+            { n: 'Hollow hold', d: '30 s' }
+          ] }
+        ] },
+      { dia: 'Sábado', corto: 'S', tipo: 'Hyrox', foco: 'Guía "Hyrox Weekends" · 4 fines de semana',
+        hyrox: true,
+        bloques: [{ ejercicios: [ { n: 'Sesión Hyrox del fin de semana', d: 'Según la guía' } ] }] },
+      { dia: 'Domingo', corto: 'D', tipo: 'Descanso', foco: 'Sin culpa',
+        descanso: true,
+        bloques: [{ ejercicios: [ { n: 'Descansar', d: 'Es parte del plan' } ] }] }
+    ];
+
+    // ---------- semana y guardado ----------
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function lunesDe(fecha) {
+      var d = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate());
+      var dow = (d.getDay() + 6) % 7;          // lunes = 0
+      d.setDate(d.getDate() - dow);
+      return d;
+    }
+
+    function claveSemana() {
+      var l = lunesDe(new Date());
+      return l.getFullYear() + '-' + pad(l.getMonth() + 1) + '-' + pad(l.getDate());
+    }
+
+    var KEY = 'entreno-' + claveSemana();
+
+    function cargar() {
+      try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+    }
+
+    function guardar(est) {
+      try { localStorage.setItem(KEY, JSON.stringify(est)); } catch (e) {}
+    }
+
+    var estado = cargar();
+    var hoyIdx = (new Date().getDay() + 6) % 7;
+    var activo = hoyIdx;
+
+    function idsDe(d) {
+      var ids = [];
+      PLAN[d].bloques.forEach(function (b, bi) {
+        b.ejercicios.forEach(function (e, ei) { ids.push(bi + '-' + ei); });
+      });
+      return ids;
+    }
+
+    function progreso(d) {
+      var ids = idsDe(d), hechos = estado[d] || [];
+      var n = ids.filter(function (id) { return hechos.indexOf(id) !== -1; }).length;
+      return { n: n, total: ids.length, pct: ids.length ? Math.round(n / ids.length * 100) : 0 };
+    }
+
+    // ---------- pintar ----------
+    var manual = document.getElementById('manual');
+    var diasEl = document.getElementById('dias');
+    var diaEl = document.getElementById('dia');
+    var semanaTxt = document.getElementById('semanaTxt');
+    var semanaProg = document.getElementById('semanaProg');
+
+    manual.textContent = TITULO;
+
+    function pintarSemana() {
+      var l = lunesDe(new Date());
+      var dom = new Date(l); dom.setDate(l.getDate() + 6);
+      var f = function (x) { return x.getDate() + ' ' + x.toLocaleDateString('es-ES', { month: 'short' }).replace('.', ''); };
+      semanaTxt.textContent = 'Semana del ' + f(l) + ' al ' + f(dom);
+
+      var completos = 0;
+      diasEl.innerHTML = '';
+      PLAN.forEach(function (p, i) {
+        var pr = progreso(i);
+        if (pr.pct === 100) completos++;
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'dia-btn' + (i === hoyIdx ? ' hoy' : '') + (i === activo ? ' activo' : '')
+                    + (pr.pct === 100 ? ' hecho' : '') + (p.descanso ? ' descanso' : '');
+        b.setAttribute('aria-label', p.dia);
+        var s = document.createElement('span'); s.textContent = p.corto;
+        var ic = document.createElement('i');
+        ic.style.setProperty('--p', pr.pct);
+        ic.textContent = pr.pct === 100 ? '✓' : '';
+        b.appendChild(s); b.appendChild(ic);
+        b.addEventListener('click', function () { activo = i; pintar(); });
+        diasEl.appendChild(b);
+      });
+      semanaProg.textContent = completos + ' / 7';
+    }
+
+    function pintarDia() {
+      var p = PLAN[activo], pr = progreso(activo);
+      diaEl.innerHTML = '';
+
+      var cab = document.createElement('div'); cab.className = 'dia-cab';
+      var izq = document.createElement('div');
+      var nom = document.createElement('div'); nom.className = 'dia-nombre';
+      nom.textContent = p.dia + (activo === hoyIdx ? ' · hoy' : '');
+      var tipo = document.createElement('div'); tipo.className = 'dia-tipo'; tipo.textContent = p.tipo;
+      var foco = document.createElement('div'); foco.className = 'dia-foco'; foco.textContent = p.foco;
+      izq.appendChild(nom); izq.appendChild(tipo); izq.appendChild(foco);
+      var prog = document.createElement('div'); prog.className = 'dia-prog';
+      prog.textContent = pr.n + ' / ' + pr.total;
+      cab.appendChild(izq); cab.appendChild(prog);
+      diaEl.appendChild(cab);
+
+      var barra = document.createElement('div'); barra.className = 'barra';
+      var fill = document.createElement('span'); fill.style.width = pr.pct + '%';
+      barra.appendChild(fill); diaEl.appendChild(barra);
+
+      var hechos = estado[activo] || [];
+      p.bloques.forEach(function (b, bi) {
+        if (b.titulo) {
+          var t = document.createElement('div'); t.className = 'bloque-titulo'; t.textContent = b.titulo;
+          diaEl.appendChild(t);
+        }
+        if (b.nota) {
+          var nt = document.createElement('div'); nt.className = 'bloque-nota'; nt.textContent = b.nota;
+          diaEl.appendChild(nt);
+        }
+        var ul = document.createElement('ul'); ul.className = 'ejercicios';
+        b.ejercicios.forEach(function (e, ei) {
+          var id = bi + '-' + ei;
+          var li = document.createElement('li');
+          var lab = document.createElement('label');
+          lab.className = 'ej' + (hechos.indexOf(id) !== -1 ? ' ok' : '');
+          var inp = document.createElement('input');
+          inp.type = 'checkbox'; inp.checked = hechos.indexOf(id) !== -1;
+          var caja = document.createElement('span'); caja.className = 'caja';
+          caja.textContent = inp.checked ? '✓' : '';
+          var txt = document.createElement('span'); txt.className = 'ej-txt';
+          var n = document.createElement('div'); n.className = 'ej-nombre'; n.textContent = e.n;
+          txt.appendChild(n);
+          if (e.d) { var d = document.createElement('div'); d.className = 'ej-det'; d.textContent = e.d; txt.appendChild(d); }
+          lab.appendChild(inp); lab.appendChild(caja); lab.appendChild(txt);
+          inp.addEventListener('change', function () { marcar(activo, id, inp.checked); });
+          li.appendChild(lab); ul.appendChild(li);
+        });
+        diaEl.appendChild(ul);
+      });
+
+      if (p.hyrox) {
+        var m = document.createElement('div'); m.className = 'descanso-msg';
+        m.textContent = 'Sigue la guía "Hyrox Weekends": cuatro fines de semana, uno por sábado.';
+        if (HYROX_URL) {
+          var a = document.createElement('a'); a.className = 'enlace'; a.href = HYROX_URL;
+          a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = 'Abrir la guía';
+          m.appendChild(document.createElement('br')); m.appendChild(a);
+        }
+        diaEl.appendChild(m);
+      }
+
+      var acc = document.createElement('div'); acc.className = 'acciones';
+      var todo = document.createElement('button'); todo.type = 'button'; todo.className = 'btn primario';
+      todo.textContent = pr.pct === 100 ? 'Día completado' : 'Marcar todo el día';
+      todo.disabled = pr.pct === 100;
+      todo.addEventListener('click', function () { estado[activo] = idsDe(activo); guardar(estado); pintar(); });
+      var limpiar = document.createElement('button'); limpiar.type = 'button'; limpiar.className = 'btn';
+      limpiar.textContent = 'Reiniciar día';
+      limpiar.addEventListener('click', function () { delete estado[activo]; guardar(estado); pintar(); });
+      acc.appendChild(todo); acc.appendChild(limpiar);
+      diaEl.appendChild(acc);
+
+      var msg = document.createElement('div'); msg.className = 'hecho-msg';
+      msg.textContent = pr.pct === 100 ? (p.descanso ? 'Descansado. Eso también cuenta 🐧' : 'Día hecho. Cuerpa en marcha 🐧') : '';
+      diaEl.appendChild(msg);
+    }
+
+    function marcar(d, id, on) {
+      var arr = estado[d] || [];
+      if (on && arr.indexOf(id) === -1) arr.push(id);
+      if (!on) arr = arr.filter(function (x) { return x !== id; });
+      estado[d] = arr;
+      guardar(estado);
+      pintar();
+    }
+
+    function pintar() { pintarSemana(); pintarDia(); }
+    pintar();
+  </script>
+</body>
+</html>

@@ -426,6 +426,30 @@
 
     .unlock-btn:active { transform: scale(0.97); }
 
+    /* ---------- botón entrenar ---------- */
+    .entrenar-btn {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--hielo);
+      border: 1px solid rgba(158, 201, 230, 0.4);
+      border-radius: 999px;
+      padding: 13px 26px;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.35s ease, box-shadow 0.35s ease, transform 0.15s ease;
+    }
+
+    .entrenar-btn:hover {
+      background: rgba(158, 201, 230, 0.08);
+      box-shadow: 0 0 35px rgba(158, 201, 230, 0.15);
+    }
+
+    .entrenar-btn:active { transform: scale(0.97); }
+
     /* ---------- mensaje sorpresa ---------- */
     .surprise {
       width: 100%;
@@ -2515,6 +2539,7 @@
     <div class="tz-note">Hora de Orlando, Florida</div>
 
     <button class="unlock-btn" id="unlockBtn">Presiona para desbloquear sorpresas 🐧</button>
+    <a class="entrenar-btn" href="/entrenar">Quiero entrenar 🐧</a>
 
     <div class="surprise" id="surprise">
       <div class="boxes-card">
