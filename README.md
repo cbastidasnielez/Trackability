@@ -1,16 +1,16 @@
-# Mariapnel 🌚
+# Mariapnel 🐧
 
-Cuenta atrás para el cumpleaños de Mariapnel 🌚 — **25 de agosto**, hora de Orlando, Florida.
+Cuenta atrás para el cumpleaños de Mariapnel 🐧 — **25 de agosto**, hora de Orlando, Florida.
 
-Fondo negro, ondas de sonido y un emblema giratorio de "distancia y tiempo" con su foto en el centro.
+Temática de pingüino sobre fondo negro, con ondas de sonido y un emblema giratorio de "distancia y tiempo" con su foto en el centro.
 
 ## Qué hay ahora
 
 - Dos contadores en vivo (días y horas : minutos : segundos): el cumpleaños
   (25/08) y el reencuentro, que apunta al aterrizaje en Orlando del 26/12 a
   las 19:10 (`ENCUENTRO` en `index.html`)
-- Emblema giratorio (círculo de flechas "Distancia y Tiempo") con la foto de Mariapnel 🌚 en el centro
-- Botón **"Presiona para desbloquear sorpresas 🌚"** con la misión provisional
+- Emblema giratorio (círculo de flechas "Distancia y Tiempo") con la foto de Mariapnel 🐧 en el centro
+- Botón **"Presiona para desbloquear sorpresas 🐧"** con la misión provisional
 - Lista permanente con las fechas que ya apuntó (se pueden quitar con la ×)
 - Las fechas viven en el navegador (`localStorage`) y cualquier cambio se
   envía por email vía Formspree
@@ -168,8 +168,9 @@ bola: {
 
 ## El ahorcado de la casilla 05
 
-Mismo juego de siempre, pero en vez del muñeco **mengua una luna**: seis fases,
-y cuando desaparece se pierde la partida. La palabra es `VINILO`: dice el formato del regalo de cumpleaños pero no el
+Mismo juego de siempre, pero en vez del muñeco hay **un pingüino sobre un
+témpano que se rompe**: seis trozos, y cuando se acaba el hielo el pingüino
+cae al agua y se pierde la partida. La palabra es `VINILO`: dice el formato del regalo de cumpleaños pero no el
 disco, así que el *AM* sigue siendo sorpresa hasta el día 25.
 
 ```js
@@ -209,7 +210,7 @@ del tiempo que queda.
 ## Próximamente
 
 Convertir las casillas en "raspaditos" de verdad, para descubrir cada sorpresa
-rascando en lugar de pulsando. Stay tuned 🌚
+rascando en lugar de pulsando. Stay tuned 🐧
 
 ## Analíticas
 

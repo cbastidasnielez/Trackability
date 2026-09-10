@@ -8,7 +8,7 @@
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" href="/icon-512.svg" />
   <link rel="apple-touch-icon" href="/icon-512.svg" />
-  <title>Mariapnel 🌚</title>
+  <title>Mariapnel 🐧</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -1081,7 +1081,7 @@
       color: var(--dim);
     }
 
-    /* ---------- el ahorcado (con luna en vez de horca) ---------- */
+    /* ---------- el ahorcado (con un pingüino sobre el hielo) ---------- */
     .ahorcado {
       margin-top: 22px;
       border: 1px solid rgba(245, 242, 234, 0.16);
@@ -1090,10 +1090,10 @@
       background: rgba(255, 255, 255, 0.025);
     }
 
-    .luna-fases {
+    .hielo-fases {
       display: block;
-      width: 88px;
-      height: 88px;
+      width: 104px;
+      height: 104px;
       margin: 0 auto 6px;
     }
 
@@ -1615,7 +1615,7 @@
       display: block;
     }
 
-    /* en una esquina, para no taparle la luna */
+    /* en una esquina, para no taparle la portada */
     .play-btn {
       position: absolute;
       left: 12px;
@@ -2259,7 +2259,7 @@
 
   <main>
     <div class="side-label">Side A &middot; Track 01 &middot; 25&thinsp;/&thinsp;08</div>
-    <h1>Mariapnel 🌚</h1>
+    <h1>Mariapnel 🐧</h1>
 
     <svg class="wave-divider" viewBox="0 0 420 60" aria-hidden="true">
       <path class="wave-path" fill="none" stroke="#f5f2ea" stroke-width="1.5" />
@@ -2288,7 +2288,7 @@
        </g>
       </svg>
       <div class="photo">
-        <img src="/mariapnel.jpeg" alt="Mariapnel 🌚" />
+        <img src="/mariapnel.jpeg" alt="Mariapnel 🐧" />
       </div>
     </div>
 
@@ -2296,14 +2296,14 @@
       <div class="timer">
         <span class="timer-lead" id="lead">Faltan</span>
         <span class="timer-num" id="days">–</span>
-        <span class="timer-cap" id="caption">días para tu cumpleaños 🌚</span>
+        <span class="timer-cap" id="caption">días para tu cumpleaños 🐧</span>
         <span class="timer-clock" id="clock"></span>
       </div>
 
       <div class="timer">
         <span class="timer-lead" id="meetLead">Faltan</span>
         <span class="timer-num" id="meetDays">–</span>
-        <span class="timer-cap" id="meetCaption">días para vernos 🌚</span>
+        <span class="timer-cap" id="meetCaption">días para vernos 🐧</span>
         <span class="timer-clock" id="meetClock"></span>
         <span class="timer-flight">26 dic &middot; BCN 10:55 &rarr; MCO 19:10</span>
       </div>
@@ -2311,7 +2311,7 @@
 
     <div class="tz-note">Hora de Orlando, Florida</div>
 
-    <button class="unlock-btn" id="unlockBtn">Presiona para desbloquear sorpresas 🌚</button>
+    <button class="unlock-btn" id="unlockBtn">Presiona para desbloquear sorpresas 🐧</button>
 
     <div class="surprise" id="surprise">
       <div class="boxes-card">
@@ -2330,7 +2330,7 @@
 
         <div class="reveal" id="reveal">
           <span class="reveal-tag">Sorpresa 01 &middot; Desbloqueada</span>
-          <p class="reveal-lead">La misión era una excusa.<br />Los billetes ya estaban comprados 🌚</p>
+          <p class="reveal-lead">La misión era una excusa.<br />Los billetes ya estaban comprados 🐧</p>
 
           <svg class="route" viewBox="0 0 400 132" aria-hidden="true">
             <path id="route" d="M42 96 Q200 6 358 96" fill="none"
@@ -2350,7 +2350,7 @@
           <div class="pass">
             <div class="pass-head">
               <span>Boarding pass</span>
-              <span>🌚</span>
+              <span>🐧</span>
             </div>
             <div class="pass-route">
               <div>
@@ -2394,8 +2394,8 @@
           <p class="reveal-match" id="revealMatch" hidden></p>
         </div>
 
-        <p class="reveal-foot">Nos vemos en Orlando 🌚</p>
-        <span class="stay-tuned">Esto es solo la introducción &middot; Stay tuned 🌚</span>
+        <p class="reveal-foot">Nos vemos en Orlando 🐧</p>
+        <span class="stay-tuned">Esto es solo la introducción &middot; Stay tuned 🐧</span>
       </div>
     </section>
 
@@ -2406,7 +2406,7 @@
     </section>
 
     <!--
-      Próximamente: convertir las casillas en raspaditos de verdad. 🌚
+      Próximamente: convertir las casillas en raspaditos de verdad. 🐧
     -->
   </main>
 
@@ -2464,7 +2464,7 @@
 
   <div class="print-area" id="printArea" aria-hidden="true"></div>
 
-  <footer>Stay tuned &middot; 🌚</footer>
+  <footer>Stay tuned &middot; 🐧</footer>
 
   <script type="module" src="/src/analytics.js"></script>
   <script src="/flappy.js"></script>
@@ -2523,8 +2523,8 @@
       var now = orlandoToday();
       if (now.month === BIRTH_MONTH && now.day === BIRTH_DAY) {
         leadEl.textContent = 'Hoy es el día';
-        daysEl.textContent = '🌚🎂';
-        captionEl.textContent = '¡Feliz cumpleaños, Mariapnel! 🌚';
+        daysEl.textContent = '🐧🎂';
+        captionEl.textContent = '¡Feliz cumpleaños, Mariapnel! 🐧';
         clockEl.textContent = '';
         return;
       }
@@ -2535,7 +2535,7 @@
       var sec = Math.floor(diff / 1000) % 60;
       leadEl.textContent = 'Faltan';
       daysEl.textContent = days;
-      captionEl.textContent = (days === 1 ? 'día' : 'días') + ' para tu cumpleaños 🌚';
+      captionEl.textContent = (days === 1 ? 'día' : 'días') + ' para tu cumpleaños 🐧';
       clockEl.textContent = pad(hrs) + ' : ' + pad(min) + ' : ' + pad(sec);
     }
     // ---------- cuenta atrás para vernos ----------
@@ -2561,8 +2561,8 @@
       var diff = encuentroMs - Date.now();
       if (diff <= 0) {
         meetLead.textContent = 'Por fin';
-        meetDays.textContent = '🌚';
-        meetCaption.textContent = 'estamos en el mismo sitio 🌚';
+        meetDays.textContent = '🐧';
+        meetCaption.textContent = 'estamos en el mismo sitio 🐧';
         meetClock.textContent = '';
         ringTiempo.textContent = '0';
         return;
@@ -2571,7 +2571,7 @@
       meetLead.textContent = 'Faltan';
       meetDays.textContent = dias;
       ringTiempo.textContent = dias + (dias === 1 ? ' DÍA' : ' DÍAS');
-      meetCaption.textContent = (dias === 1 ? 'día' : 'días') + ' para vernos 🌚';
+      meetCaption.textContent = (dias === 1 ? 'día' : 'días') + ' para vernos 🐧';
       meetClock.textContent = pad(Math.floor(diff / 3600000) % 24) + ' : ' +
                               pad(Math.floor(diff / 60000) % 60) + ' : ' +
                               pad(Math.floor(diff / 1000) % 60);
@@ -2623,7 +2623,7 @@
           version: 'Versión Fluida',
           artista: 'doncarlitin'
         },
-        nota: 'Súbele el volumen. Y disculpa que no sea Taylor Swift, pero ella no te conoce 🌚'
+        nota: 'Súbele el volumen. Y disculpa que no sea Taylor Swift, pero ella no te conoce 🐧'
       },
       {
         titulo: 'Lo que causas en las personas',
@@ -2638,13 +2638,13 @@
           pie: 'Tres pruebas, aportadas por Roberto',
           imagenes: ['/recuerdo-1.jpg', '/recuerdo-2.jpg', '/recuerdo-3.jpg']
         },
-        nota: 'Cuatro personas distintas, en cuatro sitios distintos, y ninguna se puso de acuerdo con las demás. Eso es lo que más dice de ti 🌚'
+        nota: 'Cuatro personas distintas, en cuatro sitios distintos, y ninguna se puso de acuerdo con las demás. Eso es lo que más dice de ti 🐧'
       },
       {
         titulo: 'Hoy toca ganártelo',
         texto: 'Sí, hoy la sorpresa no viene regalada: hay que jugársela. Consigue 10 puntos y se desbloquea el premio. Y sí, la que vuela eres tú.',
         juego: { objetivo: 10, sprite: '/cara-juego.png', respaldo: '/mariapnel.jpeg' },
-        nota: 'Si te estrellas, no pasa nada: se vuelve a empezar tocando la pantalla. El premio no caduca y el juego tampoco 🌚'
+        nota: 'Si te estrellas, no pasa nada: se vuelve a empezar tocando la pantalla. El premio no caduca y el juego tampoco 🐧'
       },
       {
         titulo: 'Sé que el mejor café es el de tu casa',
@@ -2656,7 +2656,7 @@
           codigo: '6E8F 4795 4H88 E454',
           enlace: 'https://juanvaldezcafestore.com/gift_cards/57702514768/ae48ba96c2cc29555b805a119bfa5112'
         },
-        nota: 'El café de tu casa sigue ganando, que quede claro. Esto es solo mientras llego 🌚'
+        nota: 'El café de tu casa sigue ganando, que quede claro. Esto es solo mientras llego 🐧'
       },
       {
         titulo: 'Una pista, si te la ganas',
@@ -2666,10 +2666,10 @@
           pista: 'Gira despacio, cruje un poquito y hay que levantarse a darle la vuelta.',
           vidas: 6,
           derrotasMax: 5,
-          alGanar: 'Ahí lo tienes. Ya sabes la forma que tiene tu regalo; cuál es exactamente, eso lo sabrás el día 25 🌚',
-          alAgotarse: 'Se acabaron los intentos. La pista se queda conmigo hasta el día 25 — que, mira, tampoco falta tanto 🌚'
+          alGanar: 'Ahí lo tienes. Ya sabes la forma que tiene tu regalo; cuál es exactamente, eso lo sabrás el día 25 🐧',
+          alAgotarse: 'Se acabaron los intentos. La pista se queda conmigo hasta el día 25 — que, mira, tampoco falta tanto 🐧'
         },
-        nota: 'Seis fases de luna por partida y cinco partidas en total. Nadie dijo que las pistas fueran gratis 🌚'
+        nota: 'Seis trozos de hielo por partida y cinco partidas en total. Nadie dijo que las pistas fueran gratis 🐧'
       },
       {
         titulo: 'La bola del 8',
@@ -2722,7 +2722,7 @@
               ]
             },
             {
-              id: 'sola', icono: '🌙', nombre: 'Sola',
+              id: 'sola', icono: '❄️', nombre: 'Sola',
               respuestas: [
                 { cita: 'Aunque mi padre y mi madre me dejaran, con todo, Jehová me recogerá.', ref: 'Salmo 27:10',
                   nota: 'Hay abandonos que parecen decir: “No eres digno de ser elegido”. Y este versículo responde: “Aunque todos se vayan, yo todavía te recogeré.”' },
@@ -2745,7 +2745,7 @@
             }
           ]
         },
-        nota: 'Tres respuestas guardadas para cada estado de ánimo, y la bola evita repetirte la última. Vuelve las veces que haga falta 🌚'
+        nota: 'Tres respuestas guardadas para cada estado de ánimo, y la bola evita repetirte la última. Vuelve las veces que haga falta 🐧'
       },
       {
         titulo: 'Lo último que queda cerrado',
@@ -2758,9 +2758,9 @@
             { valor: 2013, min: 2000, max: 2026, inicio: 2000, pista: 'El año en que te escribí por primera vez.' }
           ],
           animo: [
-            'Todavía no. Piensa en fechas, no en números 🌚',
-            'Casi. Son días del mes, menos la última, que es un año 🌚',
-            'Sigue. Te prometo que las cuatro las sabes 🌚'
+            'Todavía no. Piensa en fechas, no en números 🐧',
+            'Casi. Son días del mes, menos la última, que es un año 🐧',
+            'Sigue. Te prometo que las cuatro las sabes 🐧'
           ],
           seguidilla: {
             numeros: ['24', '25', '26'],
@@ -2780,9 +2780,9 @@
             etiqueta: 'Pendiente',
             pie: 'El último marco está vacío a propósito. Esa foto todavía no existe, pero ya tiene fecha.'
           },
-          rasca: { pie: 'Una cosa más', texto: 'Hay más sorpresas. Pero no están aquí: las tiene Churra 🌚' }
+          rasca: { pie: 'Una cosa más', texto: 'Hay más sorpresas. Pero no están aquí: las tiene Churra 🐧' }
         },
-        nota: 'Las cuatro fechas ya estaban ahí antes de que yo me diera cuenta. Solo hacía falta ponerlas en fila 🌚'
+        nota: 'Las cuatro fechas ya estaban ahí antes de que yo me diera cuenta. Solo hacía falta ponerlas en fila 🐧'
       }
     ];
 
@@ -2991,7 +2991,7 @@
       v.innerHTML =
         '<div class="vale-tag">Vale canjeable</div>' +
         '<div class="vale-title">Un masaje completo</div>' +
-        '<div class="vale-sub">A reclamar cuando te apetezca 🌚</div>' +
+        '<div class="vale-sub">A reclamar cuando te apetezca 🐧</div>' +
         '<div class="vale-rule"></div>' +
         '<dl class="vale-data">' +
           '<dt>A nombre de</dt><dd>Mariapnel</dd>' +
@@ -3012,7 +3012,7 @@
       if (repetido) {
         var aviso = document.createElement('p');
         aviso.className = 'vale-once';
-        aviso.textContent = 'Este vale ya estaba emitido. Solo existe uno, y sigue siendo tuyo 🌚';
+        aviso.textContent = 'Este vale ya estaba emitido. Solo existe uno, y sigue siendo tuyo 🐧';
         v.insertBefore(aviso, v.querySelector('.vale-serie').nextSibling);
       }
 
@@ -3034,7 +3034,7 @@
       // por si no hay impresora a mano
       var correo = document.createElement('a');
       correo.className = 'vale-btn';
-      correo.href = 'mailto:?subject=' + encodeURIComponent('Vale por un masaje 🌚') +
+      correo.href = 'mailto:?subject=' + encodeURIComponent('Vale por un masaje 🐧') +
                     '&body=' + encodeURIComponent(valeTexto(emitido));
       correo.textContent = 'Enviar por correo';
       acciones.appendChild(correo);
@@ -3073,7 +3073,7 @@
         alGanar: function (ctx) {
           var yaLoTenia = !!valeEmitido();
           var emitido = emitirVale();
-          ctx.ayuda.textContent = 'Sigue volando 🌚';
+          ctx.ayuda.textContent = 'Sigue volando 🐧';
           ctx.premio.innerHTML = '';
           ctx.premio.appendChild(montarVale(null, false, emitido, yaLoTenia));
           syncPanel();
@@ -3107,7 +3107,7 @@
     });
 
     // ---------- el ahorcado ----------
-    // La luna mengua con cada fallo; cuando desaparece, se pierde la partida.
+    // El hielo se rompe con cada fallo; cuando se acaba, el pingüino cae al agua.
     // A las derrotas máximas la casilla se cierra para siempre.
     var AHORCADO_KEY = 'ahorcado-estado';
 
@@ -3152,34 +3152,45 @@
       if (guardado.ganado) { desenlace(cfg.alGanar, true); return caja; }
       if (guardado.derrotas >= TOPE) { desenlace(cfg.alAgotarse, false); return caja; }
 
-      // --- la luna, que mengua ---
+      // --- el pingüino sobre el hielo, que se va rompiendo ---
       var NS = 'http://www.w3.org/2000/svg';
       var svg = document.createElementNS(NS, 'svg');
-      svg.setAttribute('class', 'luna-fases');
+      svg.setAttribute('class', 'hielo-fases');
       svg.setAttribute('viewBox', '0 0 100 100');
       svg.setAttribute('aria-hidden', 'true');
-      var defs = document.createElementNS(NS, 'defs');
-      var mask = document.createElementNS(NS, 'mask');
-      mask.setAttribute('id', 'mLuna');
-      var base = document.createElementNS(NS, 'circle');
-      base.setAttribute('cx', '50'); base.setAttribute('cy', '50');
-      base.setAttribute('r', '38'); base.setAttribute('fill', '#fff');
-      var tapa = document.createElementNS(NS, 'circle');
-      tapa.setAttribute('cy', '50'); tapa.setAttribute('r', '38');
-      tapa.setAttribute('fill', '#000'); tapa.setAttribute('cx', '-100');
-      mask.appendChild(base); mask.appendChild(tapa);
-      defs.appendChild(mask);
-      var borde = document.createElementNS(NS, 'circle');
-      borde.setAttribute('cx', '50'); borde.setAttribute('cy', '50');
-      borde.setAttribute('r', '38');
-      borde.setAttribute('fill', 'none');
-      borde.setAttribute('stroke', 'rgba(245,242,234,0.14)');
-      var disco = document.createElementNS(NS, 'circle');
-      disco.setAttribute('cx', '50'); disco.setAttribute('cy', '50');
-      disco.setAttribute('r', '38');
-      disco.setAttribute('fill', '#e8e2d2');
-      disco.setAttribute('mask', 'url(#mLuna)');
-      svg.appendChild(defs); svg.appendChild(borde); svg.appendChild(disco);
+
+      function nodo(tipo, attrs) {
+        var e = document.createElementNS(NS, tipo);
+        for (var k in attrs) e.setAttribute(k, attrs[k]);
+        return e;
+      }
+
+      // la línea del agua, apenas insinuada
+      svg.appendChild(nodo('line', { x1: 4, y1: 84, x2: 96, y2: 84,
+        stroke: 'rgba(169,139,216,0.35)', 'stroke-width': 1.2 }));
+
+      // el témpano: se estrecha con cada fallo
+      var hielo = nodo('path', { fill: '#dbe6ee', opacity: 0.9 });
+      svg.appendChild(hielo);
+
+      // el pingüino, con el contorno claro para que se recorte sobre el negro
+      var ping = nodo('g', {});
+      var CLARO = 'rgba(245,242,234,0.8)';
+      ping.appendChild(nodo('ellipse', { cx: 29, cy: 50, rx: 5, ry: 14, fill: '#1b1b22',
+        stroke: CLARO, 'stroke-width': 1.4, transform: 'rotate(-14 29 50)' }));
+      ping.appendChild(nodo('ellipse', { cx: 71, cy: 50, rx: 5, ry: 14, fill: '#1b1b22',
+        stroke: CLARO, 'stroke-width': 1.4, transform: 'rotate(14 71 50)' }));
+      ping.appendChild(nodo('path', { d: 'M42 72 h9 l-3 5 h-9 z', fill: 'var(--gold)' }));
+      ping.appendChild(nodo('path', { d: 'M58 72 h-9 l3 5 h9 z', fill: 'var(--gold)' }));
+      ping.appendChild(nodo('ellipse', { cx: 50, cy: 47, rx: 20, ry: 27, fill: '#1b1b22',
+        stroke: CLARO, 'stroke-width': 1.8 }));
+      ping.appendChild(nodo('ellipse', { cx: 50, cy: 53, rx: 12.5, ry: 19, fill: '#f5f2ea' }));
+      ping.appendChild(nodo('circle', { cx: 43.5, cy: 35, r: 3.1, fill: '#f5f2ea' }));
+      ping.appendChild(nodo('circle', { cx: 56.5, cy: 35, r: 3.1, fill: '#f5f2ea' }));
+      ping.appendChild(nodo('circle', { cx: 44.2, cy: 35.6, r: 1.4, fill: '#15151b' }));
+      ping.appendChild(nodo('circle', { cx: 57.2, cy: 35.6, r: 1.4, fill: '#15151b' }));
+      ping.appendChild(nodo('path', { d: 'M44.5 41 L55.5 41 L50 48.5 Z', fill: 'var(--gold)' }));
+      svg.appendChild(ping);
       caja.appendChild(svg);
 
       var vidasEl = document.createElement('div');
@@ -3201,11 +3212,20 @@
 
       var acertadas = [], fallos = 0, terminada = false;
 
-      function pintarLuna() {
-        // El disco que la tapa tiene el mismo radio: en cx = 50-2r no la roza
-        // (luna llena) y en cx = 50 la cubre entera (luna nueva).
+      function pintarHielo() {
+        // De un témpano ancho a una esquirla: con el último fallo se queda
+        // sin suelo y el pingüino se hunde.
         var t = fallos / VIDAS;
-        tapa.setAttribute('cx', String(-26 + t * 76));
+        var ancho = 33 - t * 32;
+        var hundido = t >= 1;
+        hielo.setAttribute('d',
+          'M' + (50 - ancho) + ' 77.5 ' +
+          'L' + (50 - ancho * 0.7) + ' 84 ' +
+          'L' + (50 + ancho * 0.7) + ' 84 ' +
+          'L' + (50 + ancho) + ' 77.5 Z');
+        hielo.setAttribute('opacity', hundido ? 0 : 0.92);
+        ping.setAttribute('transform', hundido ? 'translate(0 16)' : 'translate(0 0)');
+        ping.setAttribute('opacity', hundido ? 0.45 : 1);
       }
 
       function pintarPalabra() {
@@ -3250,8 +3270,8 @@
         } else {
           var quedan = TOPE - est.derrotas;
           av.appendChild(document.createTextNode(
-            'La luna se apagó. Te quedan ' + quedan +
-            (quedan === 1 ? ' intento' : ' intentos') + ' 🌚'));
+            'Se rompió el hielo. Te quedan ' + quedan +
+            (quedan === 1 ? ' intento' : ' intentos') + ' 🐧'));
           var otra = document.createElement('button');
           otra.type = 'button';
           otra.className = 'ahorcado-btn';
@@ -3279,7 +3299,7 @@
         } else {
           fallos++;
           boton.classList.add('fallo');
-          pintarLuna();
+          pintarHielo();
           vidasEl.textContent = (VIDAS - fallos) + ' de ' + VIDAS + ' fases';
           if (fallos >= VIDAS) rematar(false);
         }
@@ -3295,7 +3315,7 @@
       });
 
       vidasEl.textContent = VIDAS + ' de ' + VIDAS + ' fases';
-      pintarLuna();
+      pintarHielo();
       pintarPalabra();
       return caja;
     }
@@ -3596,7 +3616,7 @@
         cuerpo.classList.add('temblando');
         var cuantas = campos.filter(function (c) { return parseInt(c.inp.value, 10) === c.valor; }).length;
         aviso.textContent = cuantas
-          ? 'Vas por buen camino: ' + cuantas + ' de ' + campos.length + ' encajan 🌚'
+          ? 'Vas por buen camino: ' + cuantas + ' de ' + campos.length + ' encajan 🐧'
           : (cfg.animo[Math.min(fallos - 1, cfg.animo.length - 1)]);
       });
 
@@ -3885,7 +3905,7 @@
       boxOpen.appendChild(h);
 
       var p = document.createElement('p');
-      p.textContent = s.texto || 'Esta sorpresa aún se está cocinando. Vuelve en un rato 🌚';
+      p.textContent = s.texto || 'Esta sorpresa aún se está cocinando. Vuelve en un rato 🐧';
       boxOpen.appendChild(p);
 
       if (s.ahorcado) boxOpen.appendChild(montarAhorcado(s.ahorcado));
@@ -3962,17 +3982,17 @@
           'En la web normal la 01 se abre el ' + diaCorto(fechas[0]) + '.';
       } else if (disponibles > 0) {
         boxesNote.textContent = disponibles === 1
-          ? 'Tienes 1 casilla esperándote 🌚'
-          : 'Tienes ' + disponibles + ' casillas esperándote 🌚';
+          ? 'Tienes 1 casilla esperándote 🐧'
+          : 'Tienes ' + disponibles + ' casillas esperándote 🐧';
       } else if (siguiente) {
         var dias = Math.round(
           (new Date(siguiente.fecha + 'T00:00:00-04:00') - new Date(hoy + 'T00:00:00-04:00')) / 86400000
         );
         boxesNote.textContent = 'La casilla ' + pad(siguiente.n) + ' se abre el ' +
-          diaCorto(siguiente.fecha) + (dias === 1 ? ' · falta 1 día 🌚'
-                                                  : ' · faltan ' + dias + ' días 🌚');
+          diaCorto(siguiente.fecha) + (dias === 1 ? ' · falta 1 día 🐧'
+                                                  : ' · faltan ' + dias + ' días 🐧');
       } else {
-        boxesNote.textContent = 'Ya las abriste todas 🌚';
+        boxesNote.textContent = 'Ya las abriste todas 🐧';
       }
     }
 
@@ -4011,8 +4031,8 @@
       });
       el.hidden = dentro.length === 0;
       el.textContent = dentro.length === 1
-        ? 'Y la fecha que apuntaste cae justo dentro del viaje 🌚'
-        : 'Y las ' + dentro.length + ' fechas que apuntaste caen dentro del viaje 🌚';
+        ? 'Y la fecha que apuntaste cae justo dentro del viaje 🐧'
+        : 'Y las ' + dentro.length + ' fechas que apuntaste caen dentro del viaje 🐧';
     }
 
     // ---------- decorado navideño de la misión ----------
@@ -4080,7 +4100,7 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
-          _subject: 'Fechas disponibles de Mariapnel 🌚',
+          _subject: 'Fechas disponibles de Mariapnel 🐧',
           fechas: list.length ? list.map(prettyDate).join('  ·  ') : '(ninguna)',
           total: list.length,
           actualizado: new Date().toLocaleString('es-ES')
@@ -4102,8 +4122,8 @@
       // y a partir de ahí se queda fija en la página
       agenda.hidden = list.length === 0;
       agendaSub.textContent = list.length === 1
-        ? 'Misión en curso: 1 fecha apuntada 🌚'
-        : 'Misión en curso: ' + list.length + ' fechas apuntadas 🌚';
+        ? 'Misión en curso: 1 fecha apuntada 🐧'
+        : 'Misión en curso: ' + list.length + ' fechas apuntadas 🐧';
 
       updateMatch();
 

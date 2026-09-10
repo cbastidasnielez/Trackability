@@ -1,11 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="100" fill="#050505"/>
-  <!-- luna nueva con carita 🌚 -->
-  <circle cx="256" cy="230" r="130" fill="#2b2b30" stroke="#4a4a52" stroke-width="6"/>
-  <circle cx="210" cy="205" r="14" fill="#0d0d10"/>
-  <circle cx="302" cy="205" r="14" fill="#0d0d10"/>
-  <path d="M200 265 Q256 310 312 265" fill="none" stroke="#0d0d10" stroke-width="12" stroke-linecap="round"/>
-  <!-- onda de sonido -->
-  <path d="M60 430 L150 430 Q170 430 180 405 T210 380 Q230 355 240 430 T270 480 Q290 505 300 430 T330 405 Q350 380 362 430 L452 430"
-        fill="none" stroke="#f5f2ea" stroke-width="8" stroke-linecap="round" opacity="0.85"/>
+  <!-- pingüino -->
+  <ellipse cx="256" cy="248" rx="122" ry="150" fill="#1b1b22"/>
+  <ellipse cx="256" cy="272" rx="76" ry="112" fill="#f5f2ea"/>
+  <!-- alas -->
+  <ellipse cx="140" cy="262" rx="27" ry="80" fill="#12121a" transform="rotate(-12 140 262)"/>
+  <ellipse cx="372" cy="262" rx="27" ry="80" fill="#12121a" transform="rotate(12 372 262)"/>
+  <!-- ojos -->
+  <circle cx="216" cy="204" r="18" fill="#f5f2ea"/>
+  <circle cx="296" cy="204" r="18" fill="#f5f2ea"/>
+  <circle cx="220" cy="208" r="8" fill="#15151b"/>
+  <circle cx="300" cy="208" r="8" fill="#15151b"/>
+  <!-- pico y patas -->
+  <path d="M226 244 L286 244 L256 284 Z" fill="#e3c07a"/>
+  <path d="M206 388 h52 l-14 26 h-54 z" fill="#e3c07a"/>
+  <path d="M306 388 h-52 l14 26 h54 z" fill="#e3c07a"/>
+  <!-- onda de sonido, como en la web -->
+  <path d="M64 452 L150 452 Q168 452 178 430 T206 408 Q224 386 234 452 T262 496 Q280 518 290 452 T318 430 Q336 408 348 452 L434 452"
+        fill="none" stroke="#f5f2ea" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
 </svg>
