@@ -2,7 +2,10 @@
 
 Cuenta atrás para el cumpleaños de Mariapnel 🐧 — **25 de agosto**, hora de Orlando, Florida.
 
-Temática de pingüino sobre fondo negro, con ondas de sonido y un emblema giratorio de "distancia y tiempo" con su foto en el centro.
+Temática polar sobre fondo negro: nieve cayendo en toda la página, casillas
+escarchadas hasta que llega su día, un pingüino sobre el hielo en el ahorcado y
+la bola del 8 convertida en bola de nieve. Más las ondas de sonido y el emblema
+giratorio de "distancia y tiempo" con su foto en el centro.
 
 ## Qué hay ahora
 

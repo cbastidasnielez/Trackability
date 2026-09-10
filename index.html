@@ -20,6 +20,7 @@
       --glow: rgba(245, 242, 234, 0.08);
       --gold: #e3c07a;
       --morado: #a98bd8;
+      --hielo: #9ec9e6;
     }
 
     html, body { min-height: 100%; }
@@ -46,6 +47,30 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+
+    /* ---------- nieve en toda la página ---------- */
+    .nevada {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .nevada i {
+      position: absolute;
+      top: -12px;
+      border-radius: 50%;
+      background: rgba(245, 242, 234, 0.75);
+      animation: nevar linear infinite;
+    }
+
+    @keyframes nevar {
+      0%   { transform: translate(0, 0); opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { transform: translate(var(--deriva, 14px), 105vh); opacity: 0; }
     }
 
     /* ---------- gran onda de fondo ---------- */
@@ -424,6 +449,15 @@
     }
 
     .box .mark { font-size: 11px; line-height: 1; }
+
+    /* las que aún no tocan salen escarchadas */
+    .box:disabled {
+      border-color: rgba(158, 201, 230, 0.22);
+      background:
+        linear-gradient(160deg, rgba(158, 201, 230, 0.07), rgba(255, 255, 255, 0.01));
+    }
+
+    .box:disabled .mark { color: var(--hielo); opacity: 0.75; }
 
     /* la de hoy: encendida y pulsable */
     .box.ready {
@@ -891,6 +925,35 @@
     }
 
     .bola.agitando { animation: agitar 0.9s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+
+    /* la nieve de dentro, recortada al círculo */
+    .bola-nieve {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bola-nieve i {
+      position: absolute;
+      top: -6px;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(245, 242, 234, 0.9);
+      opacity: 0;
+    }
+
+    .bola.agitando .bola-nieve i,
+    .bola.revelando .bola-nieve i { animation: caer-copo 2.4s ease-in forwards; }
+
+    @keyframes caer-copo {
+      0%   { transform: translate(0, 0); opacity: 0; }
+      10%  { opacity: 0.95; }
+      70%  { opacity: 0.8; }
+      100% { transform: translate(var(--lado, 8px), 150px); opacity: 0; }
+    }
 
     /* sacudida seca, como cuando revuelves el líquido de verdad */
     @keyframes agitar {
@@ -2244,13 +2307,17 @@
 
     @media (prefers-reduced-motion: reduce) {
       .ring-spin, .photo, .lights i { animation: none; }
+      .nevada { display: none; }
       .bola.agitando, .bola.revelando::after { animation: none; }
+      .bola-nieve i { animation: none !important; }
       .bola.revelando .bola-triangulo { animation: none; opacity: 1; }
       .snow { display: none; }
     }
   </style>
 </head>
 <body>
+
+  <div class="nevada" id="nevada" aria-hidden="true"></div>
 
   <!-- gran onda de fondo -->
   <svg class="bg-wave" viewBox="0 0 1200 300" aria-hidden="true">
@@ -2469,6 +2536,23 @@
   <script type="module" src="/src/analytics.js"></script>
   <script src="/flappy.js"></script>
   <script>
+    // ---------- nieve de fondo ----------
+    (function () {
+      var capa = document.getElementById('nevada');
+      for (var i = 0; i < 34; i++) {
+        var copo = document.createElement('i');
+        var tam = (1.6 + Math.random() * 2.6).toFixed(1);
+        copo.style.width = tam + 'px';
+        copo.style.height = tam + 'px';
+        copo.style.left = (Math.random() * 100).toFixed(1) + '%';
+        copo.style.opacity = (0.18 + Math.random() * 0.45).toFixed(2);
+        copo.style.setProperty('--deriva', (Math.random() * 90 - 45).toFixed(0) + 'px');
+        copo.style.animationDuration = (13 + Math.random() * 17).toFixed(1) + 's';
+        copo.style.animationDelay = (-Math.random() * 30).toFixed(1) + 's';
+        capa.appendChild(copo);
+      }
+    })();
+
     // ---------- ondas de sonido ----------
     // seno modulado por una envolvente gaussiana: plano en los bordes,
     // vibrante en el centro
@@ -3633,6 +3717,19 @@
       wrap.className = 'bola-wrap';
       var bola = document.createElement('div');
       bola.className = 'bola';
+      // la nieve que se levanta al agitarla
+      var nieve = document.createElement('div');
+      nieve.className = 'bola-nieve';
+      for (var n = 0; n < 16; n++) {
+        var copo = document.createElement('i');
+        copo.style.left = (6 + Math.random() * 88).toFixed(0) + '%';
+        copo.style.setProperty('--lado', (Math.random() * 40 - 20).toFixed(0) + 'px');
+        copo.style.animationDelay = (Math.random() * 0.5).toFixed(2) + 's';
+        copo.style.animationDuration = (1.6 + Math.random() * 1.4).toFixed(2) + 's';
+        nieve.appendChild(copo);
+      }
+      bola.appendChild(nieve);
+
       var ventana = document.createElement('div');
       ventana.className = 'bola-ventana';
       var ocho = document.createElement('div');
@@ -3686,7 +3783,7 @@
         // 1) se agita
         bola.classList.remove('agitando', 'revelando');
         salida.hidden = true;
-        void bola.offsetWidth;          // reinicia las animaciones
+        void bola.offsetWidth;          // reinicia las animaciones, nieve incluida
         bola.classList.add('agitando');
 
         // 2) del líquido sube el triángulo, con el icono de lo que eligió
@@ -3965,7 +4062,7 @@
 
         var mark = document.createElement('span');
         mark.className = 'mark';
-        mark.textContent = vista ? '✦' : lista ? 'ábreme' : '🔒';
+        mark.textContent = vista ? '✦' : lista ? 'ábreme' : '❄';
 
         b.appendChild(num);
         b.appendChild(when);
