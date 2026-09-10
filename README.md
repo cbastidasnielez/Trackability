@@ -11,7 +11,9 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 
 - Dos contadores en vivo (días y horas : minutos : segundos): el cumpleaños
   (25/08) y el reencuentro, que apunta al aterrizaje en Orlando del 26/12 a
-  las 19:10 (`ENCUENTRO` en `index.html`)
+  las 19:10 (`ENCUENTRO` en `index.html`), con los sábados que quedan por
+  delante — el 26/12/2026 cae precisamente en sábado, así que el último que
+  cuenta es el del reencuentro
 - Emblema giratorio (círculo de flechas "Distancia y Tiempo") con la foto de Mariapnel 🐧 en el centro
 - Botón **"Presiona para desbloquear sorpresas 🐧"** con la misión provisional
 - Lista permanente con las fechas que ya apuntó (se pueden quitar con la ×)

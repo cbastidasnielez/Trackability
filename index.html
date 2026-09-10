@@ -317,6 +317,13 @@
       margin-top: 14px;
     }
 
+    .timer-sabados {
+      margin-top: 12px;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: var(--hielo);
+    }
+
     .timer-flight {
       margin-top: 12px;
       font-size: 10px;
@@ -2442,6 +2449,7 @@
         <span class="timer-num" id="meetDays">–</span>
         <span class="timer-cap" id="meetCaption">días para vernos 🐧</span>
         <span class="timer-clock" id="meetClock"></span>
+        <span class="timer-sabados" id="meetSabados"></span>
         <span class="timer-flight">26 dic &middot; BCN 10:55 &rarr; MCO 19:10</span>
       </div>
     </div>
@@ -2749,6 +2757,21 @@
     var meetCaption = document.getElementById('meetCaption');
     var meetClock = document.getElementById('meetClock');
     var ringTiempo = document.getElementById('ringTiempo');
+    var meetSabados = document.getElementById('meetSabados');
+
+    // Cuántos sábados quedan por delante, contando el de hoy si hoy es sábado
+    // y el del propio reencuentro. En UTC para que no lo despiste el horario
+    // de verano.
+    function sabadosHasta(ms) {
+      var h = orlandoToday();
+      var d = new Date(Date.UTC(h.year, h.month - 1, h.day));
+      var f = isoDe(new Date(ms)).split('-');
+      var fin = new Date(Date.UTC(+f[0], +f[1] - 1, +f[2]));
+      d = new Date(d.getTime() + ((6 - d.getUTCDay() + 7) % 7) * 86400000);
+      var n = 0;
+      while (d.getTime() <= fin.getTime()) { n++; d = new Date(d.getTime() + 7 * 86400000); }
+      return n;
+    }
 
     // la distancia en línea recta entre Barcelona y Orlando
     // (el punto de los miles se pone a mano: toLocaleString depende del
@@ -2764,12 +2787,17 @@
         meetDays.textContent = '🐧';
         meetCaption.textContent = 'estamos en el mismo sitio 🐧';
         meetClock.textContent = '';
+        meetSabados.textContent = '';
         ringTiempo.textContent = '0';
         return;
       }
       var dias = Math.floor(diff / 86400000);
       meetLead.textContent = 'Faltan';
       meetDays.textContent = dias;
+      var sab = sabadosHasta(encuentroMs);
+      meetSabados.textContent = sab === 1
+        ? 'Queda 1 sábado por delante'
+        : 'Quedan ' + sab + ' sábados por delante';
       ringTiempo.textContent = dias + (dias === 1 ? ' DÍA' : ' DÍAS');
       meetCaption.textContent = (dias === 1 ? 'día' : 'días') + ' para vernos 🐧';
       meetClock.textContent = pad(Math.floor(diff / 3600000) % 24) + ' : ' +
