@@ -49,6 +49,64 @@
       align-items: center;
     }
 
+    /* ---------- maktub ---------- */
+    .maktub {
+      width: 100%;
+      max-width: 460px;
+      margin-top: 46px;
+      padding: 30px 22px 26px;
+      border: 1px solid rgba(227, 192, 122, 0.24);
+      border-radius: 16px;
+      background: linear-gradient(170deg, rgba(227, 192, 122, 0.07), rgba(255, 255, 255, 0.012));
+    }
+
+    .maktub-palabra {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 10vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-indent: 0.1em;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .maktub-arabe {
+      display: block;
+      margin-top: 14px;
+      font-size: clamp(1.5rem, 7vw, 2rem);
+      line-height: 1.4;
+      color: var(--gold);
+    }
+
+    .maktub-trad {
+      display: block;
+      margin-top: 12px;
+      padding-bottom: 22px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid rgba(227, 192, 122, 0.22);
+      font-size: 9px;
+      letter-spacing: 0.34em;
+      text-indent: 0.34em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .maktub p {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 14px;
+      line-height: 1.85;
+      color: rgba(245, 242, 234, 0.9);
+      margin-bottom: 16px;
+    }
+
+    .maktub .firma {
+      margin-top: 24px;
+      margin-bottom: 0;
+      font-size: clamp(1.05rem, 5vw, 1.25rem);
+      font-style: italic;
+      color: var(--gold);
+    }
+
     /* ---------- por qué un pingüino ---------- */
     .porque {
       width: 100%;
@@ -2550,6 +2608,20 @@
       <ul class="dates-list" id="datesList"></ul>
     </section>
 
+
+    <section class="maktub">
+      <div class="maktub-palabra">Maktub</div>
+      <span class="maktub-arabe" lang="ar" dir="rtl">مكتوب</span>
+      <span class="maktub-trad">Está escrito</span>
+
+      <p>Hay una palabra árabe que se usa cuando algo encaja demasiado bien como para llamarlo casualidad. Un mensaje en 2013, entre dos adolescentes de ciudades distintas de un país que se rompía. Mi vida ya partida entre Lechería y Valera años antes de que tú hicieras ese mismo trayecto. Un parque en Orlando en 2020 donde estuve a un metro de todo esto sin verlo. Tres fechas que salen seguidas: 24, 25, 26. Un disco que se publicó el mismo año en que te escribí por primera vez. Y un 26 de diciembre que, mira tú, cae en sábado.</p>
+
+      <p>Pero maktub no es cruzarse de brazos a esperar. Donde muchos la leímos por primera vez, la palabra va siempre acompañada de caminar: lo que está escrito no ocurre hasta que alguien da el paso. Trece años estuvo escrito y no pasó nada. Empezó a pasar cuando te escribí, y cuando tú dejaste la puerta entreabierta.</p>
+
+      <p>Puede que estuviera escrito desde el principio. O puede que lo hayamos ido escribiendo nosotros y solo se note al mirar hacia atrás. A mí las dos me sirven.</p>
+
+      <p class="firma">Maktub.</p>
+    </section>
 
     <section class="porque">
       <svg class="pareja" viewBox="0 0 200 124" aria-hidden="true">
