@@ -278,16 +278,6 @@
     .track-copy:hover { color: var(--ink); border-color: rgba(245, 242, 234, 0.5); }
     .track-copy.ok { color: var(--gold); border-color: rgba(227, 192, 122, 0.6); }
 
-    .track-lee {
-      margin-top: 14px;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 13px;
-      line-height: 1.75;
-      color: var(--dim);
-    }
-
-    .track-lee strong { color: var(--gold); font-weight: 400; }
-
     /* ---------- enlaces oficiales ---------- */
     .carta-links {
       display: flex;
@@ -315,96 +305,11 @@
     .carta-links a.principal { border-color: rgba(227, 192, 122, 0.55); color: var(--gold); }
     .carta-links a.principal:hover { background: rgba(227, 192, 122, 0.1); }
 
-    /* ---------- las etapas ---------- */
-    .hitos {
-      list-style: none;
-      margin: 22px 0 0;
-      padding: 0;
-    }
-
-    .hito {
-      position: relative;
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      padding: 9px 0 9px 24px;
-      font-size: 12.5px;
-      color: var(--dim);
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .hitos.fijo .hito { cursor: default; }
-
-    /* el hilo que une las etapas */
-    .hito::before {
-      content: "";
-      position: absolute;
-      left: 5px;
-      top: 20px;
-      bottom: -4px;
-      width: 1px;
-      background: rgba(245, 242, 234, 0.16);
-    }
-
-    .hito:last-child::before { display: none; }
-
-    .hito-punto {
-      position: absolute;
-      left: 0;
-      top: 13px;
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      border: 1px solid rgba(245, 242, 234, 0.35);
-      background: var(--bg);
-      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .hito-txt { flex: 1 1 auto; }
-
-    .hito-fecha {
-      flex: 0 0 auto;
-      font-size: 9.5px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--faint);
-    }
-
-    .hito.ok { color: var(--ink); }
-
-    .hito.ok .hito-punto {
-      background: var(--gold);
-      border-color: var(--gold);
-      box-shadow: 0 0 10px rgba(227, 192, 122, 0.5);
-    }
-
-    .hito.ok .hito-fecha { color: var(--gold); }
-
-    .hito.aqui .hito-punto {
-      border-color: var(--hielo);
-      box-shadow: 0 0 0 0 rgba(158, 201, 230, 0.55);
-      animation: latido 2.2s ease-out infinite;
-    }
-
-    @keyframes latido {
-      0%   { box-shadow: 0 0 0 0 rgba(158, 201, 230, 0.5); }
-      70%  { box-shadow: 0 0 0 9px rgba(158, 201, 230, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(158, 201, 230, 0); }
-    }
-
     .carta-estado {
       margin-top: 16px;
       font-size: 12px;
       line-height: 1.7;
       color: var(--hielo);
-    }
-
-    .carta-nota {
-      margin-top: 14px;
-      font-size: 11px;
-      line-height: 1.7;
-      color: var(--faint);
     }
 
     .carta-firma {
@@ -2938,7 +2843,7 @@
     <section class="carta" id="carta">
       <span class="carta-tag">Correo aéreo &middot; En camino</span>
       <h2 class="carta-titulo">Hay una carta cruzando el Atlántico</h2>
-      <p class="carta-lead">La escribiste tú, a mano, en Orlando. La espero yo en Barcelona. Por una vez en toda esta historia, lo que viaja no lo mandé yo 🐧</p>
+      <p class="carta-lead">La escribiste tú, a mano, en Orlando. La espero yo en Barcelona 🐧</p>
 
       <div class="carta-dias">
         <b id="cartaDias">–</b>
@@ -2974,18 +2879,12 @@
         </div>
       </div>
 
-      <p class="track-lee">Hasta el código dice algo. La <strong>L</strong> del principio significa carta, no paquete. Las dos letras del final dicen de dónde salió: <strong>US</strong>.</p>
-
       <div class="carta-links">
         <a class="principal" id="linkUsps" href="https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=LH276353799US" target="_blank" rel="noopener">Seguir en USPS</a>
         <a id="linkCorreos" href="https://www.correos.es/es/es/herramientas/localizador/envios/detalle?tracking-number=LH276353799US" target="_blank" rel="noopener">Correos</a>
-        <a id="link17" href="https://t.17track.net/es#nums=LH276353799US" target="_blank" rel="noopener">17track</a>
       </div>
 
-      <ol class="hitos" id="hitos"></ol>
-
       <p class="carta-estado" id="cartaEstado" hidden></p>
-      <p class="carta-nota" id="cartaNota"></p>
       <p class="carta-firma">Cuando llegue te aviso. Y la leo entera antes de decirte nada 🐧</p>
     </section>
 
@@ -4927,51 +4826,27 @@
       if (localStorage.getItem(PENDING_KEY) && loadDates().length) sendDates(loadDates());
     } catch (e) {}
 
+
     /* ---------- la carta que viene de Orlando ----------
-       El número de seguimiento es público y el detalle real vive en USPS.
-       Aquí se ve el camino, los días que lleva y las etapas. Si algún día
-       hay credenciales de la API de USPS en Vercel (USPS_CLIENT_ID y
-       USPS_CLIENT_SECRET), /api/carta devuelve el estado de verdad y las
-       etapas se pintan solas; mientras tanto se marcan a mano. */
+       El detalle real vive en USPS y en Correos, que es lo que ven los dos
+       igual. Si algún día hay credenciales de USPS en Vercel
+       (USPS_CLIENT_ID y USPS_CLIENT_SECRET), /api/carta devuelve la última
+       novedad y la fecha de salida, y se pintan aquí. Si no, la tarjeta se
+       queda con los enlaces. */
     (function () {
       var seccion = document.getElementById('carta');
       if (!seccion) return;
 
       var CARTA_DESDE = '2026-09-12';   // primer día que la seguimos
-      var CARTA_KEY = 'carta-hitos';
-
-      var ETAPAS = [
-        'Aceptada en Orlando',
-        'Sale de Estados Unidos',
-        'Cruza el Atlántico',
-        'Llega a España',
-        'En reparto en Barcelona',
-        'En mis manos'
-      ];
 
       var MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun',
                    'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
-      var listaEl = document.getElementById('hitos');
       var diasEl = document.getElementById('cartaDias');
       var diasPieEl = document.getElementById('cartaDiasPie');
       var estadoEl = document.getElementById('cartaEstado');
-      var notaEl = document.getElementById('cartaNota');
       var copiaBtn = document.getElementById('trackCopy');
       var numEl = document.getElementById('trackNum');
-
-      var envivo = false;         // ¿manda USPS o mandamos nosotros?
-      var marcas = cargar();      // { "0": "2026-09-12", ... }
-
-      function cargar() {
-        try { return JSON.parse(localStorage.getItem(CARTA_KEY)) || {}; }
-        catch (e) { return {}; }
-      }
-
-      function guardar() {
-        if (MODO_TEST) return;    // en modo prueba no se guarda nada
-        try { localStorage.setItem(CARTA_KEY, JSON.stringify(marcas)); } catch (e) {}
-      }
 
       function aFecha(iso) {
         if (!iso) return null;
@@ -4994,82 +4869,16 @@
         return Math.max(0, Math.round((hoy - d) / 86400000));
       }
 
-      function pintarDias() {
-        var origen = (envivo && marcas['0']) ? marcas['0'] : CARTA_DESDE;
+      // con fecha de salida de USPS cuenta el viaje; si no, los días que
+      // llevamos detrás de ella
+      function pintarDias(salida) {
+        var origen = salida || CARTA_DESDE;
         var n = diasDesde(origen);
         if (n === null) return;
         diasEl.textContent = n;
-        var enCamino = envivo && marcas['0'];
         diasPieEl.textContent = (n === 1 ? 'día ' : 'días ') +
-          (enCamino ? 'en camino' : 'siguiéndola') +
+          (salida ? 'en camino' : 'siguiéndola') +
           ' · desde el ' + corta(origen);
-      }
-
-      function pintarHitos() {
-        listaEl.innerHTML = '';
-        listaEl.className = 'hitos' + (envivo ? ' fijo' : '');
-
-        var ultimoOk = -1;
-        for (var i = 0; i < ETAPAS.length; i++) if (marcas[String(i)]) ultimoOk = i;
-
-        ETAPAS.forEach(function (texto, i) {
-          var li = document.createElement('li');
-          li.className = 'hito';
-          if (marcas[String(i)]) li.classList.add('ok');
-          else if (i === ultimoOk + 1) li.classList.add('aqui');
-
-          var punto = document.createElement('span');
-          punto.className = 'hito-punto';
-
-          var txt = document.createElement('span');
-          txt.className = 'hito-txt';
-          txt.textContent = texto;
-
-          var fecha = document.createElement('span');
-          fecha.className = 'hito-fecha';
-          fecha.textContent = marcas[String(i)] ? corta(marcas[String(i)]) : '';
-
-          li.appendChild(punto);
-          li.appendChild(txt);
-          li.appendChild(fecha);
-
-          if (!envivo) {
-            li.setAttribute('role', 'button');
-            li.setAttribute('tabindex', '0');
-            li.setAttribute('aria-pressed', marcas[String(i)] ? 'true' : 'false');
-            li.addEventListener('click', function () { alternar(i); });
-            li.addEventListener('keydown', function (e) {
-              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); alternar(i); }
-            });
-          }
-
-          listaEl.appendChild(li);
-        });
-      }
-
-      // marcar una etapa da por hechas las anteriores; desmarcarla borra las
-      // que vienen después
-      function alternar(i) {
-        var hoy = new Date();
-        var iso = hoy.getFullYear() + '-' +
-                  String(hoy.getMonth() + 1).padStart(2, '0') + '-' +
-                  String(hoy.getDate()).padStart(2, '0');
-
-        if (marcas[String(i)]) {
-          for (var j = i; j < ETAPAS.length; j++) delete marcas[String(j)];
-        } else {
-          for (var k = 0; k <= i; k++) if (!marcas[String(k)]) marcas[String(k)] = iso;
-        }
-
-        guardar();
-        pintarHitos();
-        pintarDias();
-      }
-
-      function pintarNota() {
-        notaEl.textContent = envivo
-          ? 'Estado según USPS. Se actualiza solo cada vez que abres la página.'
-          : 'El detalle oficial está en los enlaces de arriba. Aquí puedes ir marcando cada etapa según USPS la vaya cantando (se guarda en este dispositivo).';
       }
 
       // copiar el número al portapapeles
@@ -5083,11 +4892,6 @@
             copiaBtn.classList.remove('ok');
           }, 1800);
         }
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(texto).then(hecho, seleccionar);
-        } else {
-          seleccionar();
-        }
         function seleccionar() {
           try {
             var r = document.createRange();
@@ -5098,29 +4902,25 @@
             hecho();
           } catch (e) {}
         }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(texto).then(hecho, seleccionar);
+        } else {
+          seleccionar();
+        }
       });
 
-      pintarHitos();
-      pintarDias();
-      pintarNota();
+      pintarDias(null);
 
       // si hay datos de verdad, mandan ellos
-      (function vivo() {
-        if (!window.fetch) return;
+      if (window.fetch) {
         fetch('/api/carta', { cache: 'no-store' }).then(function (r) {
           var tipo = r.headers.get('content-type') || '';
           if (!r.ok || tipo.indexOf('json') === -1) throw new Error('sin datos');
           return r.json();
         }).then(function (d) {
-          if (!d || !d.activo || !Array.isArray(d.etapas)) return;
+          if (!d || !d.activo) return;
 
-          envivo = true;
-          marcas = {};
-          d.etapas.forEach(function (e, i) { if (e && e.fecha) marcas[String(i)] = e.fecha; });
-
-          pintarHitos();
-          pintarDias();
-          pintarNota();
+          if (d.salida) pintarDias(d.salida);
 
           if (d.ultimo && d.ultimo.texto) {
             estadoEl.hidden = false;
@@ -5128,8 +4928,8 @@
               (d.ultimo.fecha ? ' · ' + corta(d.ultimo.fecha) : '') +
               (d.ultimo.lugar ? ' · ' + d.ultimo.lugar : '');
           }
-        }).catch(function () { /* sin API: se queda el modo a mano */ });
-      })();
+        }).catch(function () { /* sin API: se queda la tarjeta con los enlaces */ });
+      }
     })();
   </script>
 </body>

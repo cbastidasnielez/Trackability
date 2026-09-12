@@ -244,26 +244,21 @@ carta cruzando el Atlántico"** (en la portada, `<section class="carta">`) es
 para seguirla los dos:
 
 - La ruta al revés que la del vuelo: aquí el sobre va **MCO → BCN**.
-- El número de seguimiento, `LH276353799US`, con botón de copiar. El código
-  se lee: la `L` inicial quiere decir carta (no paquete) y las dos últimas
-  letras, el país de origen.
-- Enlaces al rastreo oficial: **USPS**, **Correos** (que es quien la reparte
-  al llegar a España) y **17track**.
-- Seis etapas, de "Aceptada en Orlando" a "En mis manos". Se tocan para
-  marcarlas según USPS las vaya cantando; marcar una da por hechas las
-  anteriores y desmarcarla borra las siguientes. Se guarda en el navegador
-  (`carta-hitos`), así que cada dispositivo lleva su propia cuenta. Con
-  `?test` no se guarda nada.
+- El número de seguimiento, `LH276353799US`, con botón de copiar.
+- Enlaces al rastreo oficial: **USPS** y **Correos**, que es quien la reparte
+  al llegar a España.
 - El contador de días sale de `CARTA_DESDE` en `index.html`, ahora mismo el
   12 de septiembre de 2026, el día que empezamos a seguirla. Si se sabe la
-  fecha real del envío, se cambia ahí y el contador pasa a contar el viaje
-  de verdad.
+  fecha real del envío, se cambia ahí.
+
+No hay estados marcados a mano: lo que uno marque en su navegador no lo ve
+el otro, así que la única verdad es la de USPS, y a esa se va por el enlace.
 
 ### Estado real, automático (opcional)
 
 `api/carta.mjs` es una función de Vercel que consulta la API de USPS y
-devuelve las seis etapas ya resueltas. **Está apagada mientras no existan
-credenciales.** Para encenderla:
+devuelve la última novedad y la fecha del primer escaneo. **Está apagada
+mientras no existan credenciales.** Para encenderla:
 
 1. Sacar un `client id` y un `client secret` gratis en `developer.usps.com`.
 2. En Vercel: **proyecto → Settings → Environment Variables** → añadir
@@ -271,10 +266,11 @@ credenciales.** Para encenderla:
    `USPS_TRACKING_NUMBER` si algún día hay otro envío).
 3. Redesplegar.
 
-Con eso la web pinta las fechas reales de cada etapa y la última novedad de
-USPS, y las etapas dejan de ser tocables. Sin eso —o si USPS falla, o
-responde raro— la función contesta `{ activo: false }` y la página se queda
-en el modo de marcar a mano. Nunca se rompe.
+Con eso la tarjeta muestra la última novedad de USPS con su fecha y sitio, y
+el contador pasa a contar los días de viaje de verdad. Eso sí lo ven los dos
+igual, porque viene del servidor. Sin credenciales —o si USPS falla, o
+responde raro— la función contesta `{ activo: false }` y la tarjeta se queda
+con sus enlaces. Nunca se rompe.
 
 ## Quiero entrenar
 
