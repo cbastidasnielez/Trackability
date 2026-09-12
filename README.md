@@ -18,6 +18,8 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 - Botón **"Presiona para desbloquear sorpresas 🐧"** con la misión provisional
 - Botón **"Quiero entrenar 🐧"**, que lleva a `/entrenar`: su plan semanal
   con checklist (ver más abajo)
+- **La carta**: el seguimiento del sobre que viene de Orlando, con sus
+  etapas y los enlaces a USPS y Correos (ver más abajo)
 - Lista permanente con las fechas que ya apuntó (se pueden quitar con la ×)
 - Las fechas viven en el navegador (`localStorage`) y cualquier cambio se
   envía por email vía Formspree
@@ -234,6 +236,45 @@ de Magallanes y de Adelia se emparejan de por vida, vuelven al mismo nido
 temporada tras temporada y esperan a la misma pareja — no por romanticismo,
 sino porque volver con quien ya te conoce ahorra el trabajo de empezar de cero.
 Es la idea que sostiene toda la web, así que va escrita, no solo insinuada.
+
+## La carta
+
+Mariapnel 🐧 mandó una carta por USPS desde Orlando. La sección **"Hay una
+carta cruzando el Atlántico"** (en la portada, `<section class="carta">`) es
+para seguirla los dos:
+
+- La ruta al revés que la del vuelo: aquí el sobre va **MCO → BCN**.
+- El número de seguimiento, `LH276353799US`, con botón de copiar. El código
+  se lee: la `L` inicial quiere decir carta (no paquete) y las dos últimas
+  letras, el país de origen.
+- Enlaces al rastreo oficial: **USPS**, **Correos** (que es quien la reparte
+  al llegar a España) y **17track**.
+- Seis etapas, de "Aceptada en Orlando" a "En mis manos". Se tocan para
+  marcarlas según USPS las vaya cantando; marcar una da por hechas las
+  anteriores y desmarcarla borra las siguientes. Se guarda en el navegador
+  (`carta-hitos`), así que cada dispositivo lleva su propia cuenta. Con
+  `?test` no se guarda nada.
+- El contador de días sale de `CARTA_DESDE` en `index.html`, ahora mismo el
+  12 de septiembre de 2026, el día que empezamos a seguirla. Si se sabe la
+  fecha real del envío, se cambia ahí y el contador pasa a contar el viaje
+  de verdad.
+
+### Estado real, automático (opcional)
+
+`api/carta.mjs` es una función de Vercel que consulta la API de USPS y
+devuelve las seis etapas ya resueltas. **Está apagada mientras no existan
+credenciales.** Para encenderla:
+
+1. Sacar un `client id` y un `client secret` gratis en `developer.usps.com`.
+2. En Vercel: **proyecto → Settings → Environment Variables** → añadir
+   `USPS_CLIENT_ID` y `USPS_CLIENT_SECRET` (opcionalmente
+   `USPS_TRACKING_NUMBER` si algún día hay otro envío).
+3. Redesplegar.
+
+Con eso la web pinta las fechas reales de cada etapa y la última novedad de
+USPS, y las etapas dejan de ser tocables. Sin eso —o si USPS falla, o
+responde raro— la función contesta `{ activo: false }` y la página se queda
+en el modo de marcar a mano. Nunca se rompe.
 
 ## Quiero entrenar
 
