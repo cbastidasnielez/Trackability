@@ -299,8 +299,6 @@
 
     .aviso.ver { opacity: 1; transform: translate(-50%, 0); }
 
-    #confeti { position: fixed; inset: 0; pointer-events: none; z-index: 9; }
-
     /* ---------- estados ---------- */
     .estado {
       min-height: 100dvh;
@@ -377,10 +375,10 @@
     </section>
   </main>
 
-  <canvas id="confeti"></canvas>
   <div class="aviso" id="aviso"></div>
 
   <script src="/flappy.js"></script>
+  <script src="/revelar.js"></script>
   <script type="module" src="/src/analytics.js"></script>
   <script>
     (function () {
@@ -402,32 +400,6 @@
       }
       function guardar(clave, v) { try { localStorage.setItem(clave, JSON.stringify(v)); } catch (e) {} }
 
-      // ---------- confeti ----------
-      var confetiCanvas = $('confeti');
-      function confeti() {
-        var ctx = confetiCanvas.getContext('2d');
-        var dpr = Math.min(window.devicePixelRatio || 1, 2);
-        confetiCanvas.width = innerWidth * dpr; confetiCanvas.height = innerHeight * dpr;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        var colores = ['#e3c07a', '#f08fa4', '#f5f2ea', '#9ec9e6'];
-        var piezas = [];
-        for (var i = 0; i < 110; i++) {
-          piezas.push({ x: innerWidth / 2 + (Math.random() - 0.5) * 120, y: innerHeight * 0.55, vx: (Math.random() - 0.5) * 520, vy: -300 - Math.random() * 420, r: 3 + Math.random() * 4, c: colores[i % colores.length], a: Math.random() * Math.PI, va: (Math.random() - 0.5) * 12 });
-        }
-        var t0 = performance.now(), prev = t0;
-        function paso(t) {
-          var dt = Math.min((t - prev) / 1000, 0.04); prev = t;
-          ctx.clearRect(0, 0, innerWidth, innerHeight);
-          piezas.forEach(function (p) {
-            p.vy += 900 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.a += p.va * dt; p.vx *= 0.99;
-            ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.fillStyle = p.c;
-            ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); ctx.restore();
-          });
-          if (t - t0 < 2600) requestAnimationFrame(paso); else ctx.clearRect(0, 0, innerWidth, innerHeight);
-        }
-        requestAnimationFrame(paso);
-      }
-
       // ---------- el regalo ----------
       if (!ID) { $('cargando').hidden = true; $('noExiste').hidden = false; return; }
 
@@ -443,6 +415,7 @@
         var record = leer(K_RECORD, 0);
         var premios = regalo.premios || [];
         var juego = null;
+        var revelador = window.crearRevelador();
 
         document.title = 'Un regalo para ' + regalo.ella;
         $('caraGrande').src = regalo.cara;
@@ -495,25 +468,68 @@
           }
         }
 
+        // el texto con el que ella le reclama el premio a quien se lo regaló;
+        // no sabemos su teléfono, así que WhatsApp le deja elegir el contacto
+        function enlaceCobrar(texto) {
+          var frase = texto
+            ? 'Acabo de desbloquear: ' + texto + ' 👀 ¿Cuándo me lo cobras?'
+            : 'Ya tengo todos los premios 🎁 ¿Cuándo empezamos a cobrarlos?';
+          return 'https://wa.me/?text=' + encodeURIComponent(frase);
+        }
+
+        function mostrarFinal() {
+          revelador.final({
+            cara: regalo.cara,
+            titulo: 'Los tienes todos',
+            mensaje: regalo.mensaje || 'Te lo has ganado.',
+            de: regalo.de,
+            enlaceCobrar: enlaceCobrar(null),
+            textoCobrar: 'Reclamar mis premios',
+            textoCerrar: 'Volver al juego',
+            alCerrar: function () { if (juego && juego.juego) juego.juego.reanudar(); }
+          });
+          if (juego && juego.juego) juego.juego.sonar('record');
+        }
+
         function alPunto(p) {
           $('ahora').textContent = p;
           if (p > record) {
             record = p; guardar(K_RECORD, record); $('record').textContent = record;
           }
+
+          // puede caer más de uno en el mismo punto: se enseñan en fila
+          var recien = [];
           premios.forEach(function (pr, i) {
             if (p >= pr.puntos && abiertos.indexOf(i) === -1) {
               abiertos.push(i);
-              guardar(K_ABIERTOS, abiertos);
-              pintarPremios(i);
-              aviso('Premio desbloqueado: ' + pr.texto);
-              confeti();
-              if (juego && juego.juego) juego.juego.sonar('premio');
-              if (navigator.vibrate) { try { navigator.vibrate([40, 60, 40]); } catch (e) {} }
-              if (abiertos.length === premios.length) {
-                setTimeout(function () { $('finalWrap').scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 900);
-              }
+              recien.push(i);
             }
           });
+          if (!recien.length) return;
+
+          guardar(K_ABIERTOS, abiertos);
+          pintarPremios(recien[recien.length - 1]);
+          if (juego && juego.juego) { juego.juego.pausar(); juego.juego.sonar('premio'); }
+
+          (function siguiente() {
+            if (!recien.length) {
+              // ganados todos: el mensaje es el final de verdad, va aparte
+              if (abiertos.length >= premios.length) { setTimeout(mostrarFinal, 420); }
+              else if (juego && juego.juego) juego.juego.reanudar();
+              return;
+            }
+            var i = recien.shift();
+            revelador.premio({
+              n: abiertos.indexOf(i) + 1,
+              total: premios.length,
+              texto: premios[i].texto,
+              pie: premios.length - abiertos.length > 0
+                ? 'Quedan ' + (premios.length - abiertos.length) + ' por descubrir.'
+                : null,
+              enlaceCobrar: enlaceCobrar(premios[i].texto),
+              alSeguir: siguiente
+            });
+          })();
         }
 
         function montarJuego() {
@@ -521,12 +537,16 @@
           juego = window.crearFlappy({
             sprite: regalo.cara,
             objetivo: 0,
+            objetivos: premios.map(function (p) { return p.puntos; }),
             pista: primero + ' puntos y cae el primer premio',
             suave: true,
             efectos: true,
             sonido: true,
             alPunto: alPunto,
-            alPerder: function (p) { $('ahora').textContent = p; }
+            alPerder: function (p) { $('ahora').textContent = p; },
+            // la sonda para automatizar pruebas solo existe sirviendo en local;
+            // en el regalo de verdad permitiría saltarse el juego
+            depurar: location.hostname === 'localhost' || location.hostname === '127.0.0.1'
           });
           $('hueco').appendChild(juego);
         }

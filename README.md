@@ -349,9 +349,28 @@ En Vercel Blob, como blobs **privados** (no hay URL pública que adivinar):
 recibe el enlace, y `pedidos/` los datos de la venta, que no se exponen nunca.
 En local, sin token de Blob, todo va a la carpeta `.data/`.
 
+### Los momentos grandes
+
+`public/revelar.js` (`window.crearRevelador`) son las dos pantallas que
+justifican el producto, y las comparten la demo y el regalo:
+
+- **El premio.** Al ganarlo, el juego se **pausa** y ocupa toda la pantalla:
+  "Premio 1 de 3", el texto en grande, confeti y vibración. Antes era un aviso
+  pequeño y una línea en una lista debajo del lienzo, o sea, fuera de donde
+  ella estaba mirando.
+- **El final.** Cuando los tiene todos, el mensaje de quien se lo regala se
+  **escribe letra a letra**, con su cara arriba y la firma al terminar. Es el
+  cierre emocional del regalo, no un párrafo más de la página.
+- **Reclamarlo.** Cada premio lleva un botón que abre WhatsApp con el texto
+  ya escrito ("Acabo de desbloquear: … ¿Cuándo me lo cobras?"). No sabemos el
+  teléfono de quien lo regala, así que ella elige el contacto. Convierte un
+  premio escrito en una conversación de verdad.
+
+Respeta `prefers-reduced-motion`: sin animaciones ni texto que se escribe solo.
+
 ### El juego
 
-`public/flappy.js` lo comparten las cuatro páginas. Para el producto ganó tres
+`public/flappy.js` lo comparten las cuatro páginas. Para el producto ganó estas
 opciones, todas apagadas por defecto para no cambiar la web personal:
 
 - `suave: true` — dificultad progresiva. Empieza con los huecos anchos y lento,
@@ -361,6 +380,20 @@ opciones, todas apagadas por defecto para no cambiar la web personal:
 - `efectos: true` — estrellas de fondo, marcador grande y chispas al puntuar.
 - `sonido: true` — pitidos sintetizados con WebAudio (sin archivos) y botón
   para silenciar, que recuerda la elección.
+- `objetivos: [5, 10, 15]` — pinta en el lienzo una barra con lo que falta
+  para el siguiente premio. Cada punto se nota, en lugar de ser un número que
+  sube.
+- **Que no se rinda.** Al perder, la pantalla dice cuánto faltaba: quedarse a
+  un punto duele, y decirlo en voz alta hace que lo intente otra vez. Y a
+  partir de la tercera derrota seguida sin llegar al premio, el juego se
+  ablanda solo hasta un tope, avisándolo. Un regalo que no se puede abrir no
+  es un regalo.
+- `pausar()` y `reanudar()` en `caja.juego`, para congelarlo mientras se
+  enseña el premio.
+
+La sonda de pruebas (`window.__juego`) va con `depurar`. En la página del
+regalo solo se activa sirviendo desde `localhost`: en el regalo de verdad
+permitiría saltarse el juego y desbloquear los premios sin jugar.
 
 ### Probarlo entero sin PayPal
 
