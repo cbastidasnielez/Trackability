@@ -981,6 +981,7 @@
   <div class="aviso" id="aviso"></div>
 
   <script src="/flappy.js"></script>
+  <script src="/revelar.js"></script>
   <script type="module" src="/src/analytics.js"></script>
   <script>
     (function () {
@@ -992,6 +993,7 @@
       var MAX_PREMIOS = 5;
 
       var config = null;                 // lo que responde /api/config
+      var revelador = window.crearRevelador();
       var caraActual = CARA_DEFECTO;     // data URL cuando el usuario sube foto
       var caraSubida = false;
       var abiertos = [];
@@ -1103,14 +1105,41 @@
       function alPunto(p) {
         if (p > mejor) mejor = p;
         var u = umbrales(), n = inputsPremio().length;
+        var recien = [];
         for (var i = 0; i < n; i++) {
-          if (p >= u[i] && abiertos.indexOf(i) === -1) {
-            abiertos.push(i);
-            pintarPremios(i);
-            aviso('Premio desbloqueado: ' + textoPremio(i));
-            if (juego && juego.juego) juego.juego.sonar('premio');
-          }
+          if (p >= u[i] && abiertos.indexOf(i) === -1) { abiertos.push(i); recien.push(i); }
         }
+        if (!recien.length) return;
+
+        pintarPremios(recien[recien.length - 1]);
+        if (juego && juego.juego) { juego.juego.pausar(); juego.juego.sonar('premio'); }
+
+        (function siguiente() {
+          if (!recien.length) {
+            if (abiertos.length >= n) {
+              setTimeout(function () {
+                revelador.final({
+                  cara: caraActual,
+                  titulo: 'Así termina el suyo',
+                  mensaje: finalIn.value.trim() || 'Te lo has ganado.',
+                  de: $('fDe').value.trim(),
+                  textoCerrar: 'Seguir en la demo',
+                  alCerrar: function () { if (juego && juego.juego) juego.juego.reanudar(); }
+                });
+                if (juego && juego.juego) juego.juego.sonar('record');
+              }, 420);
+            } else if (juego && juego.juego) juego.juego.reanudar();
+            return;
+          }
+          var i = recien.shift();
+          revelador.premio({
+            n: abiertos.indexOf(i) + 1,
+            total: n,
+            texto: textoPremio(i),
+            pie: n - abiertos.length > 0 ? 'Así lo verá ella. Quedan ' + (n - abiertos.length) + '.' : null,
+            alSeguir: siguiente
+          });
+        })();
       }
 
       function montarJuego() {
@@ -1119,6 +1148,7 @@
           sprite: caraActual,
           respaldo: CARA_DEFECTO,
           objetivo: 0,
+          objetivos: umbrales().slice(0, inputsPremio().length),
           pista: umbrales()[0] + ' puntos y cae el primer premio',
           suave: true,
           efectos: true,

@@ -9,6 +9,9 @@
         suave    (true: empieza fácil y se endurece poco a poco; los
                   primeros puntos salen casi solos),
         efectos  (true: marcador grande, chispas al puntuar, estrellas),
+        objetivos (array de puntuaciones con premio: pinta en el lienzo
+                  cuánto falta para la siguiente),
+        textoFin(puntos, faltan) (la línea de la pantalla de derrota),
         sonido   (true: pitidos con WebAudio y botón para silenciar) */
 (function () {
   'use strict';
@@ -141,6 +144,26 @@
     var RADIO = 21, GRAVEDAD = 1500, IMPULSO = -430;
     var VEL = 132, HUECO = 136, CADA = 1.55;
     var ave, tubos, puntos, estado, desdeUltimo, ganado, finEn, chispas, estrellas, popPunto;
+    var pausado = false;
+    var OBJETIVOS = Array.isArray(cfg.objetivos) ? cfg.objetivos.slice().sort(function (a, b) { return a - b; }) : [];
+    var muertesSeguidas = 0;     // para no dejar que se rinda: ver alivio()
+
+    /** La puntuación del siguiente premio, o 0 si ya los tiene todos. */
+    function siguienteObjetivo() {
+      for (var i = 0; i < OBJETIVOS.length; i++) if (puntos < OBJETIVOS[i]) return OBJETIVOS[i];
+      return 0;
+    }
+
+    /**
+     * Si falla tres veces seguidas sin llegar al siguiente premio, el juego se
+     * ablanda un poco más cada vez, hasta un tope. No se nota jugando, pero
+     * evita que abandone: un regalo que no se puede abrir no es un regalo.
+     * Se reinicia en cuanto consigue un premio.
+     */
+    function alivio() {
+      if (!SUAVE) return 0;
+      return Math.min(1, Math.max(0, (muertesSeguidas - 2) / 4));
+    }
 
     // en modo suave los primeros puntos salen casi solos y a partir del 12
     // el juego es el de siempre; después de 25 aprieta un poco más
@@ -149,10 +172,11 @@
       var p = puntos;
       var f = Math.min(1, p / 12);                 // 0 → 1 en los 12 primeros puntos
       var g = Math.max(0, Math.min(1, (p - 25) / 25)); // 0 → 1 entre 25 y 50
+      var a = alivio();                            // 0 → 1 según lo que lleve fallado
       return {
-        vel: 108 + (VEL - 108) * f + 22 * g,
-        hueco: 166 - (166 - HUECO) * f - 10 * g,
-        cada: 1.75 - (1.75 - CADA) * f - 0.1 * g
+        vel: 108 + (VEL - 108) * f + 22 * g - 16 * a,
+        hueco: 166 - (166 - HUECO) * f - 10 * g + 22 * a,
+        cada: 1.75 - (1.75 - CADA) * f - 0.1 * g + 0.15 * a
       };
     }
 
@@ -177,6 +201,7 @@
     }
 
     function volar() {
+      if (pausado) return;
       if (estado === 'fin' || estado === 'ganado') {
         // en modo suave, medio segundo de gracia: un toque por inercia no reinicia
         if (SUAVE && estado === 'fin' && performance.now() - finEn < 450) return;
@@ -221,12 +246,14 @@
     function perder() {
       estado = 'fin';
       finEn = performance.now();
+      muertesSeguidas++;
       sonar('perder');
       chispear(14, 'rgba(240,143,164,');
       if (cfg.alPerder) cfg.alPerder(puntos);
     }
 
     function actualizar(dt) {
+      if (pausado) return;
       // las chispas y estrellas siguen vivas aunque la partida haya acabado
       if (EFECTOS) {
         for (var k = chispas.length - 1; k >= 0; k--) {
@@ -262,7 +289,10 @@
           sonar('punto');
           chispear(6, 'rgba(227,192,122,');
           marcador.textContent = etiquetaMarcador(puntos);
+          if (OBJETIVOS.indexOf(puntos) !== -1) muertesSeguidas = 0;
           if (cfg.alPunto) cfg.alPunto(puntos);
+          // quien escucha alPunto puede haber pausado para enseñar el premio
+          if (pausado) return;
           if (OBJETIVO && !premiado && puntos >= OBJETIVO) {
             premiado = true;
             if (cfg.seguirTrasMeta) {
@@ -352,10 +382,33 @@
       }
       ctx.restore();
 
-      // marcador grande mientras se juega
+      // marcador grande mientras se juega; si arriba va la barra de progreso,
+      // baja para no pisar su texto
       if (EFECTOS && estado === 'juega') {
         var tam = 34 + (popPunto > 0 ? popPunto * 30 : 0);
-        texto(String(puntos), 58, tam, 'rgba(245,242,234,' + (popPunto > 0 ? 0.95 : 0.55) + ')', '200');
+        var yMarcador = OBJETIVOS.length ? 92 : 58;
+        texto(String(puntos), yMarcador, tam, 'rgba(245,242,234,' + (popPunto > 0 ? 0.95 : 0.4) + ')', '200');
+      }
+
+      // cuánto falta para el siguiente premio, siempre a la vista
+      if (OBJETIVOS.length && estado !== 'fin') {
+        var meta = siguienteObjetivo();
+        if (meta) {
+          var desde = 0;
+          for (var o = 0; o < OBJETIVOS.length; o++) if (OBJETIVOS[o] < meta) desde = OBJETIVOS[o];
+          var avance = Math.max(0, Math.min(1, (puntos - desde) / (meta - desde)));
+          var ancho = ANCHO - 48;
+          ctx.fillStyle = 'rgba(245,242,234,0.14)';
+          ctx.fillRect(24, 18, ancho, 3);
+          ctx.fillStyle = '#e3c07a';
+          ctx.fillRect(24, 18, ancho * avance, 3);
+          var faltan = meta - puntos;
+          texto(faltan === 1 ? '1 punto para el siguiente premio'
+                             : faltan + ' puntos para el siguiente premio',
+                38, 10.5, 'rgba(245,242,234,0.5)');
+        } else {
+          texto('Los tienes todos', 30, 11, 'rgba(227,192,122,0.75)');
+        }
       }
 
       if (estado === 'espera') {
@@ -364,9 +417,22 @@
       } else if (estado === 'fin') {
         ctx.fillStyle = 'rgba(5,5,7,0.72)';
         ctx.fillRect(0, 0, ANCHO, ALTO);
-        texto('Casi', ALTO / 2 - 16, 26, '#f5f2ea');
-        texto(puntos + (puntos === 1 ? ' punto' : ' puntos') + ' · toca para reintentar',
-              ALTO / 2 + 12, 12, 'rgba(245,242,234,0.6)');
+        var meta2 = siguienteObjetivo();
+        var faltaban = meta2 ? meta2 - puntos : 0;
+        // quedarse a un punto duele; decirlo en voz alta hace que lo intente otra vez
+        var titulo = faltaban === 1 ? '¡A un punto!' : faltaban === 2 ? '¡A dos puntos!' : 'Casi';
+        var linea = cfg.textoFin ? cfg.textoFin(puntos, faltaban) : null;
+        if (!linea) {
+          linea = meta2
+            ? (faltaban <= 2 ? 'Otra vez y es tuyo · toca para volar'
+                             : faltaban + ' más para el premio · toca para volar')
+            : puntos + (puntos === 1 ? ' punto' : ' puntos') + ' · toca para reintentar';
+        }
+        texto(titulo, ALTO / 2 - 16, 26, '#f5f2ea');
+        texto(linea, ALTO / 2 + 12, 12, 'rgba(245,242,234,0.6)');
+        if (muertesSeguidas >= 3 && meta2) {
+          texto('(te lo estoy poniendo más fácil)', ALTO / 2 + 34, 10, 'rgba(227,192,122,0.5)');
+        }
       }
     }
 
@@ -412,7 +478,9 @@
     caja.juego = {
       reiniciar: reiniciar,
       sonar: sonar,
-      estado: function () { return { estado: estado, puntos: puntos }; }
+      pausar: function () { pausado = true; },
+      reanudar: function () { pausado = false; previo = 0; },
+      estado: function () { return { estado: estado, puntos: puntos, pausado: pausado }; }
     };
 
     // sonda para poder probar el juego desde fuera (solo en modo prueba)
