@@ -330,6 +330,13 @@ precio, client id de PayPal, si se puede cobrar), `GET /api/regalo?id=` (el
 regalo, sin ningún dato del comprador) y `GET /api/pedidos` (tu panel de
 ventas, protegido con `ADMIN_TOKEN`).
 
+### Por qué no sale el botón de pago
+
+Abre la página de venta con `?diag` al final (`/demo?diag`) y aparece un panel
+que dice exactamente qué falta: las credenciales de PayPal, el store de Blob,
+el email del comprador y el de contacto, con el nombre de cada variable. Los
+visitantes no lo ven, solo quien pone `?diag` a mano.
+
 **Si falta algo, la página no se rompe.** Sin PayPal configurado, o si el
 script de PayPal no carga en el navegador del visitante, el checkout se
 sustituye por el formulario de siempre: el pedido llega por email y el enlace
