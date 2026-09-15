@@ -251,6 +251,54 @@
 
     .progreso { margin-top: 12px; font-size: 11px; color: var(--dim); text-align: center; letter-spacing: 0.08em; }
 
+    /* ---------- colección ---------- */
+    .coleccion { margin-top: 4px; }
+
+    .monedero-caja {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 16px;
+      border: 1px solid rgba(227, 192, 122, 0.4);
+      border-radius: 14px;
+      background: rgba(227, 192, 122, 0.06);
+    }
+
+    .monedero-ico { font-size: 26px; }
+    .monedero-caja strong { display: block; font-size: 26px; font-weight: 200; line-height: 1; color: var(--gold); }
+    .monedero-caja span {
+      display: block;
+      margin-top: 4px;
+      font-size: 9.5px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .coleccion-pie { margin-top: 10px; font-size: 12px; line-height: 1.55; color: var(--dim); }
+
+    .medallero { margin-top: 12px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+
+    .medalla {
+      padding: 12px 6px;
+      border: 1px solid var(--linea);
+      border-radius: 12px;
+      text-align: center;
+      opacity: 0.45;
+    }
+
+    .medalla.tiene { opacity: 1; border-color: rgba(227, 192, 122, 0.55); background: rgba(227, 192, 122, 0.06); }
+    .medalla-ico { display: block; font-size: 20px; }
+    .medalla-t {
+      display: block;
+      margin-top: 6px;
+      font-size: 8.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dim);
+      line-height: 1.3;
+    }
+
     .final {
       margin-top: 18px;
       padding: 22px 18px;
@@ -369,6 +417,16 @@
       <div class="progreso" id="progreso"></div>
       <div id="finalWrap"></div>
 
+      <span class="tag">Tu colección</span>
+      <div class="coleccion">
+        <div class="monedero-caja">
+          <span class="monedero-ico">🪙</span>
+          <div><strong id="monedero">0</strong><span>monedas</span></div>
+        </div>
+        <p class="coleccion-pie">Las ganas pasando por el centro de los huecos, encadenando perfectos y entrando en zonas nuevas. Sirven para seguir jugando cuando pierdes.</p>
+        <div class="medallero" id="medallero"></div>
+      </div>
+
       <footer>
         <a href="/demo?desde=regalo">Hecho con Gánatelo · Haz uno para alguien</a>
       </footer>
@@ -411,8 +469,20 @@
       function montar(regalo) {
         var K_ABIERTOS = 'regalo-' + ID + '-abiertos';
         var K_RECORD = 'regalo-' + ID + '-record';
+        var K_MONEDAS = 'regalo-' + ID + '-monedas';
+        var K_MEDALLAS = 'regalo-' + ID + '-medallas';
         var abiertos = leer(K_ABIERTOS, []);
         var record = leer(K_RECORD, 0);
+        var monedas = leer(K_MONEDAS, 0);
+        var medallas = leer(K_MEDALLAS, []);
+
+        // metas que no se acaban: cuando ya tiene los premios, quedan estas
+        var MEDALLAS = [
+          { id: 'bronce',  puntos: 10,  nombre: 'Bronce',   icono: '🥉' },
+          { id: 'plata',   puntos: 25,  nombre: 'Plata',    icono: '🥈' },
+          { id: 'oro',     puntos: 50,  nombre: 'Oro',      icono: '🥇' },
+          { id: 'leyenda', puntos: 100, nombre: 'Leyenda',  icono: '👑' }
+        ];
         var premios = regalo.premios || [];
         var juego = null;
         var revelador = window.crearRevelador();
@@ -477,6 +547,46 @@
           return 'https://wa.me/?text=' + encodeURIComponent(frase);
         }
 
+        function pintarMedallas() {
+          var cont = $('medallero');
+          if (!cont) return;
+          cont.innerHTML = '';
+          MEDALLAS.forEach(function (m) {
+            var tiene = medallas.indexOf(m.id) !== -1;
+            var d = document.createElement('div');
+            d.className = 'medalla' + (tiene ? ' tiene' : '');
+            d.innerHTML = '<span class="medalla-ico">' + (tiene ? m.icono : '🔒') + '</span>';
+            var t = document.createElement('span');
+            t.className = 'medalla-t';
+            t.textContent = m.nombre + ' · ' + m.puntos;
+            d.appendChild(t);
+            cont.appendChild(d);
+          });
+          var mon = $('monedero');
+          if (mon) mon.textContent = monedas;
+        }
+
+        function revisarMedallas() {
+          var nuevas = MEDALLAS.filter(function (m) {
+            return record >= m.puntos && medallas.indexOf(m.id) === -1;
+          });
+          if (!nuevas.length) return;
+          nuevas.forEach(function (m) { medallas.push(m.id); });
+          guardar(K_MEDALLAS, medallas);
+          pintarMedallas();
+          var m = nuevas[nuevas.length - 1];
+          if (juego && juego.juego) { juego.juego.pausar(); juego.juego.sonar('record'); }
+          revelador.premio({
+            n: medallas.length,
+            total: MEDALLAS.length,
+            texto: 'Medalla de ' + m.nombre,
+            pie: 'Por llegar a ' + m.puntos + ' puntos. ' + (medallas.length < MEDALLAS.length
+              ? 'La siguiente está en ' + MEDALLAS[medallas.length].puntos + '.'
+              : 'No queda ninguna por encima.'),
+            alSeguir: function () { if (juego && juego.juego) juego.juego.reanudar(); }
+          });
+        }
+
         function mostrarFinal() {
           revelador.final({
             cara: regalo.cara,
@@ -495,6 +605,7 @@
           $('ahora').textContent = p;
           if (p > record) {
             record = p; guardar(K_RECORD, record); $('record').textContent = record;
+            if (juego && juego.juego) juego.juego.ponerRecord(record);
           }
 
           // puede caer más de uno en el mismo punto: se enseñan en fila
@@ -542,8 +653,12 @@
             suave: true,
             efectos: true,
             sonido: true,
+            arcade: true,
+            record: record,
+            monedasIniciales: monedas,
+            alMoneda: function (total) { monedas = total; guardar(K_MONEDAS, total); pintarMedallas(); },
             alPunto: alPunto,
-            alPerder: function (p) { $('ahora').textContent = p; },
+            alPerder: function (p) { $('ahora').textContent = p; revisarMedallas(); },
             // la sonda para automatizar pruebas solo existe sirviendo en local;
             // en el regalo de verdad permitiría saltarse el juego
             depurar: location.hostname === 'localhost' || location.hostname === '127.0.0.1'
@@ -554,7 +669,7 @@
         $('empezar').addEventListener('click', function () {
           $('portada').hidden = true;
           $('juego').hidden = false;
-          if (!juego) { pintarPremios(); montarJuego(); }
+          if (!juego) { pintarPremios(); pintarMedallas(); montarJuego(); }
           window.scrollTo(0, 0);
         });
       }

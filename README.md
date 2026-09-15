@@ -391,6 +391,34 @@ opciones, todas apagadas por defecto para no cambiar la web personal:
 - `pausar()` y `reanudar()` en `caja.juego`, para congelarlo mientras se
   enseña el premio.
 
+### El modo arcade
+
+`arcade: true` enciende de golpe la capa que hace que se pueda jugar para
+siempre. La usan el regalo y la demo; la web personal no, así que su juego
+es exactamente el de antes.
+
+- **Zonas.** Cada 10 puntos cambia la paleta entera (cielo, columnas, polvo) y
+  se anuncia el nombre: Noche, Amanecer, Hielo, Selva, Tormenta, Espacio, Oro.
+  Después vuelve a empezar, así que la novedad no se acaba nunca. Entrar en una
+  zona da 3 monedas.
+- **Perfectos y rachas.** Pasar por el centro del hueco es un «perfecto» y da
+  una moneda; encadenar tres o más da dos. Es la capa de habilidad: el mismo
+  juego tiene algo que mejorar cuando ya te lo sabes.
+- **Monedas y escudos.** Aparecen flotando, a veces pegados al borde del hueco,
+  así que recogerlos es una decisión. El escudo aguanta un choque.
+- **Seguir tras perder.** Con monedas suficientes (10 por defecto,
+  `costoRevivir`) sale un botón para continuar en el sitio, con un momento de
+  invulnerabilidad. Es lo que convierte «he perdido» en «una más».
+- **El récord.** Con `record`, el juego avisa cuando está a dos puntos de
+  batirlo y lo celebra al hacerlo.
+- **Adornos.** Temblor de pantalla al chocar, estela detrás de la cara, textos
+  que suben y se desvanecen.
+
+La página del regalo guarda monedas y medallas por regalo en `localStorage`, y
+tiene su propio medallero: Bronce a los 10 puntos, Plata a los 25, Oro a los 50
+y Leyenda a los 100. Son las metas que quedan cuando ya tiene todos los
+premios, y por eso el juego no se acaba con el regalo.
+
 La sonda de pruebas (`window.__juego`) va con `depurar`. En la página del
 regalo solo se activa sirviendo desde `localhost`: en el regalo de verdad
 permitiría saltarse el juego y desbloquear los premios sin jugar.
