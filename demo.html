@@ -960,6 +960,15 @@
       </div>
     </section>
 
+    <section id="diagnostico" hidden>
+      <span class="tag">Diagnóstico · solo lo ves tú</span>
+      <h2>Qué le falta a la tienda para cobrar</h2>
+      <p class="sub">Esta página aparece porque has abierto la dirección con <code>?diag</code> al final. Los visitantes no la ven.</p>
+      <div class="panel"><div id="diagLista"></div>
+        <p class="peq">Los pasos completos, con dónde sacar cada credencial, están en <code>LANZAMIENTO.md</code>.</p>
+      </div>
+    </section>
+
     <footer>
       Gánatelo · Hecho en Barcelona
       <div class="links">
@@ -1328,12 +1337,74 @@
         }
       }
 
+      // ---------- diagnóstico (solo con ?diag en la dirección) ----------
+      function pintarDiagnostico(cfg, error) {
+        if (!/[?&]diag\b/.test(location.search)) return;
+        var sec = $('diagnostico'), lista = $('diagLista');
+        sec.hidden = false;
+        lista.innerHTML = '';
+
+        function fila(ok, titulo, detalle) {
+          var d = document.createElement('div');
+          d.className = 'premio' + (ok ? ' abierto' : '');
+          var n = document.createElement('span');
+          n.className = 'premio-ico'; n.textContent = ok ? '✅' : '❌';
+          var t = document.createElement('span');
+          t.className = 'premio-t';
+          var b = document.createElement('strong');
+          b.style.fontWeight = '400'; b.style.display = 'block'; b.style.color = 'var(--ink)';
+          b.textContent = titulo;
+          t.appendChild(b);
+          t.appendChild(document.createTextNode(detalle));
+          d.appendChild(n); d.appendChild(t);
+          lista.appendChild(d);
+        }
+
+        if (error || !cfg) {
+          fila(false, 'La web no responde a /api/config',
+               'Abre /api/config en el navegador para ver el error. Si da 404, las funciones de la carpeta api no se han desplegado.');
+          return;
+        }
+
+        var hayPaypal = !!cfg.paypal;
+        fila(hayPaypal,
+             'Credenciales de PayPal',
+             hayPaypal
+               ? 'Configuradas, en modo ' + (cfg.paypal.sandbox ? 'pruebas (sandbox)' : 'real (live)') + '.'
+               : 'Faltan PAYPAL_CLIENT_ID y PAYPAL_CLIENT_SECRET en Vercel (Settings → Environment Variables). Sin ellas no puede salir el botón de pago.');
+
+        var hayAlmacen = cfg.almacen === 'blob' || cfg.almacen === 'local';
+        fila(hayAlmacen,
+             'Dónde se guardan los regalos',
+             cfg.almacen === 'blob' ? 'Vercel Blob conectado.'
+               : cfg.almacen === 'local' ? 'Carpeta .data/ (solo en tu ordenador).'
+               : 'Falta conectar un store de Blob en Vercel (Storage → Create → Blob). Sin él no se puede publicar ningún regalo.');
+
+        fila(cfg.emailComprador,
+             'Email con el enlace al comprador',
+             cfg.emailComprador ? 'Resend configurado.'
+               : 'Opcional. Sin RESEND_API_KEY y RESEND_FROM, el comprador solo ve su enlace en pantalla.');
+
+        fila(!!cfg.contacto,
+             'Email de contacto',
+             cfg.contacto ? cfg.contacto
+               : 'Opcional. Pon CONTACTO_EMAIL para recibir aviso de cada venta y que salga en la página legal.');
+
+        fila(cfg.listo,
+             cfg.listo ? 'La tienda puede cobrar' : 'La tienda todavía no puede cobrar',
+             cfg.listo ? 'El botón de PayPal aparece en el paso 2.'
+               : 'Mientras tanto la web enseña el formulario de pedido por email, que sí funciona.');
+
+        fila(true, 'Precio actual', cfg.precioTexto + ' · se cambia con la variable GANATELO_PRECIO, sin desplegar código.');
+      }
+
       fetch('/api/config').then(function (r) { return r.json(); }).then(function (cfg) {
         config = cfg;
+        pintarDiagnostico(cfg);
         pintarPrecio(cfg.precioTexto, cfg.moneda, Number(cfg.precio).toLocaleString('es', { minimumFractionDigits: 2 }));
         if (cfg.umbrales) { UMBRALES = cfg.umbrales; pintarCampos(inputsPremio().map(function (x) { return x.value; })); pintarPremios(); }
         if (cfg.listo && cfg.paypal) montarPayPal(cfg); else modoReserva();
-      }).catch(function () { modoReserva(); });
+      }).catch(function (e) { pintarDiagnostico(null, e); modoReserva(); });
 
       // ---------- reserva por email (sin pasarela) ----------
       var form = $('formPedido');

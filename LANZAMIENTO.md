@@ -9,6 +9,19 @@ del botón de PayPal).
 
 ---
 
+## 0. Ver qué falta en cualquier momento
+
+Abre tu web con `?diag` al final:
+
+```
+https://tudominio/demo?diag
+```
+
+Sale un panel con una línea por cosa pendiente y el nombre exacto de cada
+variable. Los visitantes no lo ven. Úsalo después de cada paso de esta guía
+para comprobar que Vercel ha cogido el cambio: si sigue en rojo, es que falta
+redesplegar.
+
 ## 1. PayPal · 20 minutos
 
 1. Entra en [developer.paypal.com](https://developer.paypal.com) con tu cuenta
