@@ -1,0 +1,6 @@
+User-agent: *
+# los enlaces de los regalos son privados
+Disallow: /r/
+Allow: /
+
+Sitemap: https://project-undiaalavez.vercel.app/sitemap.xml

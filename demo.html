@@ -4,11 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#050505" />
-  <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" href="/icon-512.svg" />
-  <title>Gánatelo · Un regalo con su cara</title>
-  <meta name="description" content="Hazle un regalo con su cara, vuestros premios y una experiencia que tendrá que jugar para descubrir." />
+  <title>Gánatelo · Un regalo con su cara que tiene que ganarse</title>
+  <meta name="description" content="Hazle un regalo con su cara, vuestros premios y un mensaje tuyo que tendrá que jugar para descubrir. Pago único con PayPal, enlace al momento." />
+  <link rel="canonical" href="https://project-undiaalavez.vercel.app/demo" />
+  <meta property="og:title" content="Gánatelo · Un regalo con su cara" />
+  <meta property="og:description" content="¿Qué le regalo cuando ya le he regalado de todo? Un juego con su cara, vuestros premios y un mensaje tuyo al final. Lo tiene en el móvil en dos minutos." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/og.png" />
+  <meta property="og:locale" content="es_ES" />
+  <meta name="twitter:card" content="summary_large_image" />
   <style>
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
@@ -535,53 +542,248 @@
       .campos { grid-template-columns: 1fr 1fr; }
       .campos .ancho { grid-column: 1 / -1; }
     }
+  
+    /* ---------- confianza ---------- */
+    .confianza {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 18px;
+      margin-top: 22px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .confianza span::before { content: "✓ "; color: var(--gold); }
+
+    /* ---------- premios editables ---------- */
+    .campo .quitar {
+      float: right;
+      background: none;
+      border: 0;
+      color: var(--faint);
+      font-family: inherit;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .campo .quitar:hover { color: var(--rosa); }
+
+    .anadir {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 9px 14px;
+      border: 1px dashed rgba(227, 192, 122, 0.45);
+      border-radius: 999px;
+      background: none;
+      color: var(--gold);
+      font-family: inherit;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .anadir:disabled { opacity: 0.35; cursor: default; }
+
+    /* ---------- historia ---------- */
+    .historia {
+      margin-top: 22px;
+      padding: 22px 20px;
+      border-left: 2px solid rgba(240, 143, 164, 0.6);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 15.5px;
+      line-height: 1.65;
+      color: rgba(245, 242, 234, 0.85);
+    }
+
+    .historia p + p { margin-top: 12px; }
+
+    /* ---------- checkout ---------- */
+    .resumen {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      padding-bottom: 16px;
+      margin-bottom: 4px;
+      border-bottom: 1px solid var(--linea);
+    }
+
+    .resumen img {
+      flex: 0 0 auto;
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(227, 192, 122, 0.55);
+      background: #111;
+    }
+
+    .resumen-t { min-width: 0; font-size: 13.5px; color: var(--dim); }
+    .resumen-t strong { display: block; font-weight: 400; color: var(--ink); font-size: 15px; }
+    .resumen-t a { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); text-decoration: none; }
+
+    .check {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-top: 16px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--dim);
+      cursor: pointer;
+    }
+
+    .check input { margin-top: 3px; accent-color: var(--gold); }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--linea);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .total b { font-size: 22px; font-weight: 300; color: var(--gold); letter-spacing: 0; }
+
+    #paypal { margin-top: 18px; min-height: 48px; position: relative; }
+
+    #paypal.espera::after {
+      content: "Cargando el pago seguro…";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .procesando {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .error {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(240, 143, 164, 0.5);
+      background: rgba(240, 143, 164, 0.07);
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    .enlace {
+      margin-top: 16px;
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .enlace input {
+      flex: 1 1 auto;
+      min-width: 0;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(227, 192, 122, 0.5);
+      border-radius: 10px;
+      padding: 11px 12px;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .enlace button { flex: 0 0 auto; padding: 11px 14px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; border-radius: 10px; border: 1px solid var(--gold); background: var(--gold); color: #0b0b0b; font-family: inherit; cursor: pointer; }
+
+    .acciones { margin-top: 14px; display: grid; gap: 8px; }
+    .acciones .btn { width: 100%; text-align: center; }
+    .btn.wa { border-color: #25d366; color: #25d366; }
+    .btn.wa:hover { background: rgba(37, 211, 102, 0.1); }
+
+    .modo {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(240, 143, 164, 0.6);
+      color: var(--rosa);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+
+    footer a { text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+    footer .links { margin-top: 8px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
   <main>
     <header class="top">
       <a class="marca" href="#top">Gánatelo<small>Regalos que se ganan</small></a>
-      <span class="precio-mini">4,99 USD</span>
+      <a class="precio-mini" href="#pedir" id="precioMini">4,99 US$</a>
     </header>
 
     <section class="hero" id="top">
       <span class="eyebrow">Un juego con su cara</span>
       <h1>¿Qué le regalo a mi novia cuando ya le he regalado de todo?</h1>
-      <p>Hazle un regalo con su cara, vuestros premios y una experiencia que tendrá que jugar para descubrir.</p>
+      <p>Hazle un regalo con su cara, vuestros premios y un mensaje tuyo que tendrá que jugar para descubrir. Lo tiene en el móvil en dos minutos.</p>
       <div class="ctas">
-        <a class="btn oro" href="#demo">Probar la demo</a>
+        <a class="btn oro" href="#demo">Probar con su foto</a>
         <a class="btn" href="#pedir">Quiero hacerle uno</a>
       </div>
-      <p class="nota">Sin app. Se abre con un enlace, en cualquier móvil.</p>
+      <div class="confianza">
+        <span>Pago seguro con PayPal</span>
+        <span>Enlace al momento</span>
+        <span>Sin instalar nada</span>
+      </div>
     </section>
 
     <!-- ================= DEMO ================= -->
     <section id="demo">
-      <span class="tag">Demo · Se personaliza aquí mismo</span>
+      <span class="tag">Paso 1 · Se personaliza aquí mismo</span>
       <h2>Pruébalo con su cara</h2>
-      <p class="sub">Sube una foto, escribe tres premios y juega. La foto no sale de tu móvil: la demo la recorta aquí y no la envía a ningún sitio.</p>
+      <p class="sub">Sube una foto, escribe los premios y juega. Lo que pongas aquí es exactamente lo que recibirá ella.</p>
 
       <div class="panel">
         <div class="foto">
-          <img class="foto-prev" id="fotoPrev" src="/cara-juego.png" alt="" />
+          <img class="foto-prev" id="fotoPrev" src="/cara-demo.png" alt="" />
           <div class="foto-txt">
             <strong>Su cara</strong>
-            <span>Una foto donde salga centrada. La recortamos en redondo.</span>
+            <span>Una foto donde salga centrada. La recortamos en redondo aquí, en tu móvil.</span>
             <label class="subir">Subir su foto
               <input type="file" id="fotoIn" accept="image/*" />
             </label>
           </div>
         </div>
 
-        <div class="campos">
-          <label class="campo"><span>Premio 1 · <b>5 puntos</b></span>
-            <input id="p1" maxlength="60" value="Un masaje de 20 minutos" /></label>
-          <label class="campo"><span>Premio 2 · <b>10 puntos</b></span>
-            <input id="p2" maxlength="60" value="Cena donde tú elijas" /></label>
-          <label class="campo"><span>Premio 3 · <b>15 puntos</b></span>
-            <input id="p3" maxlength="60" value="Un fin de semana sorpresa" /></label>
-          <label class="campo"><span>Mensaje final</span>
-            <input id="pFinal" maxlength="120" value="Te lo has ganado. Como todo lo demás." /></label>
+        <div class="campos" id="campos">
+          <label class="campo ancho"><span>Dificultad</span>
+            <select id="dificultad">
+              <option value="normal">Normal · premios a 5, 10 y 15 puntos</option>
+              <option value="facil">Fácil · premios a 3, 6 y 9 puntos</option>
+            </select></label>
+          <div class="ancho" id="listaPremios"></div>
+          <div class="ancho"><button class="anadir" id="anadir" type="button">+ Añadir un premio</button></div>
+          <label class="campo ancho"><span>Mensaje final · cuando los tenga todos</span>
+            <input id="pFinal" maxlength="240" value="Te lo has ganado. Como todo lo demás." /></label>
         </div>
       </div>
 
@@ -596,19 +798,19 @@
     <!-- ================= CÓMO FUNCIONA ================= -->
     <section>
       <span class="tag">Cómo funciona</span>
-      <h2>Tres pasos y lo tiene en el móvil</h2>
+      <h2>Dos minutos y lo tiene en el móvil</h2>
       <div class="pasos">
         <div class="paso"><span class="paso-n">1</span><div>
-          <strong>Nos mandas su foto</strong>
-          <p>Una en la que se le vea bien la cara. Del recorte nos encargamos nosotros.</p>
+          <strong>Subes su foto y escribes los premios</strong>
+          <p>Aquí arriba. Un masaje, una cena, vuestra broma interna. Cada uno cae a una puntuación.</p>
         </div></div>
         <div class="paso"><span class="paso-n">2</span><div>
-          <strong>Eliges los premios</strong>
-          <p>Tres, cinco, los que quieras. Un masaje, una cena, vuestra broma interna. Cada uno cae a una puntuación.</p>
+          <strong>Pagas con PayPal</strong>
+          <p>O con tarjeta, sin cuenta. Pago único, sin suscripciones ni sorpresas.</p>
         </div></div>
         <div class="paso"><span class="paso-n">3</span><div>
-          <strong>Recibes un enlace</strong>
-          <p>En menos de 24 horas. Se lo mandas cuando quieras: el día de su cumpleaños, a medianoche, en la cena.</p>
+          <strong>Recibes el enlace al momento</strong>
+          <p>En pantalla y en tu email. Se lo mandas cuando quieras: a medianoche, en la cena, escondido en una nota.</p>
         </div></div>
       </div>
     </section>
@@ -618,11 +820,22 @@
       <span class="tag">Qué recibe ella</span>
       <h2>No es un regalo. Es vuestro regalo.</h2>
       <ul class="lista">
-        <li>Su cara volando entre tubos, con tu nombre en la portada.</li>
-        <li>Vuestros premios, que se desbloquean con puntos y quedan guardados.</li>
+        <li>Una portada con su nombre y el tuyo: "Un regalo para…, de parte de…".</li>
+        <li>Su cara volando entre columnas, con sonido y un récord que se guarda.</li>
+        <li>Vuestros premios, escondidos hasta que los gana. Cuando los desbloquea, se quedan.</li>
         <li>Un mensaje tuyo al final, cuando los tenga todos.</li>
         <li>Un enlace que funciona para siempre. Sin instalar nada.</li>
       </ul>
+    </section>
+
+    <!-- ================= HISTORIA ================= -->
+    <section>
+      <span class="tag">De dónde sale</span>
+      <h2>Nació como un regalo real</h2>
+      <div class="historia">
+        <p>Mi novia vive a un océano de distancia. Para su cumpleaños le hice una web con siete sorpresas, y una era un juego con su cara en el que cada punto le acercaba a un vale de masaje.</p>
+        <p>De todo lo que le preparé, fue lo que más jugó. Y lo que más enseñó a sus amigas. Así que lo he convertido en algo que puedas regalar tú, con su cara y vuestros premios.</p>
+      </div>
     </section>
 
     <!-- ================= OCASIONES ================= -->
@@ -640,25 +853,65 @@
 
     <!-- ================= PRECIO ================= -->
     <div class="precio">
-      <div class="num">4,99<small>USD</small></div>
-      <div class="det"><span>Pago único</span><span>Entrega en 24 h</span><span>Premios editables</span></div>
+      <div class="num" id="precioGrande">4,99<small>USD</small></div>
+      <div class="det"><span>Pago único</span><span>Enlace al momento</span><span>Hasta 5 premios</span></div>
       <a class="btn oro" href="#pedir">Quiero hacerle uno</a>
     </div>
 
     <!-- ================= PEDIDO ================= -->
     <section class="pedido" id="pedir">
-      <span class="tag">Pedir</span>
-      <h2>Cuéntanos de ella</h2>
-      <p class="sub">Los premios y el mensaje ya vienen rellenos con lo que has puesto en la demo.</p>
+      <span class="tag">Paso 2 · Pedir</span>
+      <h2>Cuéntanos de ella y paga</h2>
+      <p class="sub">La foto, los premios y el mensaje son los que has puesto en la demo. Si quieres cambiar algo, cámbialo arriba: se actualiza solo.</p>
 
-      <form class="panel" id="formPedido" novalidate>
+      <div class="panel" id="checkout">
+        <div class="resumen">
+          <img id="resumenCara" src="/cara-demo.png" alt="" />
+          <div class="resumen-t">
+            <strong id="resumenTitulo">Un regalo para…</strong>
+            <span id="resumenPremios">3 premios · dificultad normal</span><br />
+            <a href="#demo" id="resumenSinFoto">Falta su foto · subir</a>
+          </div>
+        </div>
+
         <div class="campos">
-          <label class="campo"><span>Tu email</span>
-            <input type="email" name="email" id="fEmail" required placeholder="tu@email.com" /></label>
           <label class="campo"><span>Cómo se llama ella</span>
-            <input name="ella" id="fElla" required placeholder="Su nombre" /></label>
+            <input name="ella" id="fElla" maxlength="40" required placeholder="Su nombre" autocomplete="off" /></label>
+          <label class="campo"><span>De parte de</span>
+            <input name="de" id="fDe" maxlength="40" placeholder="Tu nombre" autocomplete="given-name" /></label>
+          <label class="campo ancho"><span>Tu email · aquí te mandamos el enlace</span>
+            <input type="email" name="email" id="fEmail" required placeholder="tu@email.com" autocomplete="email" inputmode="email" /></label>
           <label class="campo ancho"><span>Ocasión</span>
             <select name="ocasion" id="fOcasion">
+              <option>Aniversario</option>
+              <option>Cumpleaños</option>
+              <option>San Valentín</option>
+              <option>Navidad</option>
+              <option>Picante</option>
+              <option>Porque sí</option>
+            </select></label>
+        </div>
+
+        <label class="check"><input type="checkbox" id="fDerecho" />
+          <span>Tengo derecho a usar esta foto y acepto las <a href="/legal" target="_blank" rel="noopener">condiciones y la política de privacidad</a>. La foto solo se usa para este regalo.</span></label>
+
+        <div class="total"><span>Total</span><b id="precioTotal">4,99 US$</b></div>
+
+        <div id="paypal" class="espera"></div>
+        <div class="procesando" id="procesando" hidden>Cobrando y montando el regalo…</div>
+        <div class="error" id="errorPago" hidden></div>
+        <p class="peq" id="notaPago">Pago único. Si algo no funciona, te devolvemos el dinero.</p>
+      </div>
+
+      <!-- Sin pasarela configurada: el pedido llega por email y se cobra a mano -->
+      <form class="panel" id="formPedido" hidden novalidate>
+        <div class="campos">
+          <label class="campo"><span>Tu email</span>
+            <input type="email" name="email" id="rEmail" required placeholder="tu@email.com" /></label>
+          <label class="campo"><span>Cómo se llama ella</span>
+            <input name="ella" id="rElla" required placeholder="Su nombre" /></label>
+          <label class="campo ancho"><span>Ocasión</span>
+            <select name="ocasion" id="rOcasion">
               <option>Aniversario</option>
               <option>Cumpleaños</option>
               <option>San Valentín</option>
@@ -666,14 +919,29 @@
               <option>Porque sí</option>
             </select></label>
           <label class="campo ancho"><span>Premios (uno por línea)</span>
-            <textarea name="premios" id="fPremios" rows="4"></textarea></label>
+            <textarea name="premios" id="rPremios" rows="4"></textarea></label>
           <label class="campo ancho"><span>Mensaje final</span>
-            <input name="mensaje" id="fMensaje" maxlength="200" /></label>
+            <input name="mensaje" id="rMensaje" maxlength="240" /></label>
         </div>
         <input type="hidden" name="_subject" value="Pedido Gánatelo" />
-        <button class="btn oro" type="submit" id="fEnviar" style="margin-top:16px">Pedir · 4,99 USD</button>
-        <p class="peq" id="fNota">Aún no se cobra en la web: te escribimos en menos de 24 h con el enlace de pago y para pedirte la foto. Hasta entonces no pagas nada.</p>
+        <button class="btn oro" type="submit" id="rEnviar" style="margin-top:16px">Pedir</button>
+        <p class="peq">Aún no se cobra en la web: te escribimos en menos de 24 h con el enlace de pago y para pedirte la foto. Hasta entonces no pagas nada.</p>
       </form>
+
+      <div class="panel" id="listo" hidden>
+        <span class="tag">Listo</span>
+        <h2 id="listoTitulo">El regalo ya existe</h2>
+        <p class="sub" id="listoTexto">Este es el enlace. Es el único que hay: guárdalo y mándaselo cuando quieras.</p>
+        <div class="enlace">
+          <input id="enlaceRegalo" readonly value="" />
+          <button type="button" id="copiar">Copiar</button>
+        </div>
+        <div class="acciones">
+          <a class="btn wa" id="compartirWa" href="#" target="_blank" rel="noopener">Mandárselo por WhatsApp</a>
+          <a class="btn" id="abrirRegalo" href="#" target="_blank" rel="noopener">Ver cómo lo verá ella</a>
+        </div>
+        <p class="peq" id="listoNota"></p>
+      </div>
     </section>
 
     <!-- ================= FAQ ================= -->
@@ -682,14 +950,23 @@
       <h2>Lo que suelen preguntar</h2>
       <div class="faq">
         <details><summary>¿Tiene que instalar algo?</summary><p>No. Es un enlace. Se abre en el navegador del móvil y ya está jugando.</p></details>
-        <details><summary>¿Y si es mala jugando?</summary><p>El primer premio cae a los 5 puntos, que son unos veinte segundos. Y si quieres, ponemos los umbrales más bajos.</p></details>
-        <details><summary>¿Puedo cambiar los premios después?</summary><p>Sí, sin coste. Nos escribes y lo actualizamos.</p></details>
-        <details><summary>¿Qué hacéis con la foto?</summary><p>Solo se usa para su juego. No la publicamos ni la usamos para nada más, y la borramos si nos lo pides.</p></details>
+        <details><summary>¿Y si es mala jugando?</summary><p>El juego empieza muy fácil y se va endureciendo poco a poco: el primer premio cae en menos de un minuto. Y si quieres, elige "Fácil" y los premios caen aún antes.</p></details>
+        <details><summary>¿Cuándo lo recibo?</summary><p>Al momento. En cuanto PayPal confirma el pago, el enlace aparece en pantalla y te lo mandamos por email.</p></details>
+        <details><summary>¿Puedo cambiar los premios después?</summary><p>Sí, sin coste. Nos escribes con tu enlace y lo actualizamos.</p></details>
+        <details><summary>¿Qué hacéis con la foto?</summary><p>Solo se usa para su juego. No la publicamos ni la usamos para nada más, y la borramos si nos lo pides. <a href="/legal">Más en la política de privacidad</a>.</p></details>
+        <details><summary>¿Necesito cuenta de PayPal?</summary><p>No. En el botón de pago puedes pagar con tarjeta sin crear ninguna cuenta.</p></details>
         <details><summary>¿Vale para un novio, una amiga, mi madre?</summary><p>Claro. La cara y los premios los pones tú. Lo de "novia" es porque es a quien más nos piden.</p></details>
+        <details><summary>¿Y si algo no funciona?</summary><p>Nos escribes y lo arreglamos. Si no podemos, te devolvemos el dinero.</p></details>
       </div>
     </section>
 
-    <footer>Gánatelo · Hecho en Barcelona</footer>
+    <footer>
+      Gánatelo · Hecho en Barcelona
+      <div class="links">
+        <a href="/legal">Privacidad y condiciones</a>
+        <a href="/legal#contacto">Contacto</a>
+      </div>
+    </footer>
   </main>
 
   <div class="aviso" id="aviso"></div>
@@ -697,173 +974,395 @@
   <script src="/flappy.js"></script>
   <script type="module" src="/src/analytics.js"></script>
   <script>
-    // ---------- la demo ----------
-    var FORMSPREE_ID = 'xzdnwwqa';
-    var UMBRALES = [5, 10, 15];
-    var CARA_DEFECTO = '/cara-juego.png';
+    (function () {
+      // ---------- estado ----------
+      var FORMSPREE_ID = 'xzdnwwqa';
+      var CARA_DEFECTO = '/cara-demo.png';
+      var GUARDA = 'ganatelo-demo';
+      var UMBRALES = { normal: [5, 10, 15, 20, 25], facil: [3, 6, 9, 12, 15] };
+      var MAX_PREMIOS = 5;
 
-    var caraActual = CARA_DEFECTO;
-    var abiertos = [];              // índices de premios ya desbloqueados
-    var mejor = 0;                  // mejor puntuación de la sesión
+      var config = null;                 // lo que responde /api/config
+      var caraActual = CARA_DEFECTO;     // data URL cuando el usuario sube foto
+      var caraSubida = false;
+      var abiertos = [];
+      var mejor = 0;
+      var juego = null;
 
-    var wrap = document.getElementById('juegoWrap');
-    var premiosEl = document.getElementById('premios');
-    var finalWrap = document.getElementById('finalWrap');
-    var avisoEl = document.getElementById('aviso');
-    var inputs = [document.getElementById('p1'), document.getElementById('p2'), document.getElementById('p3')];
-    var finalIn = document.getElementById('pFinal');
+      var $ = function (id) { return document.getElementById(id); };
+      var wrap = $('juegoWrap'), premiosEl = $('premios'), finalWrap = $('finalWrap'), avisoEl = $('aviso');
+      var listaPremios = $('listaPremios'), finalIn = $('pFinal'), dificultadSel = $('dificultad');
 
-    function textoPremio(i) {
-      return (inputs[i].value || '').trim() || ('Premio ' + (i + 1));
-    }
-
-    function aviso(txt) {
-      avisoEl.textContent = txt;
-      avisoEl.classList.add('ver');
-      clearTimeout(aviso.t);
-      aviso.t = setTimeout(function () { avisoEl.classList.remove('ver'); }, 2200);
-    }
-
-    function pintarPremios() {
-      premiosEl.innerHTML = '';
-      UMBRALES.forEach(function (u, i) {
-        var abierto = abiertos.indexOf(i) !== -1;
-        var d = document.createElement('div');
-        d.className = 'premio' + (abierto ? ' abierto' : '');
-
-        var n = document.createElement('span');
-        n.className = 'premio-n';
-        n.innerHTML = '<b>' + u + '</b>pts';
-
-        var t = document.createElement('span');
-        t.className = 'premio-t' + (abierto ? '' : ' oculto');
-        t.textContent = abierto ? textoPremio(i) : 'Premio escondido';
-
-        var ico = document.createElement('span');
-        ico.className = 'premio-ico';
-        ico.textContent = abierto ? '🎁' : '🔒';
-
-        d.appendChild(n); d.appendChild(t); d.appendChild(ico);
-        premiosEl.appendChild(d);
-      });
-
-      finalWrap.innerHTML = '';
-      if (abiertos.length === UMBRALES.length) {
-        var f = document.createElement('div');
-        f.className = 'final';
-        f.innerHTML = '<small>Mensaje final</small>';
-        f.appendChild(document.createTextNode((finalIn.value || '').trim() || 'Te lo has ganado.'));
-        finalWrap.appendChild(f);
+      function aviso(txt) {
+        avisoEl.textContent = txt;
+        avisoEl.classList.add('ver');
+        clearTimeout(aviso.t);
+        aviso.t = setTimeout(function () { avisoEl.classList.remove('ver'); }, 2400);
       }
-    }
 
-    function alPunto(p) {
-      if (p > mejor) mejor = p;
-      UMBRALES.forEach(function (u, i) {
-        if (p >= u && abiertos.indexOf(i) === -1) {
-          abiertos.push(i);
-          pintarPremios();
-          aviso('Premio desbloqueado: ' + textoPremio(i));
-        }
+      function umbrales() { return UMBRALES[dificultadSel.value] || UMBRALES.normal; }
+      function inputsPremio() { return Array.prototype.slice.call(listaPremios.querySelectorAll('input')); }
+      function textosPremio() { return inputsPremio().map(function (i) { return i.value.trim(); }).filter(Boolean); }
+      function textoPremio(i) { var inp = inputsPremio()[i]; return (inp && inp.value.trim()) || ('Premio ' + (i + 1)); }
+
+      // ---------- guardar lo que va escribiendo (por si vuelve de PayPal) ----------
+      function guardar() {
+        try {
+          localStorage.setItem(GUARDA, JSON.stringify({
+            premios: inputsPremio().map(function (i) { return i.value; }),
+            mensaje: finalIn.value,
+            dificultad: dificultadSel.value,
+            cara: caraSubida ? caraActual : null,
+            ella: $('fElla').value, de: $('fDe').value, email: $('fEmail').value, ocasion: $('fOcasion').value
+          }));
+        } catch (e) {}
+      }
+      function recuperar() {
+        try { return JSON.parse(localStorage.getItem(GUARDA) || 'null'); } catch (e) { return null; }
+      }
+
+      // ---------- premios editables ----------
+      function pintarCampos(valores) {
+        listaPremios.innerHTML = '';
+        var u = umbrales();
+        valores.forEach(function (v, i) {
+          var l = document.createElement('label');
+          l.className = 'campo';
+          l.style.marginBottom = '10px';
+          var s = document.createElement('span');
+          s.innerHTML = 'Premio ' + (i + 1) + ' · <b>' + u[i] + ' puntos</b>';
+          if (valores.length > 1) {
+            var q = document.createElement('button');
+            q.type = 'button'; q.className = 'quitar'; q.textContent = 'quitar';
+            q.addEventListener('click', function () {
+              var vs = inputsPremio().map(function (x) { return x.value; });
+              vs.splice(i, 1);
+              pintarCampos(vs); todoCambia();
+            });
+            s.appendChild(q);
+          }
+          var inp = document.createElement('input');
+          inp.maxLength = 80; inp.value = v; inp.placeholder = 'Un masaje, una cena, vuestra broma interna…';
+          inp.addEventListener('input', todoCambia);
+          l.appendChild(s); l.appendChild(inp);
+          listaPremios.appendChild(l);
+        });
+        $('anadir').disabled = valores.length >= MAX_PREMIOS;
+      }
+
+      $('anadir').addEventListener('click', function () {
+        var vs = inputsPremio().map(function (x) { return x.value; });
+        if (vs.length >= MAX_PREMIOS) return;
+        vs.push('');
+        pintarCampos(vs); todoCambia();
+        var ultimo = inputsPremio().pop(); if (ultimo) ultimo.focus();
       });
-    }
 
-    function montarJuego() {
-      wrap.innerHTML = '';
-      wrap.appendChild(window.crearFlappy({
-        sprite: caraActual,
-        respaldo: CARA_DEFECTO,
-        objetivo: 0,
-        pista: '5 puntos y cae el primer premio',
-        alPunto: alPunto,
-        depurar: true
-      }));
-    }
+      dificultadSel.addEventListener('change', function () {
+        pintarCampos(inputsPremio().map(function (x) { return x.value; }));
+        abiertos = [];
+        todoCambia();
+        montarJuego();
+      });
 
-    // los premios escritos se reflejan al momento
-    inputs.forEach(function (inp) { inp.addEventListener('input', pintarPremios); });
-    finalIn.addEventListener('input', pintarPremios);
+      // ---------- premios de la demo ----------
+      function pintarPremios(recien) {
+        premiosEl.innerHTML = '';
+        var u = umbrales();
+        var n = inputsPremio().length;
+        for (var i = 0; i < n; i++) {
+          var abierto = abiertos.indexOf(i) !== -1;
+          var d = document.createElement('div');
+          d.className = 'premio' + (abierto ? ' abierto' : '');
+          var num = document.createElement('span'); num.className = 'premio-n'; num.innerHTML = '<b>' + u[i] + '</b>pts';
+          var t = document.createElement('span'); t.className = 'premio-t' + (abierto ? '' : ' oculto');
+          t.textContent = abierto ? textoPremio(i) : 'Premio escondido';
+          var ico = document.createElement('span'); ico.className = 'premio-ico'; ico.textContent = abierto ? '🎁' : '🔒';
+          d.appendChild(num); d.appendChild(t); d.appendChild(ico);
+          premiosEl.appendChild(d);
+        }
+        finalWrap.innerHTML = '';
+        if (n && abiertos.length >= n) {
+          var f = document.createElement('div');
+          f.className = 'final';
+          f.innerHTML = '<small>Mensaje final</small>';
+          f.appendChild(document.createTextNode(finalIn.value.trim() || 'Te lo has ganado.'));
+          finalWrap.appendChild(f);
+        }
+      }
 
-    // la foto se recorta en redondo aquí mismo y no sale del navegador
-    document.getElementById('fotoIn').addEventListener('change', function (e) {
-      var f = e.target.files && e.target.files[0];
-      if (!f) return;
-      var img = new Image();
-      var url = URL.createObjectURL(f);
-      img.onload = function () {
+      function alPunto(p) {
+        if (p > mejor) mejor = p;
+        var u = umbrales(), n = inputsPremio().length;
+        for (var i = 0; i < n; i++) {
+          if (p >= u[i] && abiertos.indexOf(i) === -1) {
+            abiertos.push(i);
+            pintarPremios(i);
+            aviso('Premio desbloqueado: ' + textoPremio(i));
+            if (juego && juego.juego) juego.juego.sonar('premio');
+          }
+        }
+      }
+
+      function montarJuego() {
+        wrap.innerHTML = '';
+        juego = window.crearFlappy({
+          sprite: caraActual,
+          respaldo: CARA_DEFECTO,
+          objetivo: 0,
+          pista: umbrales()[0] + ' puntos y cae el primer premio',
+          suave: true,
+          efectos: true,
+          sonido: true,
+          alPunto: alPunto,
+          depurar: true
+        });
+        wrap.appendChild(juego);
+      }
+
+      // ---------- la foto: se recorta aquí y no sale del navegador hasta que pagas ----------
+      function recortar(img) {
         var s = Math.min(img.naturalWidth, img.naturalHeight);
         var c = document.createElement('canvas');
         c.width = c.height = 256;
         var ctx = c.getContext('2d');
         ctx.beginPath(); ctx.arc(128, 128, 128, 0, Math.PI * 2); ctx.closePath(); ctx.clip();
         ctx.drawImage(img, (img.naturalWidth - s) / 2, (img.naturalHeight - s) / 2, s, s, 0, 0, 256, 256);
-        URL.revokeObjectURL(url);
-        caraActual = c.toDataURL('image/png');
-        document.getElementById('fotoPrev').src = caraActual;
-        montarJuego();
-        aviso('Ya vuela con su cara');
-      };
-      img.onerror = function () { URL.revokeObjectURL(url); aviso('No he podido leer esa foto'); };
-      img.src = url;
-    });
+        // webp con transparencia pesa una quinta parte; si el navegador no sabe, png
+        var webp = c.toDataURL('image/webp', 0.86);
+        return webp.indexOf('data:image/webp') === 0 ? webp : c.toDataURL('image/png');
+      }
 
-    document.getElementById('reset').addEventListener('click', function () {
-      abiertos = [];
-      mejor = 0;
-      caraActual = CARA_DEFECTO;
-      document.getElementById('fotoPrev').src = CARA_DEFECTO;
-      document.getElementById('fotoIn').value = '';
-      pintarPremios();
-      montarJuego();
-    });
-
-    pintarPremios();
-    montarJuego();
-
-    // ---------- el pedido ----------
-    var form = document.getElementById('formPedido');
-    var fPremios = document.getElementById('fPremios');
-    var fMensaje = document.getElementById('fMensaje');
-
-    function rellenarPedido() {
-      fPremios.value = inputs.map(function (inp, i) { return UMBRALES[i] + ' pts · ' + textoPremio(i); }).join('\n');
-      fMensaje.value = (finalIn.value || '').trim();
-    }
-    rellenarPedido();
-    inputs.forEach(function (inp) { inp.addEventListener('input', rellenarPedido); });
-    finalIn.addEventListener('input', rellenarPedido);
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var email = document.getElementById('fEmail');
-      var ella = document.getElementById('fElla');
-      if (!email.value || email.value.indexOf('@') === -1) { email.focus(); aviso('Falta tu email'); return; }
-      if (!ella.value.trim()) { ella.focus(); aviso('¿Cómo se llama?'); return; }
-
-      var btn = document.getElementById('fEnviar');
-      btn.disabled = true;
-      btn.textContent = 'Enviando…';
-
-      var datos = {};
-      new FormData(form).forEach(function (v, k) { datos[k] = v; });
-      datos.mejor_puntuacion_demo = mejor;
-
-      fetch('https://formspree.io/f/' + FORMSPREE_ID, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(datos)
-      }).then(function (r) {
-        if (!r.ok) throw new Error('formspree ' + r.status);
-        var g = document.createElement('div');
-        g.className = 'gracias';
-        g.textContent = 'Recibido. Te escribimos a ' + email.value + ' en menos de 24 horas con el enlace de pago y para pedirte la foto de ' + ella.value.trim() + '.';
-        form.replaceWith(g);
-      }).catch(function () {
-        btn.disabled = false;
-        btn.textContent = 'Pedir · 4,99 USD';
-        aviso('No se ha podido enviar. Inténtalo otra vez.');
+      $('fotoIn').addEventListener('change', function (e) {
+        var f = e.target.files && e.target.files[0];
+        if (!f) return;
+        var img = new Image();
+        var url = URL.createObjectURL(f);
+        img.onload = function () {
+          URL.revokeObjectURL(url);
+          caraActual = recortar(img);
+          caraSubida = true;
+          $('fotoPrev').src = caraActual;
+          montarJuego();
+          todoCambia();
+          aviso('Ya vuela con su cara');
+        };
+        img.onerror = function () { URL.revokeObjectURL(url); aviso('No he podido leer esa foto'); };
+        img.src = url;
       });
-    });
+
+      $('reset').addEventListener('click', function () {
+        abiertos = []; mejor = 0;
+        caraActual = CARA_DEFECTO; caraSubida = false;
+        $('fotoPrev').src = CARA_DEFECTO;
+        $('fotoIn').value = '';
+        dificultadSel.value = 'normal';
+        pintarCampos(['Un masaje de 20 minutos', 'Cena donde tú elijas', 'Un fin de semana sorpresa']);
+        finalIn.value = 'Te lo has ganado. Como todo lo demás.';
+        todoCambia();
+        montarJuego();
+      });
+
+      // ---------- resumen del pedido ----------
+      function pintarResumen() {
+        var n = textosPremio().length;
+        var ella = $('fElla').value.trim();
+        $('resumenCara').src = caraActual;
+        $('resumenTitulo').textContent = ella ? 'Un regalo para ' + ella : 'Un regalo para…';
+        $('resumenPremios').textContent = n + (n === 1 ? ' premio' : ' premios') + ' · dificultad ' + (dificultadSel.value === 'facil' ? 'fácil' : 'normal');
+        $('resumenSinFoto').hidden = caraSubida;
+        // el formulario de reserva (sin pasarela) también se rellena
+        $('rPremios').value = textosPremio().map(function (t, i) { return umbrales()[i] + ' pts · ' + t; }).join('\n');
+        $('rMensaje').value = finalIn.value.trim();
+      }
+
+      function todoCambia() { pintarPremios(); pintarResumen(); guardar(); }
+
+      finalIn.addEventListener('input', todoCambia);
+      ['fElla', 'fDe', 'fEmail', 'fOcasion'].forEach(function (id) { $(id).addEventListener('input', todoCambia); $(id).addEventListener('change', todoCambia); });
+
+      // ---------- arranque con lo guardado ----------
+      var previo = recuperar();
+      if (previo && previo.cara) { caraActual = previo.cara; caraSubida = true; $('fotoPrev').src = caraActual; }
+      if (previo && previo.dificultad) dificultadSel.value = previo.dificultad;
+      pintarCampos(previo && previo.premios && previo.premios.length ? previo.premios : ['Un masaje de 20 minutos', 'Cena donde tú elijas', 'Un fin de semana sorpresa']);
+      if (previo && typeof previo.mensaje === 'string') finalIn.value = previo.mensaje;
+      if (previo) { $('fElla').value = previo.ella || ''; $('fDe').value = previo.de || ''; $('fEmail').value = previo.email || ''; if (previo.ocasion) $('fOcasion').value = previo.ocasion; }
+      pintarPremios();
+      pintarResumen();
+      montarJuego();
+
+      // ---------- precio y configuración ----------
+      function pintarPrecio(txt, moneda, numero) {
+        $('precioMini').textContent = txt;
+        $('precioTotal').textContent = txt;
+        $('precioGrande').innerHTML = '';
+        $('precioGrande').appendChild(document.createTextNode(numero));
+        var s = document.createElement('small'); s.textContent = moneda; $('precioGrande').appendChild(s);
+      }
+
+      function validar() {
+        var campos = [];
+        if (!caraSubida) campos.push('la foto');
+        if (!$('fElla').value.trim()) campos.push('su nombre');
+        var email = $('fEmail').value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) campos.push('tu email');
+        if (!textosPremio().length) campos.push('al menos un premio');
+        if (!$('fDerecho').checked) campos.push('la casilla de la foto');
+        return campos;
+      }
+
+      function datosPedido() {
+        return {
+          cara: caraActual,
+          premios: textosPremio(),
+          mensaje: finalIn.value.trim(),
+          ella: $('fElla').value.trim(),
+          de: $('fDe').value.trim(),
+          email: $('fEmail').value.trim(),
+          ocasion: $('fOcasion').value,
+          dificultad: dificultadSel.value,
+          derechoFoto: $('fDerecho').checked
+        };
+      }
+
+      function mostrarError(txt) {
+        var e = $('errorPago');
+        e.textContent = txt; e.hidden = false;
+        $('procesando').hidden = true;
+      }
+
+      function mostrarListo(r, emailPosible) {
+        var ella = $('fElla').value.trim();
+        $('checkout').hidden = true;
+        $('listo').hidden = false;
+        $('listoTitulo').textContent = 'El regalo para ' + ella + ' ya existe';
+        $('enlaceRegalo').value = r.enlace;
+        $('abrirRegalo').href = r.enlace;
+        var texto = 'Tienes un regalo… pero te lo tienes que ganar 🎁 ' + r.enlace;
+        $('compartirWa').href = 'https://wa.me/?text=' + encodeURIComponent(texto);
+        $('listoNota').textContent = r.emailEnviado
+          ? 'También te lo hemos mandado a ' + $('fEmail').value.trim() + '. Si quieres cambiar un premio, responde a ese correo.'
+          : 'Guárdalo bien: es el único enlace que existe. Si quieres cambiar un premio, escríbenos con este enlace.';
+        try { localStorage.setItem('ganatelo-ultimo', JSON.stringify({ enlace: r.enlace, ella: ella, fecha: Date.now() })); } catch (e) {}
+        $('listo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      $('copiar').addEventListener('click', function () {
+        var inp = $('enlaceRegalo');
+        inp.select();
+        var ok = false;
+        if (navigator.clipboard) { navigator.clipboard.writeText(inp.value).then(function () { aviso('Enlace copiado'); }); ok = true; }
+        if (!ok) { try { document.execCommand('copy'); aviso('Enlace copiado'); } catch (e) {} }
+      });
+
+      function montarPayPal(cfg) {
+        var s = document.createElement('script');
+        s.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(cfg.paypal.clientId) +
+                '&currency=' + encodeURIComponent(cfg.moneda) + '&intent=capture&components=buttons&locale=es_ES';
+        s.onload = function () {
+          $('paypal').classList.remove('espera');
+          if (cfg.paypal.sandbox) {
+            var m = document.createElement('span'); m.className = 'modo'; m.textContent = 'modo pruebas';
+            $('precioTotal').appendChild(m);
+          }
+          window.paypal.Buttons({
+            style: { layout: 'vertical', color: 'gold', shape: 'pill', label: 'pay', height: 48 },
+            onClick: function (data, actions) {
+              var faltan = validar();
+              $('errorPago').hidden = true;
+              if (faltan.length) {
+                mostrarError('Antes de pagar falta: ' + faltan.join(', ') + '.');
+                if (!caraSubida) $('demo').scrollIntoView({ behavior: 'smooth' });
+                return actions.reject();
+              }
+              return actions.resolve();
+            },
+            createOrder: function () {
+              return fetch('/api/pedido/crear', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(datosPedido())
+              }).then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.error || r.status); return d; }); })
+                .then(function (d) { return d.ordenId; })
+                .catch(function (e) { mostrarError('No se pudo iniciar el pago (' + e.message + '). Inténtalo otra vez.'); throw e; });
+            },
+            onApprove: function (data) {
+              $('procesando').hidden = false;
+              return fetch('/api/pedido/capturar', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ ordenId: data.orderID })
+              }).then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d.error || r.status); return d; }); })
+                .then(function (d) { $('procesando').hidden = true; mostrarListo(d, cfg.emailComprador); })
+                .catch(function (e) { mostrarError('El pago se ha procesado pero no hemos podido montar el regalo: ' + e.message + '. Escríbenos con el id de la orden ' + data.orderID + ' y lo resolvemos.'); });
+            },
+            onCancel: function () { aviso('Pago cancelado'); },
+            onError: function (err) { console.error(err); mostrarError('PayPal ha devuelto un error. Prueba otra vez o con otra forma de pago.'); }
+          }).render('#paypal');
+        };
+        s.onerror = function () { $('paypal').classList.remove('espera'); modoReserva('No hemos podido cargar el pago con PayPal (puede ser tu conexión o un bloqueador). Déjanos tus datos y te mandamos el enlace de pago por email.'); };
+        document.head.appendChild(s);
+        // si en 12 segundos no ha aparecido el botón, se ofrece la vía por email
+        setTimeout(function () {
+          if (!$('checkout').hidden && !$('paypal').querySelector('iframe')) {
+            modoReserva('El pago con PayPal está tardando demasiado en cargar. Déjanos tus datos y te mandamos el enlace de pago por email.');
+          }
+        }, 12000);
+      }
+
+      function modoReserva(motivo) {
+        // sin pasarela (o PayPal no carga): el pedido llega por email y se cobra a mano
+        if (!$('listo').hidden) return;          // ya ha pagado: no hay nada que ofrecer
+        $('checkout').hidden = true;
+        $('formPedido').hidden = false;
+        // lo que ya haya escrito arriba se copia al formulario de reserva
+        $('rEmail').value = $('fEmail').value;
+        $('rElla').value = $('fElla').value;
+        try { $('rOcasion').value = $('fOcasion').value; } catch (e) {}
+        if (motivo) {
+          var p = document.createElement('p');
+          p.className = 'error';
+          p.textContent = motivo;
+          $('formPedido').insertBefore(p, $('formPedido').firstChild);
+        }
+      }
+
+      fetch('/api/config').then(function (r) { return r.json(); }).then(function (cfg) {
+        config = cfg;
+        pintarPrecio(cfg.precioTexto, cfg.moneda, Number(cfg.precio).toLocaleString('es', { minimumFractionDigits: 2 }));
+        if (cfg.umbrales) { UMBRALES = cfg.umbrales; pintarCampos(inputsPremio().map(function (x) { return x.value; })); pintarPremios(); }
+        if (cfg.listo && cfg.paypal) montarPayPal(cfg); else modoReserva();
+      }).catch(function () { modoReserva(); });
+
+      // ---------- reserva por email (sin pasarela) ----------
+      var form = $('formPedido');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var email = $('rEmail'), ella = $('rElla');
+        if (!email.value || email.value.indexOf('@') === -1) { email.focus(); aviso('Falta tu email'); return; }
+        if (!ella.value.trim()) { ella.focus(); aviso('¿Cómo se llama?'); return; }
+        var btn = $('rEnviar');
+        btn.disabled = true; btn.textContent = 'Enviando…';
+        var datos = {};
+        new FormData(form).forEach(function (v, k) { datos[k] = v; });
+        datos.mejor_puntuacion_demo = mejor;
+        fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(datos)
+        }).then(function (r) {
+          if (!r.ok) throw new Error('formspree ' + r.status);
+          var g = document.createElement('div');
+          g.className = 'gracias';
+          g.textContent = 'Recibido. Te escribimos a ' + email.value + ' en menos de 24 horas con el enlace de pago y para pedirte la foto de ' + ella.value.trim() + '.';
+          form.replaceWith(g);
+        }).catch(function () {
+          btn.disabled = false; btn.textContent = 'Pedir';
+          aviso('No se ha podido enviar. Inténtalo otra vez.');
+        });
+      });
+    })();
   </script>
 </body>
 </html>

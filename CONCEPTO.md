@@ -102,6 +102,7 @@ orientativas a septiembre de 2026, comprobar):
 | Lemon Squeezy | 5 % + 0,50 USD | ≈ 4,24 USD |
 | Paddle | 5 % + 0,50 USD | ≈ 4,24 USD |
 | Gumroad | 10 % + 0,50 USD | ≈ 3,99 USD |
+| **PayPal (lo que usamos)** | 3,49 % + 0,49 USD aprox. | ≈ **4,33 USD** |
 
 El coste marginal es casi cero, así que el margen está en el tiempo que te
 lleva montar cada juego. Ahora mismo es manual: recortar la foto, escribir los
@@ -146,10 +147,24 @@ RGPD.
 
 ## 10. Qué falta para vender de verdad
 
-1. Permiso escrito de Mari para usar su cara en la demo pública, o cambiarla por otra con permiso.
-2. Dominio propio (`ganatelo.app` o similar) y sacar la demo del dominio personal.
-3. Cuenta en la plataforma de cobro y sustituir el formulario por un botón de pago real.
-4. Automatizar la generación: una plantilla del juego que lea foto, premios y mensaje desde un archivo, para no tocar código por pedido.
-5. Alta en Hacienda (036) y una hora con un gestor.
-6. Política de privacidad y un email de contacto en la página.
-7. Grabar los cuatro vídeos y publicar durante dos semanas antes de gastar un euro en anuncios.
+Lo que estaba en esta lista ya está construido. Queda lo que no es código:
+
+1. ~~Permiso de Mari para su cara en la demo~~ → resuelto: la cara por defecto
+   es un dibujo generado (`public/cara-demo.png`). Para los vídeos sí hace
+   falta una cara real con permiso.
+2. **Dominio propio** (`ganatelo.app` o similar) y sacar la venta del dominio
+   personal. `vercel.json` ya manda la portada de ese dominio a la página de
+   venta.
+3. ~~Sustituir el formulario por un botón de pago real~~ → hecho: PayPal, con
+   entrega automática del enlace. Falta abrir la cuenta y pegar las
+   credenciales (paso 1 de `LANZAMIENTO.md`).
+4. ~~Automatizar la generación~~ → hecho: el comprador configura todo él mismo
+   y el regalo se publica solo al cobrar. Cero trabajo manual por pedido.
+5. **Alta en Hacienda (036) y una hora con un gestor.** Ojo: cobrando
+   directamente con PayPal el IVA es tuyo (ver sección 9 y `LANZAMIENTO.md`).
+6. ~~Política de privacidad y email de contacto~~ → hecho, en `/legal`.
+7. **Grabar los vídeos y publicar dos semanas antes de gastar un euro en
+   anuncios.** Esto es ahora lo único que separa el producto de las ventas.
+
+El plan de las dos primeras semanas, con qué medir y cuándo subir el precio,
+está en `LANZAMIENTO.md`.
