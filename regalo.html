@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/icon-512.svg" />
+  <title>Tienes un regalo. Pero te lo tienes que ganar.</title>
+  <meta name="description" content="Alguien te ha preparado un regalo con tu cara. Cada punto te acerca a un premio." />
+  <meta property="og:title" content="Tienes un regalo 🎁 Pero te lo tienes que ganar." />
+  <meta property="og:description" content="Alguien te ha preparado un juego con tu cara. Cada punto te acerca a un premio." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/og-regalo.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050505;
+      --ink: #f5f2ea;
+      --dim: rgba(245, 242, 234, 0.6);
+      --faint: rgba(245, 242, 234, 0.25);
+      --gold: #e3c07a;
+      --rosa: #f08fa4;
+      --linea: rgba(245, 242, 234, 0.14);
+    }
+
+    html { scroll-behavior: smooth; }
+    html, body { min-height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      line-height: 1.5;
+      overflow-x: hidden;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 90% 50% at 50% 0%, rgba(240, 143, 164, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 120% 80% at 50% 40%, #101010 0%, var(--bg) 60%);
+      pointer-events: none;
+    }
+
+    main { width: 100%; max-width: 480px; margin: 0 auto; padding: 0 20px 60px; }
+
+    a { color: inherit; }
+
+    [hidden] { display: none !important; }
+
+    /* ---------- portada ---------- */
+    .portada {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.34em;
+      text-indent: 0.34em;
+      text-transform: uppercase;
+      color: var(--rosa);
+    }
+
+    .cara-grande {
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 26px auto 0;
+      border: 2px solid rgba(227, 192, 122, 0.6);
+      box-shadow: 0 0 60px rgba(227, 192, 122, 0.22);
+      animation: flotar 3.6s ease-in-out infinite;
+      background: #111;
+    }
+
+    @keyframes flotar {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50%      { transform: translateY(-10px) rotate(4deg); }
+    }
+
+    h1 {
+      margin-top: 24px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      font-size: clamp(2rem, 10vw, 3rem);
+      line-height: 1.1;
+    }
+
+    .de {
+      margin-top: 10px;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+    }
+
+    .de b { font-weight: 400; color: var(--ink); }
+
+    .portada p.intro {
+      margin: 26px auto 0;
+      max-width: 340px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-size: 17px;
+      line-height: 1.55;
+      color: rgba(245, 242, 234, 0.85);
+    }
+
+    .btn {
+      appearance: none;
+      display: inline-block;
+      margin-top: 34px;
+      padding: 16px 32px;
+      border-radius: 999px;
+      border: 1px solid var(--gold);
+      background: var(--gold);
+      color: #0b0b0b;
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-indent: 0.28em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.3s ease;
+    }
+
+    .btn:hover { box-shadow: 0 0 34px rgba(227, 192, 122, 0.3); }
+    .btn:active { transform: scale(0.97); }
+
+    .portada .peq { margin-top: 18px; font-size: 11px; color: var(--faint); }
+
+    /* ---------- el juego ---------- */
+    .juego { padding-top: 20px; }
+
+    .marcadores {
+      display: flex;
+      justify-content: center;
+      gap: 34px;
+      margin: 8px 0 16px;
+    }
+
+    .marcador { text-align: center; }
+
+    .marcador span {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 6px;
+    }
+
+    .marcador strong { font-size: 28px; font-weight: 100; line-height: 1; }
+    .marcador.record strong { color: var(--gold); }
+
+    .game {
+      border: 1px solid rgba(227, 192, 122, 0.3);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #07070a;
+    }
+
+    .game canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      touch-action: manipulation;
+      cursor: pointer;
+    }
+
+    .game-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      border-top: 1px solid rgba(245, 242, 234, 0.1);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .game-score { color: var(--gold); }
+
+    /* ---------- premios ---------- */
+    .tag {
+      display: block;
+      font-size: 9.5px;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 30px 0 12px;
+    }
+
+    .premios { display: grid; gap: 8px; }
+
+    .premio {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 14px;
+      border: 1px solid var(--linea);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      transition: border-color 0.4s ease, background 0.4s ease;
+    }
+
+    .premio-n {
+      flex: 0 0 auto;
+      width: 40px;
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+      line-height: 1.2;
+    }
+
+    .premio-n b { display: block; font-size: 17px; font-weight: 300; color: var(--ink); }
+
+    .premio-t { flex: 1 1 auto; min-width: 0; font-size: 15px; color: var(--dim); }
+    .premio-t.oculto { filter: blur(5px); user-select: none; }
+    .premio-ico { flex: 0 0 auto; font-size: 17px; }
+
+    .premio.abierto {
+      border-color: rgba(227, 192, 122, 0.6);
+      background: rgba(227, 192, 122, 0.07);
+    }
+
+    .premio.abierto .premio-t { color: var(--ink); }
+    .premio.recien { animation: abrir 0.8s ease; }
+
+    @keyframes abrir {
+      0%   { transform: scale(1); }
+      35%  { transform: scale(1.04); box-shadow: 0 0 40px rgba(227, 192, 122, 0.4); }
+      100% { transform: scale(1); }
+    }
+
+    .progreso { margin-top: 12px; font-size: 11px; color: var(--dim); text-align: center; letter-spacing: 0.08em; }
+
+    .final {
+      margin-top: 18px;
+      padding: 22px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(240, 143, 164, 0.5);
+      background: rgba(240, 143, 164, 0.07);
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-size: 17px;
+      line-height: 1.6;
+      animation: abrir 0.8s ease;
+    }
+
+    .final small {
+      display: block;
+      margin-bottom: 8px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-style: normal;
+      font-size: 9.5px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--rosa);
+    }
+
+    .final .firma { margin-top: 12px; font-style: normal; font-size: 13px; color: var(--dim); }
+
+    .aviso {
+      position: fixed;
+      left: 50%;
+      bottom: calc(26px + env(safe-area-inset-bottom, 0px));
+      transform: translate(-50%, 20px);
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: var(--gold);
+      color: #0b0b0b;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-align: center;
+      max-width: calc(100vw - 32px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 10;
+    }
+
+    .aviso.ver { opacity: 1; transform: translate(-50%, 0); }
+
+    #confeti { position: fixed; inset: 0; pointer-events: none; z-index: 9; }
+
+    /* ---------- estados ---------- */
+    .estado {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    .estado h1 { font-size: clamp(1.5rem, 7vw, 2rem); }
+    .estado p { margin-top: 14px; color: var(--dim); max-width: 320px; }
+
+    .latido {
+      width: 14px; height: 14px; border-radius: 50%; background: var(--gold);
+      animation: latir 1.1s ease-in-out infinite;
+    }
+    @keyframes latir { 0%, 100% { transform: scale(0.7); opacity: 0.5; } 50% { transform: scale(1); opacity: 1; } }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    footer a { text-decoration: none; }
+    footer a:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="estado" id="cargando">
+      <div class="latido"></div>
+      <p>Abriendo tu regalo…</p>
+    </div>
+
+    <div class="estado" id="noExiste" hidden>
+      <span class="eyebrow">Vaya</span>
+      <h1>Este enlace no lleva a ningún regalo</h1>
+      <p>Puede que esté mal copiado. Pide que te lo vuelvan a mandar, o revisa que no falte ninguna letra.</p>
+    </div>
+
+    <section class="portada" id="portada" hidden>
+      <span class="eyebrow">Un regalo para</span>
+      <img class="cara-grande" id="caraGrande" alt="" />
+      <h1 id="nombre"></h1>
+      <div class="de" id="de"></div>
+      <p class="intro" id="intro"></p>
+      <button class="btn" id="empezar" type="button">Quiero ganármelo</button>
+      <p class="peq">Sin instalar nada · Los premios que ganes se quedan guardados</p>
+    </section>
+
+    <section class="juego" id="juego" hidden>
+      <div class="marcadores">
+        <div class="marcador"><span>Ahora</span><strong id="ahora">0</strong></div>
+        <div class="marcador record"><span>Tu récord</span><strong id="record">0</strong></div>
+      </div>
+
+      <div id="hueco"></div>
+
+      <span class="tag">Tus premios</span>
+      <div class="premios" id="premios"></div>
+      <div class="progreso" id="progreso"></div>
+      <div id="finalWrap"></div>
+
+      <footer>
+        <a href="/demo?desde=regalo">Hecho con Gánatelo · Haz uno para alguien</a>
+      </footer>
+    </section>
+  </main>
+
+  <canvas id="confeti"></canvas>
+  <div class="aviso" id="aviso"></div>
+
+  <script src="/flappy.js"></script>
+  <script type="module" src="/src/analytics.js"></script>
+  <script>
+    (function () {
+      var m = location.pathname.match(/\/r\/([a-z0-9]+)/i);
+      var ID = (m ? m[1] : new URLSearchParams(location.search).get('id') || '').toLowerCase();
+
+      var $ = function (id) { return document.getElementById(id); };
+      var avisoEl = $('aviso');
+
+      function aviso(txt) {
+        avisoEl.textContent = txt;
+        avisoEl.classList.add('ver');
+        clearTimeout(aviso.t);
+        aviso.t = setTimeout(function () { avisoEl.classList.remove('ver'); }, 2400);
+      }
+
+      function leer(clave, defecto) {
+        try { var v = localStorage.getItem(clave); return v == null ? defecto : JSON.parse(v); } catch (e) { return defecto; }
+      }
+      function guardar(clave, v) { try { localStorage.setItem(clave, JSON.stringify(v)); } catch (e) {} }
+
+      // ---------- confeti ----------
+      var confetiCanvas = $('confeti');
+      function confeti() {
+        var ctx = confetiCanvas.getContext('2d');
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        confetiCanvas.width = innerWidth * dpr; confetiCanvas.height = innerHeight * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        var colores = ['#e3c07a', '#f08fa4', '#f5f2ea', '#9ec9e6'];
+        var piezas = [];
+        for (var i = 0; i < 110; i++) {
+          piezas.push({ x: innerWidth / 2 + (Math.random() - 0.5) * 120, y: innerHeight * 0.55, vx: (Math.random() - 0.5) * 520, vy: -300 - Math.random() * 420, r: 3 + Math.random() * 4, c: colores[i % colores.length], a: Math.random() * Math.PI, va: (Math.random() - 0.5) * 12 });
+        }
+        var t0 = performance.now(), prev = t0;
+        function paso(t) {
+          var dt = Math.min((t - prev) / 1000, 0.04); prev = t;
+          ctx.clearRect(0, 0, innerWidth, innerHeight);
+          piezas.forEach(function (p) {
+            p.vy += 900 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.a += p.va * dt; p.vx *= 0.99;
+            ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.fillStyle = p.c;
+            ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r); ctx.restore();
+          });
+          if (t - t0 < 2600) requestAnimationFrame(paso); else ctx.clearRect(0, 0, innerWidth, innerHeight);
+        }
+        requestAnimationFrame(paso);
+      }
+
+      // ---------- el regalo ----------
+      if (!ID) { $('cargando').hidden = true; $('noExiste').hidden = false; return; }
+
+      fetch('/api/regalo?id=' + encodeURIComponent(ID))
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(montar)
+        .catch(function () { $('cargando').hidden = true; $('noExiste').hidden = false; });
+
+      function montar(regalo) {
+        var K_ABIERTOS = 'regalo-' + ID + '-abiertos';
+        var K_RECORD = 'regalo-' + ID + '-record';
+        var abiertos = leer(K_ABIERTOS, []);
+        var record = leer(K_RECORD, 0);
+        var premios = regalo.premios || [];
+        var juego = null;
+
+        document.title = 'Un regalo para ' + regalo.ella;
+        $('caraGrande').src = regalo.cara;
+        $('nombre').textContent = regalo.ella;
+        $('de').innerHTML = regalo.de ? 'de parte de <b></b>' : '';
+        if (regalo.de) $('de').querySelector('b').textContent = regalo.de;
+        var cuantos = premios.length === 1 ? 'un premio escondido' : premios.length + ' premios escondidos';
+        $('intro').textContent = 'Hay ' + cuantos + '. Para conseguirlos vas a tener que jugar: cada punto te acerca a uno. Y sí, la que vuela eres tú.';
+
+        $('record').textContent = record;
+        $('cargando').hidden = true;
+        $('portada').hidden = false;
+
+        var yaJugando = abiertos.length > 0 || record > 0;
+        if (yaJugando) { $('empezar').textContent = 'Seguir jugando'; }
+
+        function pintarPremios(recien) {
+          var cont = $('premios');
+          cont.innerHTML = '';
+          premios.forEach(function (p, i) {
+            var abierto = abiertos.indexOf(i) !== -1;
+            var d = document.createElement('div');
+            d.className = 'premio' + (abierto ? ' abierto' : '') + (recien === i ? ' recien' : '');
+            var n = document.createElement('span'); n.className = 'premio-n'; n.innerHTML = '<b>' + p.puntos + '</b>pts';
+            var t = document.createElement('span'); t.className = 'premio-t' + (abierto ? '' : ' oculto');
+            t.textContent = abierto ? p.texto : 'Premio escondido';
+            var ico = document.createElement('span'); ico.className = 'premio-ico'; ico.textContent = abierto ? '🎁' : '🔒';
+            d.appendChild(n); d.appendChild(t); d.appendChild(ico);
+            cont.appendChild(d);
+          });
+
+          var faltan = premios.length - abiertos.length;
+          var siguiente = premios.filter(function (p, i) { return abiertos.indexOf(i) === -1; })[0];
+          $('progreso').textContent = faltan === 0
+            ? 'Los tienes todos. Ahora, a cobrarlos.'
+            : (siguiente ? 'Siguiente premio a los ' + siguiente.puntos + ' puntos · ' : '') + faltan + (faltan === 1 ? ' por descubrir' : ' por descubrir');
+
+          var fw = $('finalWrap');
+          fw.innerHTML = '';
+          if (faltan === 0 && premios.length) {
+            var f = document.createElement('div');
+            f.className = 'final';
+            f.innerHTML = '<small>Un mensaje para ti</small>';
+            f.appendChild(document.createTextNode(regalo.mensaje || 'Te lo has ganado.'));
+            if (regalo.de) {
+              var firma = document.createElement('div'); firma.className = 'firma'; firma.textContent = '— ' + regalo.de;
+              f.appendChild(firma);
+            }
+            fw.appendChild(f);
+          }
+        }
+
+        function alPunto(p) {
+          $('ahora').textContent = p;
+          if (p > record) {
+            record = p; guardar(K_RECORD, record); $('record').textContent = record;
+          }
+          premios.forEach(function (pr, i) {
+            if (p >= pr.puntos && abiertos.indexOf(i) === -1) {
+              abiertos.push(i);
+              guardar(K_ABIERTOS, abiertos);
+              pintarPremios(i);
+              aviso('Premio desbloqueado: ' + pr.texto);
+              confeti();
+              if (juego && juego.juego) juego.juego.sonar('premio');
+              if (navigator.vibrate) { try { navigator.vibrate([40, 60, 40]); } catch (e) {} }
+              if (abiertos.length === premios.length) {
+                setTimeout(function () { $('finalWrap').scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 900);
+              }
+            }
+          });
+        }
+
+        function montarJuego() {
+          var primero = premios[0] ? premios[0].puntos : 5;
+          juego = window.crearFlappy({
+            sprite: regalo.cara,
+            objetivo: 0,
+            pista: primero + ' puntos y cae el primer premio',
+            suave: true,
+            efectos: true,
+            sonido: true,
+            alPunto: alPunto,
+            alPerder: function (p) { $('ahora').textContent = p; }
+          });
+          $('hueco').appendChild(juego);
+        }
+
+        $('empezar').addEventListener('click', function () {
+          $('portada').hidden = true;
+          $('juego').hidden = false;
+          if (!juego) { pintarPremios(); montarJuego(); }
+          window.scrollTo(0, 0);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

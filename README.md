@@ -288,35 +288,96 @@ el botón **"Quiero entrenar 🐧"** de la portada.
 El plan vive en `PLAN` dentro de `entrenar.html`. Para cambiar un ejercicio
 basta con editar ahí el texto; no hay nada más que tocar.
 
-## La demo del producto (`/demo`)
+## Gánatelo: el producto que se vende (`/demo`, `/r/<id>`, `/legal`)
 
-`demo.html` es una página aparte que convierte el juego en un producto para
-vender: *Gánatelo*, un juego con la cara de tu pareja en el que cada
-puntuación desbloquea un premio elegido por quien lo regala. 4,99 USD, pago
-único. El concepto de negocio, los guiones de vídeo, el precio y cómo cobrar
-están en `CONCEPTO.md`.
+Aparte del regalo personal, este repositorio contiene una tienda completa.
+Se vende un regalo digital: un juego con la cara de alguien en el que cada
+puntuación desbloquea un premio que elige quien lo regala. Pago único con
+PayPal y entrega inmediata.
 
-`/?test` redirige aquí. El antiguo modo prueba (todas las casillas abiertas
-sin guardar nada) desapareció del código: ya no hace falta, porque todas las
-casillas llevan abiertas desde agosto.
+**Cómo ponerla en marcha está en [`LANZAMIENTO.md`](LANZAMIENTO.md)**: qué
+cuentas abrir y qué variables pegar en Vercel. El concepto de negocio, los
+guiones de vídeo y el plan de precios siguen en `CONCEPTO.md`.
 
-Qué hace la página:
+### Las tres páginas
 
-- **Personalizador en vivo**: se sube una foto y se recorta en redondo en el
-  propio navegador (no se envía a ningún sitio); se escriben tres premios y un
-  mensaje final. El juego se vuelve a montar con la cara nueva.
-- **Premios por puntos**: a 5, 10 y 15 puntos (`UMBRALES`). Cada uno se
-  desbloquea con animación y aviso; con los tres, aparece el mensaje final.
-  Para eso `public/flappy.js` ganó el callback `alPunto(puntos)`, que también
-  dispara `window.__juego.puntuar(n)`.
-- **Landing**: cómo funciona, qué recibe ella, ocasiones, precio y FAQ.
-- **Pedido**: formulario a Formspree (mismo `FORMSPREE_ID`, asunto "Pedido
-  Gánatelo") con email, nombre de ella, ocasión, y los premios y el mensaje
-  ya rellenos desde la demo. No hay pasarela de pago todavía: la página lo
-  dice y el enlace de pago se manda a mano por email.
+- **`/demo`** (también `/comprar`) es la página de venta. El comprador sube la
+  foto, escribe hasta cinco premios y un mensaje, prueba el juego con esa cara
+  y paga ahí mismo. La foto se recorta en su navegador y no sale de su móvil
+  hasta que paga.
+- **`/r/<id>`** es el regalo: lo que abre quien lo recibe. Portada con su
+  nombre y el de quien se lo manda, el juego con su cara, los premios
+  escondidos que se van descubriendo y el mensaje final cuando los tiene todos.
+  Lleva `noindex` y el id son 12 caracteres aleatorios.
+- **`/legal`** es la política de privacidad, las condiciones, los reembolsos y
+  el formulario de contacto.
 
-La cara por defecto es `cara-juego.png`. Antes de compartir la demo fuera
-del círculo cercano, hace falta el permiso de Mariapnel 🐧 o cambiarla.
+### Cómo funciona el cobro
+
+1. `POST /api/pedido/crear` guarda lo que el comprador configuró como borrador
+   y crea la orden en PayPal. **El importe lo pone el servidor**, nunca el
+   navegador.
+2. El comprador aprueba el pago en el botón de PayPal.
+3. `POST /api/pedido/capturar` cobra de verdad, comprueba que el importe
+   coincide con el precio, publica el regalo y borra el borrador. Es
+   idempotente: capturar dos veces devuelve el mismo enlace, no cobra dos
+   veces.
+4. El enlace aparece en pantalla, con botón de copiar y de mandarlo por
+   WhatsApp, y también por email si Resend está configurado.
+
+Las demás funciones: `GET /api/config` (lo que la página necesita saber:
+precio, client id de PayPal, si se puede cobrar), `GET /api/regalo?id=` (el
+regalo, sin ningún dato del comprador) y `GET /api/pedidos` (tu panel de
+ventas, protegido con `ADMIN_TOKEN`).
+
+**Si falta algo, la página no se rompe.** Sin PayPal configurado, o si el
+script de PayPal no carga en el navegador del visitante, el checkout se
+sustituye por el formulario de siempre: el pedido llega por email y el enlace
+de pago se manda a mano.
+
+### Dónde se guarda
+
+En Vercel Blob, como blobs **privados** (no hay URL pública que adivinar):
+`borradores/` lo que se configuró antes de pagar, `regalos/` lo que ve quien
+recibe el enlace, y `pedidos/` los datos de la venta, que no se exponen nunca.
+En local, sin token de Blob, todo va a la carpeta `.data/`.
+
+### El juego
+
+`public/flappy.js` lo comparten las cuatro páginas. Para el producto ganó tres
+opciones, todas apagadas por defecto para no cambiar la web personal:
+
+- `suave: true` — dificultad progresiva. Empieza con los huecos anchos y lento,
+  y a los 12 puntos ya es el juego de siempre. Así el primer premio cae en
+  menos de un minuto incluso para quien no ha jugado nunca. Además, medio
+  segundo de gracia tras perder, para que un toque por inercia no reinicie.
+- `efectos: true` — estrellas de fondo, marcador grande y chispas al puntuar.
+- `sonido: true` — pitidos sintetizados con WebAudio (sin archivos) y botón
+  para silenciar, que recuerda la elección.
+
+### Probarlo entero sin PayPal
+
+Hay un PayPal de mentira para no depender de credenciales:
+
+```bash
+node dev/paypal-falso.mjs &          # en otra terminal
+npm run dev
+node dev/prueba-flujo.mjs http://localhost:5173
+```
+
+Con `PAYPAL_API_BASE=http://127.0.0.1:9911` en `.env.local` (copia
+`.env.example`). `dev/prueba-flujo.mjs` comprueba las diez cosas que importan:
+que rechaza pedidos incompletos, que el regalo no existe antes de pagar, que
+capturar dos veces no duplica nada, que el regalo no filtra el email del
+comprador y que el panel exige token.
+
+`node dev/pantallazos.mjs <base> <enlace-regalo> <carpeta>` abre las páginas en
+Chromium, avisa de errores de consola y guarda capturas.
+`node dev/imagenes.mjs` regenera la cara de la demo y las imágenes de
+previsualización para redes.
+
+`npm run dev` también sirve las funciones de `/api` y aplica las rutas de
+`vercel.json`, así que lo que ves en local es lo que se despliega.
 
 ## Analíticas
 

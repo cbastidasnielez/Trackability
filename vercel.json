@@ -1,8 +1,18 @@
 {
   "rewrites": [
+    { "source": "/", "has": [{ "type": "host", "value": "(www\\.)?ganatelo\\..*" }], "destination": "/demo.html" },
     { "source": "/juego", "destination": "/juego.html" },
     { "source": "/entrenar", "destination": "/entrenar.html" },
     { "source": "/demo", "destination": "/demo.html" },
+    { "source": "/comprar", "destination": "/demo.html" },
+    { "source": "/legal", "destination": "/legal.html" },
+    { "source": "/r/:id", "destination": "/regalo.html" },
     { "source": "/(.*)", "destination": "/" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [{ "key": "x-content-type-options", "value": "nosniff" }]
+    }
   ]
 }
