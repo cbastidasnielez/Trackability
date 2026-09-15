@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/icon-512.svg" />
+  <title>Gánatelo · Un regalo con su cara</title>
+  <meta name="description" content="Hazle un regalo con su cara, vuestros premios y una experiencia que tendrá que jugar para descubrir." />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050505;
+      --ink: #f5f2ea;
+      --dim: rgba(245, 242, 234, 0.6);
+      --faint: rgba(245, 242, 234, 0.25);
+      --gold: #e3c07a;
+      --rosa: #f08fa4;
+      --hielo: #9ec9e6;
+      --linea: rgba(245, 242, 234, 0.14);
+    }
+
+    html { scroll-behavior: smooth; }
+    html, body { min-height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 90% 50% at 50% 0%, rgba(240, 143, 164, 0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 120% 80% at 50% 40%, #101010 0%, var(--bg) 60%);
+      pointer-events: none;
+    }
+
+    main { width: 100%; max-width: 560px; margin: 0 auto; padding: 0 20px 70px; }
+
+    a { color: inherit; }
+
+    /* ---------- cabecera ---------- */
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0 6px;
+    }
+
+    .marca {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 19px;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+
+    .marca small {
+      display: block;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 8.5px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-top: 2px;
+    }
+
+    .precio-mini {
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(227, 192, 122, 0.4);
+      border-radius: 999px;
+      padding: 7px 12px;
+      white-space: nowrap;
+    }
+
+    /* ---------- hero ---------- */
+    .hero { padding: 44px 0 34px; text-align: center; }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.34em;
+      text-indent: 0.34em;
+      text-transform: uppercase;
+      color: var(--rosa);
+    }
+
+    h1 {
+      margin-top: 16px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      font-size: clamp(1.7rem, 7.6vw, 2.5rem);
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+    }
+
+    .hero p {
+      margin: 18px auto 0;
+      max-width: 440px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: rgba(245, 242, 234, 0.85);
+    }
+
+    .ctas {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      appearance: none;
+      display: inline-block;
+      padding: 15px 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(245, 242, 234, 0.35);
+      background: transparent;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.26em;
+      text-indent: 0.26em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.15s ease, box-shadow 0.3s ease;
+    }
+
+    .btn:hover { background: rgba(245, 242, 234, 0.07); }
+    .btn:active { transform: scale(0.97); }
+
+    .btn.oro {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #0b0b0b;
+    }
+
+    .btn.oro:hover { background: #ecd095; box-shadow: 0 0 34px rgba(227, 192, 122, 0.25); }
+
+    .hero .nota {
+      margin-top: 16px;
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    /* ---------- bloques ---------- */
+    section { margin-top: 54px; }
+
+    h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      font-size: clamp(1.35rem, 6vw, 1.8rem);
+      line-height: 1.25;
+    }
+
+    .sub { margin-top: 10px; font-size: 14px; color: var(--dim); }
+
+    .tag {
+      display: block;
+      font-size: 9.5px;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    /* ---------- personalizador ---------- */
+    .panel {
+      margin-top: 22px;
+      border: 1px solid var(--linea);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.025);
+      padding: 20px 18px;
+    }
+
+    .foto {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .foto-prev {
+      flex: 0 0 auto;
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      border: 2px solid rgba(227, 192, 122, 0.55);
+      object-fit: cover;
+      background: #111;
+    }
+
+    .foto-txt { min-width: 0; }
+
+    .foto-txt strong { display: block; font-weight: 400; font-size: 14px; }
+    .foto-txt span { display: block; margin-top: 3px; font-size: 11.5px; color: var(--dim); }
+
+    .subir {
+      display: inline-block;
+      margin-top: 9px;
+      padding: 9px 16px;
+      border: 1px solid rgba(227, 192, 122, 0.5);
+      border-radius: 999px;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      cursor: pointer;
+    }
+
+    .subir input { display: none; }
+
+    .campos { margin-top: 20px; display: grid; gap: 10px; }
+
+    .campo { display: block; }
+
+    .campo span {
+      display: block;
+      font-size: 9.5px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 5px;
+    }
+
+    .campo span b { color: var(--gold); font-weight: 400; }
+
+    .campo input, .campo textarea, .campo select {
+      width: 100%;
+      appearance: none;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--linea);
+      border-radius: 10px;
+      padding: 11px 12px;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 300;
+    }
+
+    .campo input:focus, .campo textarea:focus, .campo select:focus {
+      outline: none;
+      border-color: rgba(227, 192, 122, 0.6);
+    }
+
+    .campo select option { color: #111; }
+
+    /* ---------- el juego ---------- */
+    .juego-wrap { margin-top: 18px; }
+
+    .game {
+      border: 1px solid rgba(227, 192, 122, 0.3);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #07070a;
+    }
+
+    .game canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      touch-action: manipulation;
+      cursor: pointer;
+    }
+
+    .game-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      border-top: 1px solid rgba(245, 242, 234, 0.1);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .game-score { color: var(--gold); }
+
+    /* ---------- premios ---------- */
+    .premios { margin-top: 14px; display: grid; gap: 8px; }
+
+    .premio {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      border: 1px solid var(--linea);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      transition: border-color 0.4s ease, background 0.4s ease;
+    }
+
+    .premio-n {
+      flex: 0 0 auto;
+      width: 40px;
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+      line-height: 1.2;
+    }
+
+    .premio-n b { display: block; font-size: 17px; font-weight: 300; color: var(--ink); }
+
+    .premio-t { flex: 1 1 auto; min-width: 0; font-size: 14px; color: var(--dim); }
+
+    .premio-t.oculto {
+      filter: blur(4px);
+      user-select: none;
+    }
+
+    .premio-ico { flex: 0 0 auto; font-size: 16px; }
+
+    .premio.abierto {
+      border-color: rgba(227, 192, 122, 0.6);
+      background: rgba(227, 192, 122, 0.07);
+      animation: abrir 0.7s ease;
+    }
+
+    .premio.abierto .premio-t { color: var(--ink); filter: none; }
+
+    @keyframes abrir {
+      0%   { transform: scale(1); }
+      35%  { transform: scale(1.03); box-shadow: 0 0 40px rgba(227, 192, 122, 0.35); }
+      100% { transform: scale(1); }
+    }
+
+    .final {
+      margin-top: 10px;
+      padding: 18px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(240, 143, 164, 0.5);
+      background: rgba(240, 143, 164, 0.07);
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-size: 15px;
+      line-height: 1.6;
+      animation: abrir 0.7s ease;
+    }
+
+    .final small {
+      display: block;
+      margin-bottom: 6px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-style: normal;
+      font-size: 9.5px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--rosa);
+    }
+
+    .aviso {
+      position: fixed;
+      left: 50%;
+      bottom: 26px;
+      transform: translate(-50%, 20px);
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: var(--gold);
+      color: #0b0b0b;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-align: center;
+      max-width: calc(100vw - 32px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 10;
+    }
+
+    .aviso.ver { opacity: 1; transform: translate(-50%, 0); }
+
+    .reset {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--faint);
+      background: none;
+      border: 0;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .reset:hover { color: var(--ink); }
+
+    /* ---------- pasos ---------- */
+    .pasos { margin-top: 22px; display: grid; gap: 14px; }
+
+    .paso { display: flex; gap: 14px; align-items: flex-start; }
+
+    .paso-n {
+      flex: 0 0 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(227, 192, 122, 0.5);
+      color: var(--gold);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+    }
+
+    .paso strong { display: block; font-weight: 400; font-size: 15px; }
+    .paso p { margin-top: 3px; font-size: 13.5px; color: var(--dim); }
+
+    /* ---------- qué recibe ---------- */
+    .lista { margin-top: 18px; list-style: none; display: grid; gap: 9px; }
+
+    .lista li {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      font-size: 14.5px;
+      padding-bottom: 9px;
+      border-bottom: 1px solid var(--linea);
+    }
+
+    .lista li::before { content: "✓"; color: var(--gold); font-size: 13px; }
+
+    /* ---------- ocasiones ---------- */
+    .ocasiones { margin-top: 18px; display: grid; gap: 8px; }
+
+    .ocasion {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      padding: 12px 14px;
+      border: 1px solid var(--linea);
+      border-radius: 12px;
+    }
+
+    .ocasion b { flex: 0 0 auto; font-weight: 400; font-size: 13px; letter-spacing: 0.06em; }
+    .ocasion span { font-size: 13.5px; color: var(--dim); }
+
+    /* ---------- precio ---------- */
+    .precio {
+      margin-top: 54px;
+      padding: 30px 22px;
+      border-radius: 16px;
+      border: 1px solid rgba(227, 192, 122, 0.4);
+      background: linear-gradient(170deg, rgba(227, 192, 122, 0.10), rgba(255, 255, 255, 0.015));
+      text-align: center;
+    }
+
+    .precio .num {
+      font-size: clamp(2.6rem, 14vw, 3.6rem);
+      font-weight: 200;
+      line-height: 1;
+      color: var(--gold);
+    }
+
+    .precio .num small { font-size: 0.42em; letter-spacing: 0.1em; margin-left: 4px; }
+
+    .precio .det {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px 16px;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .precio .btn { margin-top: 22px; }
+
+    /* ---------- pedido ---------- */
+    .pedido .panel { margin-top: 18px; }
+
+    .pedido .btn { width: 100%; margin-top: 6px; }
+
+    .pedido .peq { margin-top: 12px; font-size: 11.5px; line-height: 1.6; color: var(--dim); }
+
+    .gracias {
+      padding: 22px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(227, 192, 122, 0.5);
+      background: rgba(227, 192, 122, 0.07);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ---------- faq ---------- */
+    .faq { margin-top: 16px; display: grid; gap: 6px; }
+
+    .faq details {
+      border-bottom: 1px solid var(--linea);
+      padding: 10px 0;
+    }
+
+    .faq summary {
+      cursor: pointer;
+      list-style: none;
+      font-size: 14.5px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; color: var(--gold); }
+    .faq details[open] summary::after { content: "–"; }
+    .faq details p { margin-top: 8px; font-size: 13.5px; color: var(--dim); }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    @media (min-width: 600px) {
+      .campos { grid-template-columns: 1fr 1fr; }
+      .campos .ancho { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="top">
+      <a class="marca" href="#top">Gánatelo<small>Regalos que se ganan</small></a>
+      <span class="precio-mini">4,99 USD</span>
+    </header>
+
+    <section class="hero" id="top">
+      <span class="eyebrow">Un juego con su cara</span>
+      <h1>¿Qué le regalo a mi novia cuando ya le he regalado de todo?</h1>
+      <p>Hazle un regalo con su cara, vuestros premios y una experiencia que tendrá que jugar para descubrir.</p>
+      <div class="ctas">
+        <a class="btn oro" href="#demo">Probar la demo</a>
+        <a class="btn" href="#pedir">Quiero hacerle uno</a>
+      </div>
+      <p class="nota">Sin app. Se abre con un enlace, en cualquier móvil.</p>
+    </section>
+
+    <!-- ================= DEMO ================= -->
+    <section id="demo">
+      <span class="tag">Demo · Se personaliza aquí mismo</span>
+      <h2>Pruébalo con su cara</h2>
+      <p class="sub">Sube una foto, escribe tres premios y juega. La foto no sale de tu móvil: la demo la recorta aquí y no la envía a ningún sitio.</p>
+
+      <div class="panel">
+        <div class="foto">
+          <img class="foto-prev" id="fotoPrev" src="/cara-juego.png" alt="" />
+          <div class="foto-txt">
+            <strong>Su cara</strong>
+            <span>Una foto donde salga centrada. La recortamos en redondo.</span>
+            <label class="subir">Subir su foto
+              <input type="file" id="fotoIn" accept="image/*" />
+            </label>
+          </div>
+        </div>
+
+        <div class="campos">
+          <label class="campo"><span>Premio 1 · <b>5 puntos</b></span>
+            <input id="p1" maxlength="60" value="Un masaje de 20 minutos" /></label>
+          <label class="campo"><span>Premio 2 · <b>10 puntos</b></span>
+            <input id="p2" maxlength="60" value="Cena donde tú elijas" /></label>
+          <label class="campo"><span>Premio 3 · <b>15 puntos</b></span>
+            <input id="p3" maxlength="60" value="Un fin de semana sorpresa" /></label>
+          <label class="campo"><span>Mensaje final</span>
+            <input id="pFinal" maxlength="120" value="Te lo has ganado. Como todo lo demás." /></label>
+        </div>
+      </div>
+
+      <div class="juego-wrap" id="juegoWrap"></div>
+
+      <div class="premios" id="premios"></div>
+      <div id="finalWrap"></div>
+
+      <button class="reset" id="reset" type="button">Reiniciar demo</button>
+    </section>
+
+    <!-- ================= CÓMO FUNCIONA ================= -->
+    <section>
+      <span class="tag">Cómo funciona</span>
+      <h2>Tres pasos y lo tiene en el móvil</h2>
+      <div class="pasos">
+        <div class="paso"><span class="paso-n">1</span><div>
+          <strong>Nos mandas su foto</strong>
+          <p>Una en la que se le vea bien la cara. Del recorte nos encargamos nosotros.</p>
+        </div></div>
+        <div class="paso"><span class="paso-n">2</span><div>
+          <strong>Eliges los premios</strong>
+          <p>Tres, cinco, los que quieras. Un masaje, una cena, vuestra broma interna. Cada uno cae a una puntuación.</p>
+        </div></div>
+        <div class="paso"><span class="paso-n">3</span><div>
+          <strong>Recibes un enlace</strong>
+          <p>En menos de 24 horas. Se lo mandas cuando quieras: el día de su cumpleaños, a medianoche, en la cena.</p>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- ================= QUÉ RECIBE ================= -->
+    <section>
+      <span class="tag">Qué recibe ella</span>
+      <h2>No es un regalo. Es vuestro regalo.</h2>
+      <ul class="lista">
+        <li>Su cara volando entre tubos, con tu nombre en la portada.</li>
+        <li>Vuestros premios, que se desbloquean con puntos y quedan guardados.</li>
+        <li>Un mensaje tuyo al final, cuando los tenga todos.</li>
+        <li>Un enlace que funciona para siempre. Sin instalar nada.</li>
+      </ul>
+    </section>
+
+    <!-- ================= OCASIONES ================= -->
+    <section>
+      <span class="tag">Sirve para</span>
+      <h2>Cualquier fecha en la que te quedes en blanco</h2>
+      <div class="ocasiones">
+        <div class="ocasion"><b>❤️ Aniversario</b><span>El regalo de aniversario que no se espera.</span></div>
+        <div class="ocasion"><b>🎂 Cumpleaños</b><span>Este año no le compres otro perfume.</span></div>
+        <div class="ocasion"><b>💍 San Valentín</b><span>Flores otra vez… ¿en serio?</span></div>
+        <div class="ocasion"><b>🎄 Navidad</b><span>El regalo que tiene que jugar para descubrir.</span></div>
+        <div class="ocasion"><b>😈 Picante</b><span>El juego empieza inocente…</span></div>
+      </div>
+    </section>
+
+    <!-- ================= PRECIO ================= -->
+    <div class="precio">
+      <div class="num">4,99<small>USD</small></div>
+      <div class="det"><span>Pago único</span><span>Entrega en 24 h</span><span>Premios editables</span></div>
+      <a class="btn oro" href="#pedir">Quiero hacerle uno</a>
+    </div>
+
+    <!-- ================= PEDIDO ================= -->
+    <section class="pedido" id="pedir">
+      <span class="tag">Pedir</span>
+      <h2>Cuéntanos de ella</h2>
+      <p class="sub">Los premios y el mensaje ya vienen rellenos con lo que has puesto en la demo.</p>
+
+      <form class="panel" id="formPedido" novalidate>
+        <div class="campos">
+          <label class="campo"><span>Tu email</span>
+            <input type="email" name="email" id="fEmail" required placeholder="tu@email.com" /></label>
+          <label class="campo"><span>Cómo se llama ella</span>
+            <input name="ella" id="fElla" required placeholder="Su nombre" /></label>
+          <label class="campo ancho"><span>Ocasión</span>
+            <select name="ocasion" id="fOcasion">
+              <option>Aniversario</option>
+              <option>Cumpleaños</option>
+              <option>San Valentín</option>
+              <option>Navidad</option>
+              <option>Porque sí</option>
+            </select></label>
+          <label class="campo ancho"><span>Premios (uno por línea)</span>
+            <textarea name="premios" id="fPremios" rows="4"></textarea></label>
+          <label class="campo ancho"><span>Mensaje final</span>
+            <input name="mensaje" id="fMensaje" maxlength="200" /></label>
+        </div>
+        <input type="hidden" name="_subject" value="Pedido Gánatelo" />
+        <button class="btn oro" type="submit" id="fEnviar" style="margin-top:16px">Pedir · 4,99 USD</button>
+        <p class="peq" id="fNota">Aún no se cobra en la web: te escribimos en menos de 24 h con el enlace de pago y para pedirte la foto. Hasta entonces no pagas nada.</p>
+      </form>
+    </section>
+
+    <!-- ================= FAQ ================= -->
+    <section>
+      <span class="tag">Dudas</span>
+      <h2>Lo que suelen preguntar</h2>
+      <div class="faq">
+        <details><summary>¿Tiene que instalar algo?</summary><p>No. Es un enlace. Se abre en el navegador del móvil y ya está jugando.</p></details>
+        <details><summary>¿Y si es mala jugando?</summary><p>El primer premio cae a los 5 puntos, que son unos veinte segundos. Y si quieres, ponemos los umbrales más bajos.</p></details>
+        <details><summary>¿Puedo cambiar los premios después?</summary><p>Sí, sin coste. Nos escribes y lo actualizamos.</p></details>
+        <details><summary>¿Qué hacéis con la foto?</summary><p>Solo se usa para su juego. No la publicamos ni la usamos para nada más, y la borramos si nos lo pides.</p></details>
+        <details><summary>¿Vale para un novio, una amiga, mi madre?</summary><p>Claro. La cara y los premios los pones tú. Lo de "novia" es porque es a quien más nos piden.</p></details>
+      </div>
+    </section>
+
+    <footer>Gánatelo · Hecho en Barcelona</footer>
+  </main>
+
+  <div class="aviso" id="aviso"></div>
+
+  <script src="/flappy.js"></script>
+  <script type="module" src="/src/analytics.js"></script>
+  <script>
+    // ---------- la demo ----------
+    var FORMSPREE_ID = 'xzdnwwqa';
+    var UMBRALES = [5, 10, 15];
+    var CARA_DEFECTO = '/cara-juego.png';
+
+    var caraActual = CARA_DEFECTO;
+    var abiertos = [];              // índices de premios ya desbloqueados
+    var mejor = 0;                  // mejor puntuación de la sesión
+
+    var wrap = document.getElementById('juegoWrap');
+    var premiosEl = document.getElementById('premios');
+    var finalWrap = document.getElementById('finalWrap');
+    var avisoEl = document.getElementById('aviso');
+    var inputs = [document.getElementById('p1'), document.getElementById('p2'), document.getElementById('p3')];
+    var finalIn = document.getElementById('pFinal');
+
+    function textoPremio(i) {
+      return (inputs[i].value || '').trim() || ('Premio ' + (i + 1));
+    }
+
+    function aviso(txt) {
+      avisoEl.textContent = txt;
+      avisoEl.classList.add('ver');
+      clearTimeout(aviso.t);
+      aviso.t = setTimeout(function () { avisoEl.classList.remove('ver'); }, 2200);
+    }
+
+    function pintarPremios() {
+      premiosEl.innerHTML = '';
+      UMBRALES.forEach(function (u, i) {
+        var abierto = abiertos.indexOf(i) !== -1;
+        var d = document.createElement('div');
+        d.className = 'premio' + (abierto ? ' abierto' : '');
+
+        var n = document.createElement('span');
+        n.className = 'premio-n';
+        n.innerHTML = '<b>' + u + '</b>pts';
+
+        var t = document.createElement('span');
+        t.className = 'premio-t' + (abierto ? '' : ' oculto');
+        t.textContent = abierto ? textoPremio(i) : 'Premio escondido';
+
+        var ico = document.createElement('span');
+        ico.className = 'premio-ico';
+        ico.textContent = abierto ? '🎁' : '🔒';
+
+        d.appendChild(n); d.appendChild(t); d.appendChild(ico);
+        premiosEl.appendChild(d);
+      });
+
+      finalWrap.innerHTML = '';
+      if (abiertos.length === UMBRALES.length) {
+        var f = document.createElement('div');
+        f.className = 'final';
+        f.innerHTML = '<small>Mensaje final</small>';
+        f.appendChild(document.createTextNode((finalIn.value || '').trim() || 'Te lo has ganado.'));
+        finalWrap.appendChild(f);
+      }
+    }
+
+    function alPunto(p) {
+      if (p > mejor) mejor = p;
+      UMBRALES.forEach(function (u, i) {
+        if (p >= u && abiertos.indexOf(i) === -1) {
+          abiertos.push(i);
+          pintarPremios();
+          aviso('Premio desbloqueado: ' + textoPremio(i));
+        }
+      });
+    }
+
+    function montarJuego() {
+      wrap.innerHTML = '';
+      wrap.appendChild(window.crearFlappy({
+        sprite: caraActual,
+        respaldo: CARA_DEFECTO,
+        objetivo: 0,
+        pista: '5 puntos y cae el primer premio',
+        alPunto: alPunto,
+        depurar: true
+      }));
+    }
+
+    // los premios escritos se reflejan al momento
+    inputs.forEach(function (inp) { inp.addEventListener('input', pintarPremios); });
+    finalIn.addEventListener('input', pintarPremios);
+
+    // la foto se recorta en redondo aquí mismo y no sale del navegador
+    document.getElementById('fotoIn').addEventListener('change', function (e) {
+      var f = e.target.files && e.target.files[0];
+      if (!f) return;
+      var img = new Image();
+      var url = URL.createObjectURL(f);
+      img.onload = function () {
+        var s = Math.min(img.naturalWidth, img.naturalHeight);
+        var c = document.createElement('canvas');
+        c.width = c.height = 256;
+        var ctx = c.getContext('2d');
+        ctx.beginPath(); ctx.arc(128, 128, 128, 0, Math.PI * 2); ctx.closePath(); ctx.clip();
+        ctx.drawImage(img, (img.naturalWidth - s) / 2, (img.naturalHeight - s) / 2, s, s, 0, 0, 256, 256);
+        URL.revokeObjectURL(url);
+        caraActual = c.toDataURL('image/png');
+        document.getElementById('fotoPrev').src = caraActual;
+        montarJuego();
+        aviso('Ya vuela con su cara');
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); aviso('No he podido leer esa foto'); };
+      img.src = url;
+    });
+
+    document.getElementById('reset').addEventListener('click', function () {
+      abiertos = [];
+      mejor = 0;
+      caraActual = CARA_DEFECTO;
+      document.getElementById('fotoPrev').src = CARA_DEFECTO;
+      document.getElementById('fotoIn').value = '';
+      pintarPremios();
+      montarJuego();
+    });
+
+    pintarPremios();
+    montarJuego();
+
+    // ---------- el pedido ----------
+    var form = document.getElementById('formPedido');
+    var fPremios = document.getElementById('fPremios');
+    var fMensaje = document.getElementById('fMensaje');
+
+    function rellenarPedido() {
+      fPremios.value = inputs.map(function (inp, i) { return UMBRALES[i] + ' pts · ' + textoPremio(i); }).join('\n');
+      fMensaje.value = (finalIn.value || '').trim();
+    }
+    rellenarPedido();
+    inputs.forEach(function (inp) { inp.addEventListener('input', rellenarPedido); });
+    finalIn.addEventListener('input', rellenarPedido);
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = document.getElementById('fEmail');
+      var ella = document.getElementById('fElla');
+      if (!email.value || email.value.indexOf('@') === -1) { email.focus(); aviso('Falta tu email'); return; }
+      if (!ella.value.trim()) { ella.focus(); aviso('¿Cómo se llama?'); return; }
+
+      var btn = document.getElementById('fEnviar');
+      btn.disabled = true;
+      btn.textContent = 'Enviando…';
+
+      var datos = {};
+      new FormData(form).forEach(function (v, k) { datos[k] = v; });
+      datos.mejor_puntuacion_demo = mejor;
+
+      fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(datos)
+      }).then(function (r) {
+        if (!r.ok) throw new Error('formspree ' + r.status);
+        var g = document.createElement('div');
+        g.className = 'gracias';
+        g.textContent = 'Recibido. Te escribimos a ' + email.value + ' en menos de 24 horas con el enlace de pago y para pedirte la foto de ' + ella.value.trim() + '.';
+        form.replaceWith(g);
+      }).catch(function () {
+        btn.disabled = false;
+        btn.textContent = 'Pedir · 4,99 USD';
+        aviso('No se ha podido enviar. Inténtalo otra vez.');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -2,7 +2,8 @@
    Se carga como script clásico y expone window.crearFlappy(cfg).
 
    cfg: sprite, respaldo, objetivo (0 = sin meta), pista,
-        alGanar(ctx), alPerder(puntos), alCrecer(), alMontar(ctx), depurar */
+        alGanar(ctx), alPerder(puntos), alCrecer(), alMontar(ctx),
+        alPunto(puntos) (cada vez que suma), depurar */
 (function () {
   'use strict';
 
@@ -118,6 +119,7 @@
           t.contado = true;
           puntos++;
           marcador.textContent = etiquetaMarcador(puntos);
+          if (cfg.alPunto) cfg.alPunto(puntos);
           if (OBJETIVO && !premiado && puntos >= OBJETIVO) {
             premiado = true;
             if (cfg.seguirTrasMeta) {
@@ -249,7 +251,11 @@
     if (cfg.depurar) {
       window.__juego = {
         estado: function () { return { estado: estado, puntos: puntos, y: ave.y, tubos: tubos.length }; },
-        puntuar: function (n) { puntos = n; marcador.textContent = etiquetaMarcador(puntos); },
+        puntuar: function (n) {
+          puntos = n;
+          marcador.textContent = etiquetaMarcador(puntos);
+          if (cfg.alPunto) cfg.alPunto(puntos);
+        },
         forzarVictoria: function () {
           puntos = OBJETIVO;
           premiado = true;

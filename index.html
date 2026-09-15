@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <script>if (/(^|[?&])test\b/.test(location.search)) location.replace('/demo');</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#050505" />
   <meta name="robots" content="noindex, nofollow" />
@@ -3373,7 +3374,6 @@
     ];
 
     // ?test abre todas las casillas sin esperar a su día, para poder revisarlas
-    var MODO_TEST = /(^|[?&])test\b/.test(location.search);
 
     var ABIERTAS_KEY = 'casillas-abiertas';
     var boxesEl = document.getElementById('boxes');
@@ -3646,7 +3646,6 @@
         objetivo: cfg.objetivo || 10,
         pista: (cfg.objetivo || 10) + ' puntos y hay premio',
         seguirTrasMeta: true,   // el premio no acaba la partida
-        depurar: MODO_TEST,
         alCrecer: syncPanel,
         alMontar: function (ctx) {
           // si ya lo ganó antes, el vale sigue siendo suyo
@@ -4522,13 +4521,10 @@
         boxOpen.appendChild(nota);
       }
 
-      // en modo prueba no se marca como abierta: la casilla sigue intacta
-      if (!MODO_TEST) {
-        var abiertas = loadAbiertas();
-        if (abiertas.indexOf(n) === -1) {
-          abiertas.push(n);
-          saveAbiertas(abiertas);
-        }
+      var abiertas = loadAbiertas();
+      if (abiertas.indexOf(n) === -1) {
+        abiertas.push(n);
+        saveAbiertas(abiertas);
       }
       renderBoxes();
       syncPanel();
@@ -4543,7 +4539,7 @@
       boxesEl.innerHTML = '';
       fechas.forEach(function (fecha, i) {
         var n = i + 1;
-        var lista = MODO_TEST || hoy >= fecha;
+        var lista = hoy >= fecha;
         var vista = abiertas.indexOf(n) !== -1;
         if (lista && !vista) disponibles++;
         if (!lista && !siguiente) siguiente = { n: n, fecha: fecha };
@@ -4576,10 +4572,7 @@
         boxesEl.appendChild(li);
       });
 
-      if (MODO_TEST) {
-        boxesNote.textContent = 'Modo prueba: todas abiertas, nada se guarda. ' +
-          'En la web normal la 01 se abre el ' + diaCorto(fechas[0]) + '.';
-      } else if (disponibles > 0) {
+      if (disponibles > 0) {
         boxesNote.textContent = disponibles === 1
           ? 'Tienes 1 casilla esperándote 🐧'
           : 'Tienes ' + disponibles + ' casillas esperándote 🐧';

@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/juego", "destination": "/juego.html" },
     { "source": "/entrenar", "destination": "/entrenar.html" },
+    { "source": "/demo", "destination": "/demo.html" },
     { "source": "/(.*)", "destination": "/" }
   ]
 }

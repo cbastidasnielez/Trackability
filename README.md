@@ -18,8 +18,10 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 - Botón **"Presiona para desbloquear sorpresas 🐧"** con la misión provisional
 - Botón **"Quiero entrenar 🐧"**, que lleva a `/entrenar`: su plan semanal
   con checklist (ver más abajo)
-- **La carta**: el seguimiento del sobre que viene de Orlando, con sus
-  etapas y los enlaces a USPS y Correos (ver más abajo)
+- **La carta**: el seguimiento del sobre que viene de Orlando, con los
+  enlaces a USPS y Correos (ver más abajo)
+- **`/demo`** (también `/?test`): la demo del producto comercial, un juego
+  con la cara de tu pareja y premios por puntos. No forma parte del regalo.
 - Lista permanente con las fechas que ya apuntó (se pueden quitar con la ×)
 - Las fechas viven en el navegador (`localStorage`) y cualquier cambio se
   envía por email vía Formspree
@@ -94,13 +96,6 @@ var SORPRESAS = [
 Si una casilla llega a su día con el texto vacío, se abre igual y dice que la
 sorpresa está en camino.
 
-### Revisarlas antes de tiempo
-
-Añade `?test` a la URL (`https://project-undiaalavez.vercel.app/?test`) y todas las
-casillas quedan pulsables, sin esperar a su fecha. Es solo para comprobarlas:
-sale un aviso de que estás en modo prueba y **no se guarda nada**, así que las
-casillas siguen intactas. Por la URL normal la regla se cumple sin excepción.
-
 ## El juego de la casilla 03
 
 Un *flappy* en `<canvas>`, sin librerías: la cara de ella vuela entre columnas
@@ -120,8 +115,6 @@ juego: { objetivo: 10, sprite: '/cara-juego.png', respaldo: '/mariapnel.jpeg' }
 - **Imprimir el vale** copia solo el vale a `#printArea` y llama a
   `window.print()`. La hoja de estilos de impresión apaga el resto de la
   página y el degradado de fondo, para que salga en claro y sin gastar tinta.
-- En modo prueba (`?test`) se expone `window.__juego` con `estado()`,
-  `puntuar(n)`, `forzarVictoria()` y `volar()`, para revisarlo sin jugar.
 
 ## Página de visitantes
 
@@ -295,10 +288,40 @@ el botón **"Quiero entrenar 🐧"** de la portada.
 El plan vive en `PLAN` dentro de `entrenar.html`. Para cambiar un ejercicio
 basta con editar ahí el texto; no hay nada más que tocar.
 
+## La demo del producto (`/demo`)
+
+`demo.html` es una página aparte que convierte el juego en un producto para
+vender: *Gánatelo*, un juego con la cara de tu pareja en el que cada
+puntuación desbloquea un premio elegido por quien lo regala. 4,99 USD, pago
+único. El concepto de negocio, los guiones de vídeo, el precio y cómo cobrar
+están en `CONCEPTO.md`.
+
+`/?test` redirige aquí. El antiguo modo prueba (todas las casillas abiertas
+sin guardar nada) desapareció del código: ya no hace falta, porque todas las
+casillas llevan abiertas desde agosto.
+
+Qué hace la página:
+
+- **Personalizador en vivo**: se sube una foto y se recorta en redondo en el
+  propio navegador (no se envía a ningún sitio); se escriben tres premios y un
+  mensaje final. El juego se vuelve a montar con la cara nueva.
+- **Premios por puntos**: a 5, 10 y 15 puntos (`UMBRALES`). Cada uno se
+  desbloquea con animación y aviso; con los tres, aparece el mensaje final.
+  Para eso `public/flappy.js` ganó el callback `alPunto(puntos)`, que también
+  dispara `window.__juego.puntuar(n)`.
+- **Landing**: cómo funciona, qué recibe ella, ocasiones, precio y FAQ.
+- **Pedido**: formulario a Formspree (mismo `FORMSPREE_ID`, asunto "Pedido
+  Gánatelo") con email, nombre de ella, ocasión, y los premios y el mensaje
+  ya rellenos desde la demo. No hay pasarela de pago todavía: la página lo
+  dice y el enlace de pago se manda a mano por email.
+
+La cara por defecto es `cara-juego.png`. Antes de compartir la demo fuera
+del círculo cercano, hace falta el permiso de Mariapnel 🐧 o cambiarla.
+
 ## Analíticas
 
 Vercel Web Analytics, vía `@vercel/analytics`. La llamada a `inject()` vive en
-`src/analytics.js` y las tres páginas la cargan como módulo aparte, para no tocar
+`src/analytics.js` y las cuatro páginas la cargan como módulo aparte, para no tocar
 sus scripts clásicos. En local no envía nada.
 
 Hay que activarlo una vez en el panel: **proyecto → Analytics → Enable**. Sin
