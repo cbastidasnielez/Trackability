@@ -260,57 +260,16 @@
       word-break: break-all;
     }
 
-    .track-copy {
+    .entregada {
+      display: inline-block;
       margin-top: 9px;
-      appearance: none;
-      background: transparent;
-      color: var(--dim);
-      border: 1px solid rgba(245, 242, 234, 0.25);
+      padding: 5px 12px;
+      border: 1px solid rgba(227, 192, 122, 0.6);
       border-radius: 999px;
-      padding: 6px 14px;
-      font-family: inherit;
       font-size: 9px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      cursor: pointer;
-      transition: color 0.3s ease, border-color 0.3s ease;
-    }
-
-    .track-copy:hover { color: var(--ink); border-color: rgba(245, 242, 234, 0.5); }
-    .track-copy.ok { color: var(--gold); border-color: rgba(227, 192, 122, 0.6); }
-
-    /* ---------- enlaces oficiales ---------- */
-    .carta-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-    }
-
-    .carta-links a {
-      flex: 1 1 auto;
-      text-align: center;
-      padding: 11px 12px;
-      border: 1px solid rgba(158, 201, 230, 0.35);
-      border-radius: 999px;
-      font-size: 9.5px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      text-decoration: none;
-      color: var(--hielo);
-      white-space: nowrap;
-      transition: background 0.3s ease;
-    }
-
-    .carta-links a:hover { background: rgba(158, 201, 230, 0.1); }
-    .carta-links a.principal { border-color: rgba(227, 192, 122, 0.55); color: var(--gold); }
-    .carta-links a.principal:hover { background: rgba(227, 192, 122, 0.1); }
-
-    .carta-estado {
-      margin-top: 16px;
-      font-size: 12px;
-      line-height: 1.7;
-      color: var(--hielo);
+      color: var(--gold);
     }
 
     .carta-firma {
@@ -2842,26 +2801,23 @@
     </section>
 
     <section class="carta" id="carta">
-      <span class="carta-tag">Correo aéreo &middot; En camino</span>
-      <h2 class="carta-titulo">Hay una carta cruzando el Atlántico</h2>
-      <p class="carta-lead">La escribiste tú, a mano, en Orlando. La espero yo en Barcelona 🐧</p>
+      <span class="carta-tag">Correo aéreo &middot; Entregada</span>
+      <h2 class="carta-titulo">La carta llegó a Barcelona</h2>
+      <p class="carta-lead">La escribiste tú, a mano, en Orlando, y cruzó el Atlántico hasta aquí.</p>
 
       <div class="carta-dias">
-        <b id="cartaDias">–</b>
-        <span id="cartaDiasPie">días</span>
+        <b>12</b>
+        <span>días siguiéndola &middot; del 12 al 24 sep</span>
       </div>
 
       <svg class="carta-ruta" viewBox="0 0 400 132" aria-hidden="true">
-        <path id="rutaCarta" d="M42 96 Q200 10 358 96" fill="none"
-              stroke="rgba(158,201,230,0.35)" stroke-width="1.5" stroke-dasharray="4 7" />
+        <path d="M42 96 Q200 10 358 96" fill="none"
+              stroke="rgba(227,192,122,0.55)" stroke-width="1.5" />
         <circle cx="42" cy="96" r="4" fill="var(--hielo)" />
         <circle cx="358" cy="96" r="4" fill="var(--gold)" />
         <text class="route-code" x="42" y="120" text-anchor="middle">MCO</text>
         <text class="route-code" x="358" y="120" text-anchor="middle">BCN</text>
-        <g>
-          <animateMotion dur="11s" repeatCount="indefinite" rotate="0" calcMode="linear">
-            <mpath href="#rutaCarta" />
-          </animateMotion>
+        <g transform="translate(358 76)">
           <rect x="-9" y="-6" width="18" height="12" rx="1.5" fill="var(--ink)" />
           <path d="M-9 -6 L0 1.5 L9 -6" fill="none" stroke="#0b0b0b" stroke-width="1.2" />
         </g>
@@ -2875,18 +2831,12 @@
         </div>
         <div class="track-num">
           <span class="track-label">Número de seguimiento</span>
-          <code id="trackNum">LH276353799US</code>
-          <button class="track-copy" id="trackCopy" type="button">Copiar</button>
+          <code>LH276353799US</code>
+          <span class="entregada">Entregada &middot; 24 sep</span>
         </div>
       </div>
 
-      <div class="carta-links">
-        <a class="principal" id="linkUsps" href="https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=LH276353799US" target="_blank" rel="noopener">Seguir en USPS</a>
-        <a id="linkCorreos" href="https://www.correos.es/es/es/herramientas/localizador/envios/detalle?tracking-number=LH276353799US" target="_blank" rel="noopener">Correos</a>
-      </div>
-
-      <p class="carta-estado" id="cartaEstado" hidden></p>
-      <p class="carta-firma">Cuando llegue te aviso. Y la leo entera antes de decirte nada 🐧</p>
+      <p class="carta-firma">Llegó. Ya está en mis manos 🐧</p>
     </section>
 
     <section class="agenda" id="agenda" hidden>
@@ -4820,110 +4770,6 @@
     } catch (e) {}
 
 
-    /* ---------- la carta que viene de Orlando ----------
-       El detalle real vive en USPS y en Correos, que es lo que ven los dos
-       igual. Si algún día hay credenciales de USPS en Vercel
-       (USPS_CLIENT_ID y USPS_CLIENT_SECRET), /api/carta devuelve la última
-       novedad y la fecha de salida, y se pintan aquí. Si no, la tarjeta se
-       queda con los enlaces. */
-    (function () {
-      var seccion = document.getElementById('carta');
-      if (!seccion) return;
-
-      var CARTA_DESDE = '2026-09-12';   // primer día que la seguimos
-
-      var MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun',
-                   'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-
-      var diasEl = document.getElementById('cartaDias');
-      var diasPieEl = document.getElementById('cartaDiasPie');
-      var estadoEl = document.getElementById('cartaEstado');
-      var copiaBtn = document.getElementById('trackCopy');
-      var numEl = document.getElementById('trackNum');
-
-      function aFecha(iso) {
-        if (!iso) return null;
-        var t = String(iso).slice(0, 10).split('-');
-        if (t.length !== 3) return null;
-        var d = new Date(Number(t[0]), Number(t[1]) - 1, Number(t[2]));
-        return isNaN(d.getTime()) ? null : d;
-      }
-
-      function corta(iso) {
-        var d = aFecha(iso);
-        return d ? d.getDate() + ' ' + MESES[d.getMonth()] : '';
-      }
-
-      function diasDesde(iso) {
-        var d = aFecha(iso);
-        if (!d) return null;
-        var hoy = new Date();
-        hoy = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-        return Math.max(0, Math.round((hoy - d) / 86400000));
-      }
-
-      // con fecha de salida de USPS cuenta el viaje; si no, los días que
-      // llevamos detrás de ella
-      function pintarDias(salida) {
-        var origen = salida || CARTA_DESDE;
-        var n = diasDesde(origen);
-        if (n === null) return;
-        diasEl.textContent = n;
-        diasPieEl.textContent = (n === 1 ? 'día ' : 'días ') +
-          (salida ? 'en camino' : 'siguiéndola') +
-          ' · desde el ' + corta(origen);
-      }
-
-      // copiar el número al portapapeles
-      copiaBtn.addEventListener('click', function () {
-        var texto = numEl.textContent.trim();
-        function hecho() {
-          copiaBtn.textContent = 'Copiado';
-          copiaBtn.classList.add('ok');
-          setTimeout(function () {
-            copiaBtn.textContent = 'Copiar';
-            copiaBtn.classList.remove('ok');
-          }, 1800);
-        }
-        function seleccionar() {
-          try {
-            var r = document.createRange();
-            r.selectNodeContents(numEl);
-            var sel = window.getSelection();
-            sel.removeAllRanges();
-            sel.addRange(r);
-            hecho();
-          } catch (e) {}
-        }
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(texto).then(hecho, seleccionar);
-        } else {
-          seleccionar();
-        }
-      });
-
-      pintarDias(null);
-
-      // si hay datos de verdad, mandan ellos
-      if (window.fetch) {
-        fetch('/api/carta', { cache: 'no-store' }).then(function (r) {
-          var tipo = r.headers.get('content-type') || '';
-          if (!r.ok || tipo.indexOf('json') === -1) throw new Error('sin datos');
-          return r.json();
-        }).then(function (d) {
-          if (!d || !d.activo) return;
-
-          if (d.salida) pintarDias(d.salida);
-
-          if (d.ultimo && d.ultimo.texto) {
-            estadoEl.hidden = false;
-            estadoEl.textContent = d.ultimo.texto +
-              (d.ultimo.fecha ? ' · ' + corta(d.ultimo.fecha) : '') +
-              (d.ultimo.lugar ? ' · ' + d.ultimo.lugar : '');
-          }
-        }).catch(function () { /* sin API: se queda la tarjeta con los enlaces */ });
-      }
-    })();
   </script>
 </body>
 </html>

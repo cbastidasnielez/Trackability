@@ -18,8 +18,8 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 - Botón **"Presiona para desbloquear sorpresas 🐧"** con la misión provisional
 - Botón **"Quiero entrenar 🐧"**, que lleva a `/entrenar`: su plan semanal
   con checklist (ver más abajo)
-- **La carta**: el seguimiento del sobre que viene de Orlando, con los
-  enlaces a USPS y Correos (ver más abajo)
+- **La carta**: el sobre que mandó desde Orlando, ya entregado en Barcelona
+  (ver más abajo)
 - **`/demo`** (también `/?test`): la demo del producto comercial, un juego
   con la cara de tu pareja y premios por puntos. No forma parte del regalo.
 - Lista permanente con las fechas que ya apuntó (se pueden quitar con la ×)
@@ -232,38 +232,20 @@ Es la idea que sostiene toda la web, así que va escrita, no solo insinuada.
 
 ## La carta
 
-Mariapnel 🐧 mandó una carta por USPS desde Orlando. La sección **"Hay una
-carta cruzando el Atlántico"** (en la portada, `<section class="carta">`) es
-para seguirla los dos:
+Mariapnel 🐧 mandó una carta por USPS desde Orlando. La seguimos desde el 12
+de septiembre de 2026 y llegó a Barcelona el 24. La sección **"La carta llegó
+a Barcelona"** (en la portada, `<section class="carta">`) la deja como
+recuerdo:
 
-- La ruta al revés que la del vuelo: aquí el sobre va **MCO → BCN**.
-- El número de seguimiento, `LH276353799US`, con botón de copiar.
-- Enlaces al rastreo oficial: **USPS** y **Correos**, que es quien la reparte
-  al llegar a España.
-- El contador de días sale de `CARTA_DESDE` en `index.html`, ahora mismo el
-  12 de septiembre de 2026, el día que empezamos a seguirla. Si se sabe la
-  fecha real del envío, se cambia ahí.
+- La ruta al revés que la del vuelo, **MCO → BCN**, ya recorrida: línea
+  continua y el sobre quieto sobre Barcelona.
+- El sello y el número de seguimiento, `LH276353799US`, con la marca
+  "Entregada · 24 sep".
+- Los 12 días que estuvimos siguiéndola.
 
-No hay estados marcados a mano: lo que uno marque en su navegador no lo ve
-el otro, así que la única verdad es la de USPS, y a esa se va por el enlace.
-
-### Estado real, automático (opcional)
-
-`api/carta.mjs` es una función de Vercel que consulta la API de USPS y
-devuelve la última novedad y la fecha del primer escaneo. **Está apagada
-mientras no existan credenciales.** Para encenderla:
-
-1. Sacar un `client id` y un `client secret` gratis en `developer.usps.com`.
-2. En Vercel: **proyecto → Settings → Environment Variables** → añadir
-   `USPS_CLIENT_ID` y `USPS_CLIENT_SECRET` (opcionalmente
-   `USPS_TRACKING_NUMBER` si algún día hay otro envío).
-3. Redesplegar.
-
-Con eso la tarjeta muestra la última novedad de USPS con su fecha y sitio, y
-el contador pasa a contar los días de viaje de verdad. Eso sí lo ven los dos
-igual, porque viene del servidor. Sin credenciales —o si USPS falla, o
-responde raro— la función contesta `{ activo: false }` y la tarjeta se queda
-con sus enlaces. Nunca se rompe.
+Es estática: ya no hay enlaces de rastreo, botón de copiar ni consulta a la
+API de USPS. La función `api/carta.mjs` se borró; está en el historial de git
+por si algún día llega otra carta.
 
 ## Quiero entrenar
 
