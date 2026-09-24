@@ -233,15 +233,15 @@ Es la idea que sostiene toda la web, así que va escrita, no solo insinuada.
 ## La carta
 
 Mariapnel 🐧 mandó una carta por USPS desde Orlando. La seguimos desde el 12
-de septiembre de 2026 y llegó a Barcelona el 24. La sección **"La carta llegó
+de septiembre de 2026 y llegó a Barcelona el miércoles 23. La sección **"La carta llegó
 a Barcelona"** (en la portada, `<section class="carta">`) la deja como
 recuerdo:
 
 - La ruta al revés que la del vuelo, **MCO → BCN**, ya recorrida: línea
   continua y el sobre quieto sobre Barcelona.
 - El sello y el número de seguimiento, `LH276353799US`, con la marca
-  "Entregada · 24 sep".
-- Los 12 días que estuvimos siguiéndola.
+  "Entregada · 23 sep".
+- Los 11 días que estuvimos siguiéndola.
 
 Es estática: ya no hay enlaces de rastreo, botón de copiar ni consulta a la
 API de USPS. La función `api/carta.mjs` se borró; está en el historial de git
