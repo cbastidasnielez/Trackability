@@ -246,6 +246,8 @@
 
     .ej-nombre { font-size: 14px; line-height: 1.4; transition: color 0.2s ease; }
 
+    .enlace.ej-enlace { margin-top: 6px; }
+
     .ej-det { margin-top: 3px; font-size: 12px; color: var(--dim); line-height: 1.5; }
 
     .ej.ok .ej-nombre { color: var(--dim); text-decoration: line-through; text-decoration-color: rgba(227,192,122,0.5); }
@@ -350,8 +352,12 @@
           { n: 'Remo con mancuerna', d: '3 × 12 por brazo' },
           { n: 'Curl de bíceps o martillo', d: '3 × 12' }
         ] }] },
-      { dia: 'Martes', corto: 'M', tipo: 'Pilates', foco: 'Sesión completa',
-        bloques: [{ ejercicios: [ { n: 'Pilates', d: 'La clase de siempre' } ] }] },
+      { dia: 'Martes', corto: 'M', tipo: 'Pilates + abdominales', foco: 'Sesión completa y extra de abdominales',
+        bloques: [{ ejercicios: [
+          { n: 'Pilates', d: 'La clase de siempre' },
+          { n: 'Extra de abdominales', d: 'Get Abs in 2 Weeks · Abs Workout Challenge, en vídeo',
+            enlace: { url: 'https://www.youtube.com/watch?v=2pLT-olgUJs', texto: 'Ver la rutina en YouTube' } }
+        ] }] },
       { dia: 'Miércoles', corto: 'X', tipo: 'Gym · Empuje', foco: 'Cuádriceps + hombro y tríceps',
         bloques: [{ ejercicios: [
           { n: 'Hack squat', d: '4 × 12 (si no hay máquina, sentadilla con barra)' },
@@ -362,9 +368,11 @@
           { n: 'Elevaciones laterales', d: '3 × 12' },
           { n: 'Tríceps en polea', d: '3 × 15' }
         ] }] },
-      { dia: 'Jueves', corto: 'J', tipo: 'Descanso activo', foco: 'Caminar, estirar, moverse sin prisa',
-        descanso: true,
-        bloques: [{ ejercicios: [ { n: 'Descanso activo', d: 'Un paseo o estiramientos suaves' } ] }] },
+      { dia: 'Jueves', corto: 'J', tipo: 'Hyrox', foco: 'Segunda sesión Hyrox de la semana',
+        hyrox: true,
+        hyroxNota: 'Ya hay volumen para dos sesiones de Hyrox por semana: jueves y sábado.',
+        // id propio: lo que se marcó como descanso activo no cuenta como Hyrox
+        bloques: [{ ejercicios: [ { id: 'hyrox-jueves', n: 'Sesión Hyrox entre semana', d: 'Según la guía' } ] }] },
       { dia: 'Viernes', corto: 'V', tipo: 'Gym · Glúteo + tren superior + core', foco: 'Tres bloques',
         bloques: [
           { titulo: 'Bloque 1 · Glúteo pesado', ejercicios: [
@@ -386,6 +394,7 @@
         ] },
       { dia: 'Sábado', corto: 'S', tipo: 'Hyrox', foco: 'Guía "Hyrox Weekends" · 4 fines de semana',
         hyrox: true,
+        hyroxNota: 'Sigue la guía "Hyrox Weekends": cuatro fines de semana, uno por sábado.',
         bloques: [{ ejercicios: [ { n: 'Sesión Hyrox del fin de semana', d: 'Según la guía' } ] }] },
       { dia: 'Domingo', corto: 'D', tipo: 'Descanso', foco: 'Sin culpa',
         descanso: true,
@@ -424,7 +433,7 @@
     function idsDe(d) {
       var ids = [];
       PLAN[d].bloques.forEach(function (b, bi) {
-        b.ejercicios.forEach(function (e, ei) { ids.push(bi + '-' + ei); });
+        b.ejercicios.forEach(function (e, ei) { ids.push(e.id || bi + '-' + ei); });
       });
       return ids;
     }
@@ -503,7 +512,7 @@
         }
         var ul = document.createElement('ul'); ul.className = 'ejercicios';
         b.ejercicios.forEach(function (e, ei) {
-          var id = bi + '-' + ei;
+          var id = e.id || bi + '-' + ei;
           var li = document.createElement('li');
           var lab = document.createElement('label');
           lab.className = 'ej' + (hechos.indexOf(id) !== -1 ? ' ok' : '');
@@ -515,6 +524,12 @@
           var n = document.createElement('div'); n.className = 'ej-nombre'; n.textContent = e.n;
           txt.appendChild(n);
           if (e.d) { var d = document.createElement('div'); d.className = 'ej-det'; d.textContent = e.d; txt.appendChild(d); }
+          if (e.enlace) {
+            var ea = document.createElement('a'); ea.className = 'enlace ej-enlace'; ea.href = e.enlace.url;
+            ea.target = '_blank'; ea.rel = 'noopener noreferrer'; ea.textContent = e.enlace.texto;
+            ea.addEventListener('click', function (ev) { ev.stopPropagation(); });
+            txt.appendChild(ea);
+          }
           lab.appendChild(inp); lab.appendChild(caja); lab.appendChild(txt);
           inp.addEventListener('change', function () { marcar(activo, id, inp.checked); });
           li.appendChild(lab); ul.appendChild(li);
@@ -524,7 +539,7 @@
 
       if (p.hyrox) {
         var m = document.createElement('div'); m.className = 'descanso-msg';
-        m.textContent = 'Sigue la guía "Hyrox Weekends": cuatro fines de semana, uno por sábado.';
+        m.textContent = p.hyroxNota;
         if (HYROX_URL) {
           var a = document.createElement('a'); a.className = 'enlace'; a.href = HYROX_URL;
           a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = 'Abrir la guía';

@@ -255,17 +255,22 @@ el botón **"Quiero entrenar 🐧"** de la portada.
 
 - Siete pestañas, una por día (L a D), con el día de hoy marcado y un anillo
   de progreso en cada una. Al entrar se abre el día actual.
-- Cada día muestra su rutina como checklist: lunes (jalón), martes (pilates),
-  miércoles (empuje), jueves (descanso activo), viernes (glúteo + tren
-  superior + core, en tres bloques), sábado (Hyrox) y domingo (descanso).
+- Cada día muestra su rutina como checklist: lunes (jalón), martes (pilates
+  más un extra de abdominales con su vídeo de YouTube), miércoles (empuje),
+  jueves (Hyrox), viernes (glúteo + tren superior + core, en tres bloques),
+  sábado (Hyrox) y domingo (descanso). Desde octubre de 2026 hay dos
+  sesiones de Hyrox por semana: el jueves sustituye al descanso activo.
 - Botones **"Marcar todo el día"** y **"Reiniciar día"**, y un contador
   semanal (días hechos / 7).
 - Lo marcado se guarda en el navegador por semana (`entreno-<lunes>` en
   `localStorage`). Cada lunes la lista empieza limpia; las semanas anteriores
   quedan guardadas por si algún día se quieren consultar.
-- El sábado menciona la guía *Hyrox Weekends*. El enlace va en `HYROX_URL`
-  dentro de `entrenar.html`: ahora está vacío, y mientras lo esté el sábado
-  lo nombra sin enlazar.
+- Jueves y sábado llevan una nota de Hyrox, y el sábado menciona la guía
+  *Hyrox Weekends*. El enlace va en `HYROX_URL` dentro de `entrenar.html`:
+  ahora está vacío, y mientras lo esté la guía se nombra sin enlazar.
+- Un ejercicio puede llevar `enlace: { url, texto }` (como el vídeo del
+  martes) y un `id` propio. El jueves usa `hyrox-jueves`, para que lo que
+  se marcara como descanso activo no cuente como sesión de Hyrox hecha.
 
 El plan vive en `PLAN` dentro de `entrenar.html`. Para cambiar un ejercicio
 basta con editar ahí el texto; no hay nada más que tocar.
