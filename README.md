@@ -268,8 +268,12 @@ el botón **"Quiero entrenar 🐧"** de la portada.
 - Jueves y sábado llevan una nota de Hyrox, y el sábado menciona la guía
   *Hyrox Weekends*. El enlace va en `HYROX_URL` dentro de `entrenar.html`:
   ahora está vacío, y mientras lo esté la guía se nombra sin enlazar.
-- Un ejercicio puede llevar `enlace: { url, texto }` (como el vídeo del
-  martes) y un `id` propio. El jueves usa `hyrox-jueves`, para que lo que
+- El extra de abdominales del martes es la rutina *Get Abs in 2 Weeks* de
+  Chloe Ting: 17 ejercicios de 30 s con 10 s de descanso cada dos, unos 10
+  minutos. Se ve entera en un desplegable bajo el enlace al vídeo. Es una
+  sola casilla: la rutina se lee, no se marca ejercicio a ejercicio.
+- Un ejercicio puede llevar `enlace: { url, texto }`, `rutina: [...]` (como
+  el martes) y un `id` propio. El jueves usa `hyrox-jueves`, para que lo que
   se marcara como descanso activo no cuente como sesión de Hyrox hecha.
 
 El plan vive en `PLAN` dentro de `entrenar.html`. Para cambiar un ejercicio

@@ -248,6 +248,43 @@
 
     .enlace.ej-enlace { margin-top: 6px; }
 
+    /* ---------- rutina en vídeo, desplegable ---------- */
+    .rutina { margin-top: 12px; cursor: default; }
+
+    .rutina summary {
+      cursor: pointer;
+      list-style: none;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--hielo);
+    }
+
+    .rutina summary::-webkit-details-marker { display: none; }
+    .rutina summary::before { content: "+ "; color: var(--gold); }
+    .rutina[open] summary::before { content: "– "; }
+
+    .rut-lista { list-style: none; margin-top: 10px; }
+
+    .rut-fila {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 6px 0;
+      border-top: 1px solid rgba(245, 242, 234, 0.06);
+      font-size: 12.5px;
+    }
+
+    .rut-n { flex: 0 0 18px; text-align: right; font-size: 11px; color: var(--gold); }
+    .rut-txt { flex: 1 1 auto; min-width: 0; }
+    .rut-nombre { display: block; color: var(--ink); line-height: 1.35; }
+    .rut-es { display: block; font-size: 11.5px; color: var(--dim); line-height: 1.4; }
+    .rut-t { flex: 0 0 auto; font-size: 11px; color: var(--dim); }
+
+    .rut-descanso { padding: 3px 0; }
+    .rut-descanso .rut-txt, .rut-descanso .rut-t { font-size: 10.5px; color: var(--faint); letter-spacing: 0.08em; }
+    .rut-descanso .rut-n { color: var(--faint); }
+
     .ej-det { margin-top: 3px; font-size: 12px; color: var(--dim); line-height: 1.5; }
 
     .ej.ok .ej-nombre { color: var(--dim); text-decoration: line-through; text-decoration-color: rgba(227,192,122,0.5); }
@@ -355,8 +392,36 @@
       { dia: 'Martes', corto: 'M', tipo: 'Pilates + abdominales', foco: 'Sesión completa y extra de abdominales',
         bloques: [{ ejercicios: [
           { n: 'Pilates', d: 'La clase de siempre' },
-          { n: 'Extra de abdominales', d: 'Get Abs in 2 Weeks · Abs Workout Challenge, en vídeo',
-            enlace: { url: 'https://www.youtube.com/watch?v=2pLT-olgUJs', texto: 'Ver la rutina en YouTube' } }
+          { n: 'Extra de abdominales',
+            d: 'Chloe Ting · Get Abs in 2 Weeks. 30 s por ejercicio y 10 s de descanso cada dos: unos 10 minutos.',
+            enlace: { url: 'https://www.youtube.com/watch?v=2pLT-olgUJs', texto: 'Ver la rutina en YouTube' },
+            rutina: [
+              { n: 'Leg Raise Clap', es: 'elevación de piernas + palmada', t: 30 },
+              { n: 'Reverse Crunch', es: 'abdominal invertido', t: 30 },
+              { descanso: 10 },
+              { n: 'Spider-Man Plank', es: 'plancha Spider-Man', t: 30 },
+              { n: 'Cross-Body Mountain Climber', es: 'escalador cruzado', t: 30 },
+              { descanso: 10 },
+              { n: 'Russian Twist', es: 'giros rusos', t: 30 },
+              { n: 'In & Out', es: 'abrir y cerrar piernas sentada', t: 30 },
+              { descanso: 10 },
+              { n: 'Plank with Hip Dips', es: 'plancha con giros de cadera', t: 30 },
+              { n: 'Plank Jacks', es: 'plancha abriendo y cerrando piernas', t: 30 },
+              { descanso: 10 },
+              { n: '100s · The Hundreds', es: 'abdominales 100', t: 30 },
+              { n: 'Crunches', es: 'abdominales clásicos', t: 30 },
+              { descanso: 10 },
+              { n: 'Up & Down Plank', es: 'plancha subiendo y bajando', t: 30 },
+              { n: 'Plank', es: 'plancha estática', t: 30 },
+              { descanso: 10 },
+              { n: 'Heel Touches', es: 'tocar talones', t: 30 },
+              { n: 'Bicycle Crunches', es: 'bicicleta', t: 30 },
+              { descanso: 10 },
+              { n: 'Reverse Crunch + Leg Extension', es: 'abdominal invertido + extensión de piernas', t: 30 },
+              { n: 'Straight Leg Crunch', es: 'crunch con piernas elevadas', t: 30 },
+              { descanso: 10 },
+              { n: 'Up & Down Plank', es: 'plancha subiendo y bajando', t: 30 }
+            ] }
         ] }] },
       { dia: 'Miércoles', corto: 'X', tipo: 'Gym · Empuje', foco: 'Cuádriceps + hombro y tríceps',
         bloques: [{ ejercicios: [
@@ -530,6 +595,7 @@
             ea.addEventListener('click', function (ev) { ev.stopPropagation(); });
             txt.appendChild(ea);
           }
+          if (e.rutina) txt.appendChild(pintarRutina(e.rutina));
           lab.appendChild(inp); lab.appendChild(caja); lab.appendChild(txt);
           inp.addEventListener('change', function () { marcar(activo, id, inp.checked); });
           li.appendChild(lab); ul.appendChild(li);
@@ -562,6 +628,48 @@
       var msg = document.createElement('div'); msg.className = 'hecho-msg';
       msg.textContent = pr.pct === 100 ? (p.descanso ? 'Descansado. Eso también cuenta 🐧' : 'Día hecho. Cuerpa en marcha 🐧') : '';
       diaEl.appendChild(msg);
+    }
+
+    // una rutina en vídeo: se lee, no se marca ejercicio a ejercicio
+    function pintarRutina(lista) {
+      var ejercicios = lista.filter(function (r) { return !r.descanso; });
+      var segundos = lista.reduce(function (acc, r) { return acc + (r.descanso || r.t || 0); }, 0);
+      var min = Math.floor(segundos / 60), seg = segundos % 60;
+
+      var det = document.createElement('details'); det.className = 'rutina';
+      var sum = document.createElement('summary');
+      sum.textContent = 'La rutina exacta · ' + ejercicios.length + ' ejercicios · ' +
+                        min + ' min' + (seg ? ' ' + seg + ' s' : '');
+      det.appendChild(sum);
+
+      var ol = document.createElement('ol'); ol.className = 'rut-lista';
+      var num = 0;
+      lista.forEach(function (r) {
+        var li = document.createElement('li');
+        var a = document.createElement('span'); a.className = 'rut-n';
+        var b = document.createElement('span'); b.className = 'rut-txt';
+        var c = document.createElement('span'); c.className = 'rut-t';
+        if (r.descanso) {
+          li.className = 'rut-fila rut-descanso';
+          a.textContent = '·';
+          b.textContent = 'Descanso';
+          c.textContent = r.descanso + ' s';
+        } else {
+          li.className = 'rut-fila';
+          a.textContent = ++num;
+          var n = document.createElement('span'); n.className = 'rut-nombre'; n.textContent = r.n;
+          var es = document.createElement('span'); es.className = 'rut-es'; es.textContent = r.es;
+          b.appendChild(n); b.appendChild(es);
+          c.textContent = r.t + ' s';
+        }
+        li.appendChild(a); li.appendChild(b); li.appendChild(c);
+        ol.appendChild(li);
+      });
+      det.appendChild(ol);
+
+      // abrir o cerrar la lista no marca el ejercicio
+      det.addEventListener('click', function (ev) { ev.stopPropagation(); });
+      return det;
     }
 
     function marcar(d, id, on) {
