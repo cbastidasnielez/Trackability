@@ -287,6 +287,22 @@
 
     .ej-det { margin-top: 3px; font-size: 12px; color: var(--dim); line-height: 1.5; }
 
+
+    .peso { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .peso input {
+      width: 76px; padding: 7px 9px; border-radius: 8px;
+      border: 1px solid rgba(245, 242, 234, 0.25); background: transparent;
+      color: var(--ink); font-family: inherit; font-size: 13px;
+    }
+    .peso input:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+    .peso button {
+      appearance: none; border-radius: 999px; padding: 7px 12px; cursor: pointer;
+      border: 1px solid var(--gold); background: transparent; color: var(--gold);
+      font-family: inherit; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .peso-ult { font-size: 11.5px; color: var(--dim); }
+    .peso-ult.err { color: #e8a0a0; }
+
     .ej.ok .ej-nombre { color: var(--dim); text-decoration: line-through; text-decoration-color: rgba(227,192,122,0.5); }
 
     .descanso-msg {
@@ -509,6 +525,90 @@
       return { n: n, total: ids.length, pct: ids.length ? Math.round(n / ids.length * 100) : 0 };
     }
 
+    // ---------- pesos (Supabase) ----------
+    // Tabla `pesos_entreno` (ver supabase-pesos.sql). Pega aquí la clave pública
+    // (anon / publishable) del proyecto. Sin clave, los pesos se guardan solo
+    // en este navegador.
+    var SUPABASE_URL = 'https://vjnxxxeivtptkvczwexj.supabase.co';
+    var SUPABASE_ANON_KEY = 'sb_publishable_dhlBvkmZaWZC29szeVxMeQ_abPtQwXg';
+    var PESOS_LOCAL = 'entreno-pesos';
+
+    var pesos = {};   // 'Día|Ejercicio' -> { kg, fecha }
+
+    function claveEj(d, nombre) { return PLAN[d].dia + '|' + nombre; }
+    function usaNube() { return !!(SUPABASE_URL && SUPABASE_ANON_KEY); }
+    function cabeceras() {
+      return { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY, 'Content-Type': 'application/json' };
+    }
+
+    function pesosLocal() {
+      try { return JSON.parse(localStorage.getItem(PESOS_LOCAL)) || {}; } catch (e) { return {}; }
+    }
+
+    function cargarPesos() {
+      pesos = pesosLocal();
+      if (!usaNube()) { pintarDia(); return; }
+      fetch(SUPABASE_URL + '/rest/v1/pesos_entreno?select=dia,ejercicio,kg,created_at&order=created_at.desc&limit=1000',
+            { headers: cabeceras() })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (filas) {
+          var nube = {};
+          filas.forEach(function (f) {
+            var k = f.dia + '|' + f.ejercicio;
+            if (!nube[k]) nube[k] = { kg: Number(f.kg), fecha: f.created_at };
+          });
+          pesos = nube;
+          pintarDia();
+        })
+        .catch(function () { pintarDia(); });
+    }
+
+    function guardarPeso(d, nombre, kg) {
+      var k = claveEj(d, nombre), reg = { kg: kg, fecha: new Date().toISOString() };
+      var local = pesosLocal(); local[k] = reg;
+      try { localStorage.setItem(PESOS_LOCAL, JSON.stringify(local)); } catch (e) {}
+      pesos[k] = reg;
+      if (!usaNube()) return Promise.resolve();
+      return fetch(SUPABASE_URL + '/rest/v1/pesos_entreno', {
+        method: 'POST',
+        headers: Object.assign({ Prefer: 'return=minimal' }, cabeceras()),
+        body: JSON.stringify({ semana: claveSemana(), dia: PLAN[d].dia, ejercicio: nombre, kg: kg })
+      }).then(function (r) { if (!r.ok) throw new Error(r.status); });
+    }
+
+    function textoUltimo(reg) {
+      if (!reg) return 'Sin registro';
+      var f = new Date(reg.fecha);
+      return 'Último: ' + reg.kg + ' kg · ' + f.getDate() + ' ' + f.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '');
+    }
+
+    // fila para anotar el peso de un ejercicio de gimnasio
+    function pintarPeso(d, nombre) {
+      var fila = document.createElement('div'); fila.className = 'peso';
+      var inp = document.createElement('input');
+      inp.type = 'number'; inp.min = '0'; inp.step = '0.5'; inp.inputMode = 'decimal';
+      inp.placeholder = 'kg'; inp.setAttribute('aria-label', 'Peso en kg de ' + nombre);
+      var btn = document.createElement('button'); btn.type = 'button'; btn.textContent = 'Guardar';
+      var ult = document.createElement('span'); ult.className = 'peso-ult';
+      ult.textContent = textoUltimo(pesos[claveEj(d, nombre)]);
+      function enviar() {
+        var kg = parseFloat(String(inp.value).replace(',', '.'));
+        if (!(kg >= 0)) return;
+        ult.className = 'peso-ult'; ult.textContent = 'Guardando…';
+        guardarPeso(d, nombre, kg).then(function () {
+          ult.textContent = textoUltimo(pesos[claveEj(d, nombre)]); inp.value = '';
+        }).catch(function () {
+          ult.className = 'peso-ult err';
+          ult.textContent = 'Guardado solo en este móvil (sin conexión con la base de datos)';
+        });
+      }
+      btn.addEventListener('click', function (ev) { ev.preventDefault(); enviar(); });
+      inp.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); enviar(); } });
+      fila.addEventListener('click', function (ev) { ev.stopPropagation(); });
+      fila.appendChild(inp); fila.appendChild(btn); fila.appendChild(ult);
+      return fila;
+    }
+
     // ---------- pintar ----------
     var manual = document.getElementById('manual');
     var diasEl = document.getElementById('dias');
@@ -596,6 +696,7 @@
             txt.appendChild(ea);
           }
           if (e.rutina) txt.appendChild(pintarRutina(e.rutina));
+          if (/^Gym/.test(p.tipo)) txt.appendChild(pintarPeso(activo, e.n));
           lab.appendChild(inp); lab.appendChild(caja); lab.appendChild(txt);
           inp.addEventListener('change', function () { marcar(activo, id, inp.checked); });
           li.appendChild(lab); ul.appendChild(li);
@@ -683,6 +784,7 @@
 
     function pintar() { pintarSemana(); pintarDia(); }
     pintar();
+    cargarPesos();
   </script>
 </body>
 </html>
