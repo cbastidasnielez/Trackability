@@ -332,7 +332,7 @@
     }
     .hist-borrar:hover { border-color: #e8a0a0; color: #e8a0a0; }
 
-    .unidad { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin: 14px 0 -6px;
+    .unidad { display: flex; align-items: center; gap: 8px; margin: 14px 0 2px;
       font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); }
     .unidad button {
       appearance: none; cursor: pointer; padding: 6px 14px; border-radius: 999px;
@@ -418,8 +418,6 @@
       </div>
       <div class="dias" id="dias"></div>
     </section>
-
-    <div class="unidad" id="unidadSel" role="group" aria-label="Unidad de peso"></div>
 
     <section class="dia" id="dia"></section>
 
@@ -771,6 +769,8 @@
         det.appendChild(res); det.appendChild(grafica(regs));
       }
 
+      var err = document.createElement('div'); err.className = 'peso-ult err'; err.setAttribute('role', 'alert');
+      det.appendChild(err);
       var ul = document.createElement('ul'); ul.className = 'hist-lista';
       regs.slice().reverse().slice(0, 60).forEach(function (r, i, arr) {
         var li = document.createElement('li'); li.className = 'hist-fila';
@@ -791,7 +791,10 @@
         x.addEventListener('click', function () {
           if (!window.confirm('¿Borrar ' + valorDe(r) + ' ' + unidad + ' (' + fechaCorta(r.fecha) + ') de ' + nombre + '?')) return;
           borrarRegistro(r).then(function () { mostrarAviso('Registro borrado'); refrescar(); })
-            .catch(function () { mostrarAviso('No se pudo borrar. ¿Está ejecutado el SQL nuevo en Supabase?'); });
+            .catch(function () {
+              err.textContent = 'No se pudo borrar. Falta ejecutar supabase-entreno-v2.sql en Supabase (SQL Editor).';
+              mostrarAviso(err.textContent);
+            });
         });
         li.appendChild(x); ul.appendChild(li);
       });
@@ -835,15 +838,15 @@
     }
 
     // el selector de unidad
-    function pintarUnidad() {
-      var box = document.getElementById('unidadSel'); box.innerHTML = '';
+    function pintarUnidad(box) {
+      box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Unidad de peso');
       var t = document.createElement('span'); t.textContent = 'Peso en'; box.appendChild(t);
       ['kg', 'lb'].forEach(function (u) {
         var b = document.createElement('button'); b.type = 'button'; b.textContent = u;
         b.setAttribute('aria-pressed', String(u === unidad));
         b.addEventListener('click', function () {
           unidad = u; try { localStorage.setItem(UNIDAD_KEY, u); } catch (e) {}
-          borradores = {}; pintarUnidad(); pintarDia();
+          borradores = {}; pintarDia();
         });
         box.appendChild(b);
       });
@@ -904,6 +907,11 @@
       var barra = document.createElement('div'); barra.className = 'barra';
       var fill = document.createElement('span'); fill.style.width = pr.pct + '%';
       barra.appendChild(fill); diaEl.appendChild(barra);
+
+      if (/^Gym/.test(p.tipo)) {
+        var selU = document.createElement('div'); selU.className = 'unidad';
+        pintarUnidad(selU); diaEl.appendChild(selU);
+      }
 
       var hechos = estado[activo] || [];
       p.bloques.forEach(function (b, bi) {
@@ -1038,7 +1046,6 @@
     }
 
     function pintar() { pintarSemana(); pintarDia(); }
-    pintarUnidad();
     pintar();
     cargarTodo();
   </script>
