@@ -141,18 +141,42 @@
       );
     }
 
-    .carta::before { top: 0; }
-    .carta::after  { bottom: 0; }
+    .carta:not([open]) { padding-block: 18px 16px; }
 
-    .carta-tag {
-      display: block;
+    .carta-resumen {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      list-style: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .carta-resumen::-webkit-details-marker { display: none; }
+
+    .carta-resumen-txt {
       font-size: 10px;
-      letter-spacing: 0.4em;
-      text-indent: 0.4em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--hielo);
-      margin-bottom: 14px;
     }
+
+    .carta-resumen-estado {
+      font-size: 9.5px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .carta-resumen-estado::after { content: "  +"; color: var(--dim); }
+    .carta[open] .carta-resumen-estado::after { content: "  –"; }
+
+    .carta-cuerpo { margin-top: 18px; }
+
+    .carta::before { top: 0; }
+    .carta::after  { bottom: 0; }
 
     .carta-titulo {
       font-family: Georgia, "Times New Roman", serif;
@@ -546,6 +570,53 @@
       text-indent: 0.32em;
       color: var(--dim);
       margin-top: 14px;
+    }
+
+    /* ---------- páginas de nuestra historia ---------- */
+    .paginas {
+      width: 100%;
+      max-width: 420px;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(245, 242, 234, 0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .paginas-titulo {
+      font-size: 10px;
+      letter-spacing: 0.36em;
+      text-indent: 0.36em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+
+    .paginas-num {
+      font-size: clamp(2.8rem, 12vw, 4rem);
+      font-weight: 100;
+      line-height: 1;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 30px var(--glow);
+    }
+
+    .paginas-cap {
+      margin-top: 10px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      color: var(--dim);
+    }
+
+    .paginas-chiste {
+      margin-top: 14px;
+      max-width: 340px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(245, 242, 234, 0.85);
     }
 
     .timer-sabados {
@@ -2711,6 +2782,13 @@
 
     <div class="tz-note">Hora de Orlando, Florida</div>
 
+    <div class="paginas">
+      <span class="paginas-titulo">Páginas de nuestra historia</span>
+      <span class="paginas-num" id="paginasDias">–</span>
+      <span class="paginas-cap" id="paginasCap">días desde el 26 de julio de 2026</span>
+      <p class="paginas-chiste">Que es también el número de días que llevo dándome con una piedra en los dientes por no haberte buscado antes.</p>
+    </div>
+
     <button class="unlock-btn" id="unlockBtn">Presiona para desbloquear sorpresas 🐧</button>
     <a class="entrenar-btn" href="/entrenar">Quiero entrenar 🐧</a>
 
@@ -2800,8 +2878,12 @@
       </div>
     </section>
 
-    <section class="carta" id="carta">
-      <span class="carta-tag">Correo aéreo &middot; Entregada</span>
+    <details class="carta" id="carta">
+      <summary class="carta-resumen">
+        <span class="carta-resumen-txt">✉️ La carta de Orlando</span>
+        <span class="carta-resumen-estado">Entregada &middot; 23 sep</span>
+      </summary>
+      <div class="carta-cuerpo">
       <h2 class="carta-titulo">La carta llegó a Barcelona</h2>
       <p class="carta-lead">La escribiste tú, a mano, en Orlando, y cruzó el Atlántico hasta aquí.</p>
 
@@ -2837,7 +2919,8 @@
       </div>
 
       <p class="carta-firma">Llegó. Ya está en mis manos 🐧</p>
-    </section>
+      </div>
+    </details>
 
     <section class="agenda" id="agenda" hidden>
       <h2>Fechas disponibles</h2>
@@ -3114,9 +3197,30 @@
                               pad(Math.floor(diff / 1000) % 60);
     }
 
+    // ---------- páginas de nuestra historia ----------
+    // días que han pasado desde el 26/07/2026, el día en que le escribí lo
+    // que sentía. Se cuenta con la fecha de Orlando y en UTC, para que el
+    // horario de verano no descuadre ningún día.
+    var HISTORIA_DESDE = '2026-07-26';
+    var paginasDias = document.getElementById('paginasDias');
+    var paginasCap = document.getElementById('paginasCap');
+
+    function tickPaginas() {
+      var h = orlandoToday();
+      var hoy = Date.UTC(h.year, h.month - 1, h.day);
+      var d = HISTORIA_DESDE.split('-');
+      var desde = Date.UTC(+d[0], +d[1] - 1, +d[2]);
+      var n = Math.max(0, Math.round((hoy - desde) / 86400000));
+      if (paginasDias.textContent !== String(n)) {
+        paginasDias.textContent = n;
+        paginasCap.textContent = (n === 1 ? 'día' : 'días') + ' desde el 26 de julio de 2026';
+      }
+    }
+
     tick();
     tickEncuentro();
-    setInterval(function () { tick(); tickEncuentro(); }, 1000);
+    tickPaginas();
+    setInterval(function () { tick(); tickEncuentro(); tickPaginas(); }, 1000);
 
     // ---------- sorpresa 01, ya revelada ----------
     var TRIP_START = '2026-12-26';

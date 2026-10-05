@@ -18,6 +18,11 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 - Botón **"Presiona para desbloquear sorpresas 🐧"** con la misión provisional
 - Botón **"Quiero entrenar 🐧"**, que lleva a `/entrenar`: su plan semanal
   con checklist (ver más abajo)
+- **Páginas de nuestra historia**: bajo los dos contadores, los días que han
+  pasado desde el 26/07/2026 (`HISTORIA_DESDE`), el día en que le escribí lo
+  que sentía. Cuenta con la fecha de Orlando: el 26 de julio es el día 0 y
+  sube a medianoche de allí. Debajo, el chiste: es también el número de días
+  que llevo dándome con una piedra en los dientes por no haberla buscado antes.
 - **La carta**: el sobre que mandó desde Orlando, ya entregado en Barcelona
   (ver más abajo)
 - **`/demo`** (también `/?test`): la demo del producto comercial, un juego
@@ -243,7 +248,8 @@ recuerdo:
   "Entregada · 23 sep".
 - Los 11 días que estuvimos siguiéndola.
 
-Es estática: ya no hay enlaces de rastreo, botón de copiar ni consulta a la
+Va plegada en una sola línea ("La carta de Orlando · Entregada · 23 sep"),
+porque ya llegó: se abre tocándola. Es estática: ya no hay enlaces de rastreo, botón de copiar ni consulta a la
 API de USPS. La función `api/carta.mjs` se borró; está en el historial de git
 por si algún día llega otra carta.
 
