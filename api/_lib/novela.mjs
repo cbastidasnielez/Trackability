@@ -236,6 +236,12 @@ Carlos subió por su cuerpo dejando un rastro de besos húmedos hasta llegar a s
 
 Los ojos de Mari se abrieron de golpe.
 
+—Dios mío, Carlos Lorenzo Bastidas Nielez —le dijo, todavía sin aire—, vas a acabar con mi vida.
+
+Él sonrió, despacio, como quien acepta un reto.
+
+—Esa es la idea.
+
 Carlos se incorporó, se quitó la camisa y Mari vio su torso por primera vez. Ancho, definido, con un vello oscuro que bajaba por el centro del abdomen hasta desaparecer bajo el cinturón. Mari se quedó mirando más de la cuenta. Así que eso era lo que había detrás de tantos «hoy no puedo, tengo CrossFit», de los mensajes a las seis de la mañana y de las fotos de la pizarra con nombres de WODs que ella nunca entendió. Por primera vez, le perdonó cada burpee. Se desabrochó los pantalones con una calma que contrastaba con la urgencia de sus ojos.
 
 Mari se sentó y lo detuvo. Puso la mano sobre la suya.
