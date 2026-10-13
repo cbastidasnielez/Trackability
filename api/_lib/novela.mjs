@@ -14,6 +14,8 @@ Mari se miró por última vez en el espejo del recibidor.
 
 No había querido arreglarse en exceso. No quería que Carlos pensara que ella había pasado horas preparándose para verlo, aunque era exactamente lo que había hecho. Un vestido negro que le acariciaba justo por encima de las rodillas. El pelo suelto, todavía húmedo, con ese olor a champú de flor que ella misma apenas percibía ya. Poco maquillaje. Suficiente para sentirse bien.
 
+Y nada debajo del vestido. Ni bragas, ni pantaletas, ni nada. Lo decidió en el último momento, ya con la mano en el pomo de la puerta, y se le escapó una sonrisa que no le contó a nadie. Si Carlos quería saberlo, tendría que averiguarlo él.
+
 Agarró las llaves del carro antes de poder arrepentirse.
 
 Durante todo el trayecto hasta el aeropuerto se repitió que estaba tranquila. Lo dijo incluso en voz alta, en un semáforo, como quien intenta convencerse de algo. No funcionó.
@@ -166,7 +168,13 @@ Carlos la miró. Tenía los labios hinchados, la respiración irregular y los oj
 
 El vestido cayó.
 
-Mari se quedó en sostén y pantaletas, con la espalda contra la puerta y la mirada de Carlos recorriéndola como una llama.
+Mari se quedó solo con el sostén, con la espalda contra la puerta y la mirada de Carlos recorriéndola como una llama.
+
+Él bajó los ojos. Se detuvo. Los volvió a subir, muy despacio, hasta los de ella.
+
+—¿Fuiste así al aeropuerto?
+
+—Te dije que no me había arreglado mucho.
 
 —Eres más bonita de lo que debería permitirme pensar —murmuró él.
 
@@ -174,13 +182,13 @@ Mari se quedó en sostén y pantaletas, con la espalda contra la puerta y la mir
 
 Carlos la levantó.
 
-Mari le rodeó la cintura con las piernas y sintió la dureza de él directamente contra sus panties, separada solo por dos capas de tela fina. El roce le hizo soltar un sonido que no pudo controlar, un gemido agudo, necesitado, que hizo que Carlos apretara la mandíbula.
+Mari le rodeó la cintura con las piernas y sintió la dureza de él directamente contra su piel desnuda, separada solo por la tela del pantalón. El roce le hizo soltar un sonido que no pudo controlar, un gemido agudo, necesitado, que hizo que Carlos apretara la mandíbula.
 
 Carlos le recorrió los muslos con las manos, apretándolos, y sonrió contra su cuello.
 
 —Veo que has seguido el entrenamiento que te receté.
 
-—Todas las sentadillas que me mandabas por WhatsApp —jadeó ella—. Y no me quejé ni una vez.
+—Todas las sentadillas que me mandabas por la web —jadeó ella—. Y no me quejé ni una vez.
 
 —Te quejaste en todas.
 
@@ -200,7 +208,7 @@ Carlos le besó el interior del muslo izquierdo. Luego el derecho. Cada beso má
 
 —Por favor —susurró Mari.
 
-Carlos apartó la tela de sus pantaletas con un dedo y la besó.
+Carlos no tuvo que apartar nada. Solo se inclinó y la besó.
 
 Mari se mordió el labio con tanta fuerza que casi se hizo sangre. La lengua de Carlos encontró su clítoris con una precisión que la hizo gritar, y él respondió hundiéndose más, lamiendo despacio, con movimientos circulares que la llevaban al borde y la traían de vuelta, una y otra vez, como si estuviera aprendiendo exactamente qué la hacía temblar.
 

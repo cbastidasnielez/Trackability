@@ -223,7 +223,7 @@ de Orlando.
 - Al entrar en la portada cae desde arriba una notificación como una push del
   móvil ("Wattpad · ahora — Nuevo capítulo de una novela que (al parecer)
   sigues…", con un autor anónimo que escribe desde Barcelona y manda
-  sentadillas por WhatsApp). Si no la toca, se recoge sola a los 15 s.
+  sentadillas por la web). Si no la toca, se recoge sola a los 15 s.
 - Abajo a la derecha queda una campana con un **1** mientras dure la
   ventana. El 1 se va cuando abre la notificación (`novela-cap2-leida` en
   `localStorage`).
