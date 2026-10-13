@@ -214,6 +214,32 @@ Hasta ese momento el botón se ve; a partir de ahí desaparece. Si caduca con la
 el botón desaparece y el pop-up se cierra solo. Dentro del texto hay un aviso
 del tiempo que queda.
 
+## La novela "de Wattpad"
+
+El capítulo 2 de *La distancia que dejó de existir*, disponible **48 horas**:
+del martes 13 de octubre de 2026 a las 16:45 al jueves 15 a las 16:45, hora
+de Orlando.
+
+- Al entrar en la portada cae desde arriba una notificación como una push del
+  móvil ("Wattpad · ahora — Nuevo capítulo de una novela que (al parecer)
+  sigues…", con un autor anónimo que escribe desde Barcelona y manda
+  sentadillas por WhatsApp). Si no la toca, se recoge sola a los 15 s.
+- Abajo a la derecha queda una campana con un **1** mientras dure la
+  ventana. El 1 se va cuando abre la notificación (`novela-cap2-leida` en
+  `localStorage`).
+- Al abrir, primero sale el aviso: todo es ficción, pero lo que le guste se
+  puede hacer realidad; instrucciones de leerla sola, con calma, y "espero
+  que le des un buen uso". Tras aceptarlo una vez, las siguientes veces va
+  directo al texto y recuerda por dónde iba.
+- Al final, "⭐ Votar y decirle al autor cuál" abre WhatsApp con el mensaje
+  empezado, para que diga qué parte quiere hacer realidad.
+
+**El texto no está en `index.html`.** Vive en `api/_lib/novela.mjs` y lo sirve
+`/api/novela` solo dentro de la ventana; fuera de ella responde
+`{ disponible: false }` y la página no muestra nada. Así, pasadas las 48 horas
+no queda ni en el código de la web (sí en el historial de git). Para mover la
+ventana, cambia `DESDE` en `api/novela.mjs`: se cierra sola 48 horas después.
+
 ## Próximamente
 
 Convertir las casillas en "raspaditos" de verdad, para descubrir cada sorpresa
