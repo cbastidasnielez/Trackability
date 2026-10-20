@@ -304,6 +304,94 @@
       color: var(--dim);
     }
 
+    /* ---------- cómo hacer feliz a Mariapnel ---------- */
+    .feliz {
+      width: 100%;
+      max-width: 460px;
+      margin-top: 46px;
+      padding: 30px 22px 26px;
+      border: 1px solid rgba(158, 201, 230, 0.22);
+      border-radius: 16px;
+      background: linear-gradient(170deg, rgba(158, 201, 230, 0.07), rgba(255, 255, 255, 0.012));
+      text-align: left;
+    }
+
+    .feliz-tag {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.36em;
+      text-transform: uppercase;
+      color: var(--hielo);
+      margin-bottom: 12px;
+    }
+
+    .feliz-titulo {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.25rem, 5.8vw, 1.55rem);
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    .feliz-sub {
+      margin-top: 10px;
+      font-size: 12.5px;
+      line-height: 1.65;
+      color: var(--dim);
+    }
+
+    .feliz-lista { margin-top: 20px; }
+
+    .feliz-item { border-top: 1px solid rgba(245, 242, 234, 0.12); }
+    .feliz-item:last-child { border-bottom: 1px solid rgba(245, 242, 234, 0.12); }
+
+    .feliz-item summary {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 15px 0;
+      list-style: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .feliz-item summary::-webkit-details-marker { display: none; }
+
+    .feliz-item summary::after {
+      content: "+";
+      margin-left: auto;
+      padding-left: 8px;
+      color: var(--gold);
+      font-size: 15px;
+    }
+
+    .feliz-item[open] summary::after { content: "–"; }
+
+    .feliz-n {
+      flex: 0 0 auto;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--gold);
+    }
+
+    .feliz-q { font-size: 14.5px; line-height: 1.45; color: var(--ink); }
+
+    .feliz-item p {
+      padding: 0 0 16px 31px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 14px;
+      line-height: 1.75;
+      color: rgba(245, 242, 234, 0.85);
+    }
+
+    .feliz-firma {
+      margin-top: 18px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--dim);
+    }
+
     /* ---------- por qué un pingüino ---------- */
     .porque {
       width: 100%;
@@ -3467,6 +3555,41 @@
       <p>Y ellos también se van. Los de Magallanes migran miles de kilómetros y pasan meses solos en mar abierto, cada uno por su cuenta. La fidelidad no está en no marcharse: está en volver, y en que al volver no haya que empezar de cero.</p>
 
       <p>Nosotros nos separamos. Cada uno vivió su vida, en países distintos, durante años. Y nos hemos vuelto a encontrar sin tener que cortejarnos otra vez. En diciembre vuelvo al mismo sitio 🐧</p>
+    </section>
+
+    <section class="feliz" id="feliz">
+      <span class="feliz-tag">Instrucciones de uso</span>
+      <h2 class="feliz-titulo">Cómo hacer feliz a <span style="white-space:nowrap">Mariapnel 🐧</span></h2>
+      <p class="feliz-sub">Cinco cosas a seguir. Las dice su test de personalidad, ENFJ, la Protagonista. Yo solo las firmo.</p>
+
+      <div class="feliz-lista">
+        <details class="feliz-item" open>
+          <summary><span class="feliz-n">01</span><span class="feliz-q">¿Qué hago cuando ella está cuidando de todos?</span></summary>
+          <p>Cuidarla a ella. Es de las que dejan sus propias necesidades para el final por atender las de los demás. Alguien tiene que preguntarle cómo está ella, y esperar a la respuesta de verdad.</p>
+        </details>
+
+        <details class="feliz-item">
+          <summary><span class="feliz-n">02</span><span class="feliz-q">¿Cómo le digo que algo le ha salido bien?</span></summary>
+          <p>En voz alta y por escrito. Sus logros le saben mejor cuando alguien se los reconoce. Cada entreno completado, cada cosa que consigue, cada día difícil que saca adelante: se le dice, aunque parezca obvio.</p>
+        </details>
+
+        <details class="feliz-item">
+          <summary><span class="feliz-n">03</span><span class="feliz-q">¿Y si me dice «estoy bien»?</span></summary>
+          <p>No quedarme en la primera respuesta. Cuando algo le pesa, se lo guarda para no preocupar a nadie. Se pregunta otra vez, sin presión, y se queda uno cerca por si quiere contarlo.</p>
+        </details>
+
+        <details class="feliz-item">
+          <summary><span class="feliz-n">04</span><span class="feliz-q">¿Qué plan le propongo?</span></summary>
+          <p>Uno con camino, uno con gente o uno sin nada. Un viaje, una excursión, sus amigos, una película, música, deporte. O el placer de no hacer absolutamente nada, que también cuenta. Y recordarle de vez en cuando que no tiene que complacer a todo el mundo.</p>
+        </details>
+
+        <details class="feliz-item">
+          <summary><span class="feliz-n">05</span><span class="feliz-q">¿Y si no estamos de acuerdo?</span></summary>
+          <p>Hablarlo a la cara y con cariño. Ella prefiere la armonía, así que me toca a mí abrir la conversación sin que suene a pelea. Un desacuerdo no rompe nada: bien hablado, nos deja más cerca.</p>
+        </details>
+      </div>
+
+      <p class="feliz-firma">Instrucciones redactadas por Carlos. Revisables cuando ella quiera 🐧</p>
     </section>
     <!--
       Próximamente: convertir las casillas en raspaditos de verdad. 🐧

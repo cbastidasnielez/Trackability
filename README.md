@@ -18,6 +18,12 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 - Botón **"Presiona para desbloquear sorpresas 🐧"** con la misión provisional
 - Botón **"Quiero entrenar 🐧"**, que lleva a `/entrenar`: su plan semanal
   con checklist (ver más abajo)
+- **Cómo hacer feliz a Mariapnel 🐧** (`<section class="feliz">`), al final de
+  la portada: cinco preguntas desplegables con su instrucción, sacadas de su
+  test de personalidad MBTI (ENFJ, la Protagonista). Solo usa las
+  fortalezas y lo que la ayuda: cuidar de quien cuida, reconocer sus logros,
+  no quedarse en un «estoy bien», planes que la relajan y hablar los
+  desacuerdos con cariño. La parte de debilidades del test no se usa.
 - **Páginas de nuestra historia**: bajo los dos contadores, los días que han
   pasado desde el 26/07/2026 (`HISTORIA_DESDE`), el día en que le escribí lo
   que sentía. Cuenta con la fecha de Orlando: el 26 de julio es el día 0 y
