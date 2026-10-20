@@ -324,13 +324,6 @@
       color: var(--ink);
     }
 
-    .feliz-sub {
-      margin-top: 10px;
-      font-size: 12.5px;
-      line-height: 1.65;
-      color: var(--dim);
-    }
-
     .feliz-lista { margin-top: 20px; }
 
     .feliz-item { border-top: 1px solid rgba(245, 242, 234, 0.12); }
@@ -760,33 +753,37 @@
 
     /* ---------- botón de alerta: ¿necesitas ayuda? ---------- */
     .ayuda-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 14px;
+      position: fixed;
+      left: 18px;
+      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+      z-index: 40;
+      width: 56px;
+      height: 56px;
       appearance: none;
-      background: rgba(240, 143, 164, 0.08);
-      color: #f5b3c1;
-      border: 1px solid rgba(240, 143, 164, 0.55);
-      border-radius: 999px;
-      padding: 12px 22px;
-      font-family: inherit;
-      font-size: 11px;
-      font-weight: 400;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(240, 143, 164, 0.6);
+      background: rgba(10, 10, 12, 0.88);
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
       animation: alerta 2.6s ease-in-out infinite;
-      transition: background 0.3s ease, transform 0.15s ease;
+      transition: transform 0.15s ease, background 0.3s ease;
     }
 
-    .ayuda-btn:hover { background: rgba(240, 143, 164, 0.16); }
-    .ayuda-btn:active { transform: scale(0.97); }
+    .ayuda-btn:hover { background: rgba(40, 18, 24, 0.92); }
+    .ayuda-btn:active { transform: scale(0.94); }
 
+    .ayuda-simbolo { font-size: 25px; line-height: 1; }
+
+    /* la lucecita de aviso, arriba a la derecha del símbolo */
     .ayuda-luz {
-      flex: 0 0 auto;
-      width: 8px;
-      height: 8px;
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       background: #f08fa4;
       box-shadow: 0 0 8px #f08fa4;
@@ -3384,9 +3381,6 @@
 
     <button class="unlock-btn" id="unlockBtn">Presiona para desbloquear sorpresas 🐧</button>
     <a class="entrenar-btn" href="/entrenar">Quiero entrenar 🐧</a>
-    <button class="ayuda-btn" id="ayudaBtn" type="button" aria-haspopup="dialog">
-      <span class="ayuda-luz" aria-hidden="true"></span>¿Necesitas ayuda? Clica aquí
-    </button>
 
     <div class="surprise" id="surprise">
       <div class="boxes-card">
@@ -3595,7 +3589,14 @@
     <span class="mystery-mark">?</span>
   </button>
 
-  <!-- botón de alerta "¿Necesitas ayuda?": cinco instrucciones para hacerla feliz -->
+  <!-- botón de alerta "¿Necesitas ayuda?": flota en la esquina inferior izquierda
+       (la derecha es del "?" y de la campana) y abre las cinco instrucciones -->
+  <button class="ayuda-btn" id="ayudaBtn" type="button" aria-haspopup="dialog"
+          aria-label="¿Necesitas ayuda? Clica aquí" title="¿Necesitas ayuda? Clica aquí">
+    <span class="ayuda-simbolo" aria-hidden="true">🛟</span>
+    <span class="ayuda-luz" aria-hidden="true"></span>
+  </button>
+
   <div class="modal" id="ayudaModal" hidden role="dialog" aria-modal="true"
        aria-labelledby="ayudaTitulo">
     <div class="modal-panel feliz" id="ayudaPanel" tabindex="-1">
@@ -3603,7 +3604,6 @@
 
       <span class="feliz-tag">Instrucciones de uso</span>
       <h2 class="feliz-titulo" id="ayudaTitulo">Cómo hacer feliz a <span style="white-space:nowrap">Mariapnel 🐧</span></h2>
-      <p class="feliz-sub">Cinco cosas a seguir. Las dice su test de personalidad, ENFJ, la Protagonista. Yo solo las firmo.</p>
 
       <div class="feliz-lista">
         <div class="feliz-item">
