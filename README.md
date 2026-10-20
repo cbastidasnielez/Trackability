@@ -18,8 +18,9 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 - Botón **"Presiona para desbloquear sorpresas 🐧"** con la misión provisional
 - Botón **"Quiero entrenar 🐧"**, que lleva a `/entrenar`: su plan semanal
   con checklist (ver más abajo)
-- **Cómo hacer feliz a Mariapnel 🐧** (`<section class="feliz">`), al final de
-  la portada: cinco preguntas desplegables con su instrucción, sacadas de su
+- **Cómo hacer feliz a Mariapnel 🐧**: el botón de alerta "¿Necesitas ayuda?
+  Clica aquí", bajo "Quiero entrenar", abre una ventana (`#ayudaModal`) con
+  cinco preguntas y su respuesta, todas a la vista, sacadas de su
   test de personalidad MBTI (ENFJ, la Protagonista). Solo usa las
   fortalezas y lo que la ayuda: cuidar de quien cuida, reconocer sus logros,
   no quedarse en un «estoy bien», planes que la relajan y hablar los
