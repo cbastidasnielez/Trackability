@@ -12,6 +12,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         juego: resolve(__dirname, 'juego.html'),
         entrenar: resolve(__dirname, 'entrenar.html'),
+        recetas: resolve(__dirname, 'recetas.html'),
         // el producto: la página de venta, el regalo que recibe ella y lo legal
         demo: resolve(__dirname, 'demo.html'),
         regalo: resolve(__dirname, 'regalo.html'),

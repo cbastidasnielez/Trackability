@@ -3,6 +3,7 @@
     { "source": "/", "has": [{ "type": "host", "value": "(www\\.)?ganatelo\\..*" }], "destination": "/demo.html" },
     { "source": "/juego", "destination": "/juego.html" },
     { "source": "/entrenar", "destination": "/entrenar.html" },
+    { "source": "/recetas", "destination": "/recetas.html" },
     { "source": "/demo", "destination": "/demo.html" },
     { "source": "/comprar", "destination": "/demo.html" },
     { "source": "/legal", "destination": "/legal.html" },

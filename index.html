@@ -751,6 +751,17 @@
 
     .entrenar-btn:active { transform: scale(0.97); }
 
+    /* mismo botón, en coral: el de la cocina */
+    .recetas-btn {
+      color: #f2a488;
+      border-color: rgba(242, 164, 136, 0.4);
+    }
+
+    .recetas-btn:hover {
+      background: rgba(242, 164, 136, 0.08);
+      box-shadow: 0 0 35px rgba(242, 164, 136, 0.15);
+    }
+
     /* ---------- botón de alerta: ¿necesitas ayuda? ---------- */
     .ayuda-btn {
       position: fixed;
@@ -3381,6 +3392,7 @@
 
     <button class="unlock-btn" id="unlockBtn">Presiona para desbloquear sorpresas 🐧</button>
     <a class="entrenar-btn" href="/entrenar">Quiero entrenar 🐧</a>
+    <a class="entrenar-btn recetas-btn" href="/recetas">Recetas para comer juntos 🍳</a>
 
     <div class="surprise" id="surprise">
       <div class="boxes-card">

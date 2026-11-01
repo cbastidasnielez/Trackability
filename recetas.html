@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/icon-512.svg" />
+  <title>Recetas para comer juntos 🐧</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050505;
+      --ink: #f5f2ea;
+      --dim: rgba(245, 242, 234, 0.55);
+      --faint: rgba(245, 242, 234, 0.22);
+      --line: rgba(245, 242, 234, 0.12);
+      --card: rgba(255, 255, 255, 0.03);
+      --gold: #e3c07a;
+      --hielo: #9ec9e6;
+      --morado: #a98bd8;
+      --coral: #f2a488;
+    }
+
+    html, body { min-height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 16px 70px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(ellipse 120% 80% at 50% 30%, #101010 0%, var(--bg) 60%);
+      pointer-events: none;
+    }
+
+    main { width: 100%; max-width: 560px; }
+
+    [hidden] { display: none !important; }
+
+    .volver, .atras {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--faint);
+      text-decoration: none;
+      margin-bottom: 22px;
+    }
+
+    .volver:hover, .atras:hover { color: var(--ink); }
+
+    h1 {
+      font-size: clamp(1.3rem, 6vw, 1.9rem);
+      font-weight: 200;
+      letter-spacing: 0.22em;
+      text-indent: 0.22em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .manual {
+      margin-top: 10px;
+      text-align: center;
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-size: 14px;
+      color: var(--dim);
+    }
+
+    /* ---------- lista ---------- */
+    .buscar {
+      display: block;
+      width: 100%;
+      margin-top: 26px;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .buscar::placeholder { color: var(--faint); }
+    .buscar:focus { border-color: rgba(242, 164, 136, 0.55); }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .chip {
+      appearance: none;
+      padding: 7px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--dim);
+      font-family: inherit;
+      font-size: 12.5px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .chip.on {
+      border-color: rgba(242, 164, 136, 0.6);
+      background: rgba(242, 164, 136, 0.12);
+      color: var(--coral);
+    }
+
+    .lista {
+      list-style: none;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .tarjeta {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card);
+      color: inherit;
+      text-decoration: none;
+      transition: border-color 0.2s ease, transform 0.15s ease, background 0.2s ease;
+    }
+
+    .tarjeta:hover { border-color: rgba(242, 164, 136, 0.45); background: rgba(242, 164, 136, 0.04); }
+    .tarjeta:active { transform: scale(0.985); }
+
+    .burbuja {
+      flex: none;
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(150deg, rgba(242, 164, 136, 0.22), rgba(227, 192, 122, 0.08));
+      font-size: 30px;
+    }
+
+    .tarjeta-txt { min-width: 0; flex: 1; }
+
+    .tarjeta-titulo {
+      display: block;
+      font-size: 15.5px;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    .tarjeta-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 12px;
+      margin-top: 6px;
+      font-size: 12.5px;
+      color: var(--dim);
+    }
+
+    .tarjeta-meta b { font-weight: 500; color: var(--coral); }
+
+    .flecha { flex: none; color: var(--faint); font-size: 18px; }
+
+    .vacio {
+      margin-top: 26px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--dim);
+    }
+
+    .pedir {
+      display: block;
+      margin-top: 26px;
+      padding: 14px;
+      border: 1px dashed rgba(242, 164, 136, 0.4);
+      border-radius: 14px;
+      color: var(--coral);
+      font-size: 14px;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .pedir:hover { background: rgba(242, 164, 136, 0.06); }
+
+    /* ---------- receta ---------- */
+    .rec-cab { text-align: center; }
+
+    .rec-cab .burbuja {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 16px;
+      border-radius: 22px;
+      font-size: 40px;
+    }
+
+    .rec-cab h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.4rem, 6.4vw, 1.9rem);
+      font-weight: 400;
+      line-height: 1.25;
+    }
+
+    .rec-resumen {
+      margin: 12px auto 0;
+      max-width: 440px;
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--dim);
+    }
+
+    .rec-fuente {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--faint);
+    }
+
+    .rec-fuente a { color: var(--dim); }
+
+    .etiquetas {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 14px;
+    }
+
+    .etiqueta {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(245, 242, 234, 0.06);
+      color: var(--dim);
+      font-size: 11.5px;
+    }
+
+    .tiempos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .tiempos div {
+      padding: 12px 6px;
+      text-align: center;
+    }
+
+    .tiempos div + div { border-left: 1px solid var(--line); }
+
+    .tiempos span {
+      display: block;
+      font-size: 9.5px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    .tiempos b {
+      display: block;
+      margin-top: 5px;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .raciones {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+      padding: 10px 10px 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card);
+    }
+
+    .raciones-txt { font-size: 14px; }
+    .raciones-txt small { display: block; margin-top: 2px; font-size: 11.5px; color: var(--faint); }
+
+    .stepper { display: flex; align-items: center; gap: 4px; }
+
+    .stepper button {
+      appearance: none;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: transparent;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 20px;
+      font-weight: 300;
+      cursor: pointer;
+    }
+
+    .stepper button:disabled { opacity: 0.3; cursor: default; }
+
+    .stepper output {
+      min-width: 34px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    /* macros */
+    .macros {
+      margin-top: 14px;
+      padding: 18px 16px 16px;
+      border: 1px solid rgba(242, 164, 136, 0.28);
+      border-radius: 16px;
+      background: linear-gradient(170deg, rgba(242, 164, 136, 0.07), rgba(255, 255, 255, 0.012));
+    }
+
+    .macros-cab {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .kcal b {
+      font-size: 36px;
+      font-weight: 200;
+      line-height: 1;
+    }
+
+    .kcal span {
+      margin-left: 4px;
+      font-size: 13px;
+      color: var(--dim);
+    }
+
+    .por {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--faint);
+      text-align: right;
+    }
+
+    .barra {
+      display: flex;
+      height: 8px;
+      margin: 16px 0 14px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(245, 242, 234, 0.06);
+    }
+
+    .barra i { display: block; height: 100%; }
+
+    .macro-filas {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .macro {
+      padding: 10px 4px 9px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      text-align: center;
+    }
+
+    .macro b {
+      display: block;
+      font-size: 17px;
+      font-weight: 400;
+    }
+
+    .macro span {
+      display: block;
+      margin-top: 4px;
+      font-size: 10.5px;
+      color: var(--dim);
+    }
+
+    .macro small {
+      display: block;
+      margin-top: 2px;
+      font-size: 10px;
+      color: var(--faint);
+    }
+
+    .macro::before {
+      content: "";
+      display: block;
+      width: 8px;
+      height: 8px;
+      margin: 0 auto 7px;
+      border-radius: 50%;
+      background: var(--c);
+    }
+
+    .macros-total {
+      margin-top: 12px;
+      font-size: 12.5px;
+      color: var(--dim);
+      text-align: center;
+    }
+
+    .macros-total b { color: var(--ink); font-weight: 400; }
+
+    /* bloques */
+    .bloque { margin-top: 30px; }
+
+    .bloque-cab {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      padding-bottom: 10px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .bloque-cab h3 {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--coral);
+    }
+
+    .bloque-cab small { font-size: 12px; color: var(--faint); }
+
+    .ingr { list-style: none; }
+
+    .ingr label {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 11px 2px;
+      border-bottom: 1px solid rgba(245, 242, 234, 0.05);
+      cursor: pointer;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .ingr input, .paso input { position: absolute; opacity: 0; pointer-events: none; }
+
+    .check {
+      flex: none;
+      width: 22px;
+      height: 22px;
+      margin-top: 0;
+      border: 1.5px solid rgba(245, 242, 234, 0.25);
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      color: transparent;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    input:checked + .check {
+      border-color: var(--coral);
+      background: var(--coral);
+      color: #1a0f0b;
+    }
+
+    input:focus-visible + .check { outline: 2px solid var(--coral); outline-offset: 2px; }
+
+    .ingr .cant { font-weight: 500; color: var(--ink); }
+    .ingr .met, .ingr .nota { color: var(--faint); }
+
+    input:checked ~ .ingr-txt { color: var(--faint); text-decoration: line-through; }
+    input:checked ~ .ingr-txt .cant { color: var(--faint); }
+
+    .seccion {
+      margin: 18px 0 4px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--gold);
+    }
+
+    .pasos { list-style: none; }
+
+    .paso label {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 12px 2px;
+      cursor: pointer;
+      font-size: 15.5px;
+      line-height: 1.65;
+    }
+
+    .paso .num {
+      flex: none;
+      width: 26px;
+      height: 26px;
+      margin-top: 1px;
+      border: 1px solid rgba(242, 164, 136, 0.5);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      color: var(--coral);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .paso input:checked + .num { background: var(--coral); color: #1a0f0b; }
+    .paso input:checked ~ .paso-txt { color: var(--faint); }
+
+    .notas {
+      list-style: none;
+      margin-top: 26px;
+      padding: 14px 16px;
+      border-left: 2px solid var(--gold);
+      border-radius: 0 12px 12px 0;
+      background: rgba(227, 192, 122, 0.06);
+    }
+
+    .notas li {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: rgba(245, 242, 234, 0.8);
+    }
+
+    .notas li + li { margin-top: 8px; }
+
+    .desglose {
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .desglose summary {
+      padding: 13px 16px;
+      font-size: 13px;
+      color: var(--dim);
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .desglose summary::-webkit-details-marker { display: none; }
+    .desglose summary::after { content: " ▾"; color: var(--faint); }
+    .desglose[open] summary::after { content: " ▴"; }
+
+    .tabla-wrap { overflow-x: auto; padding: 0 10px 12px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th, td {
+      padding: 7px 5px;
+      text-align: right;
+      border-bottom: 1px solid rgba(245, 242, 234, 0.06);
+      white-space: nowrap;
+    }
+
+    th { font-weight: 400; color: var(--faint); font-size: 10.5px; }
+    th:first-child, td:first-child { text-align: left; white-space: normal; }
+    td { color: var(--dim); }
+    tfoot td { color: var(--ink); font-weight: 400; border-bottom: none; }
+
+    .acciones {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      appearance: none;
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: transparent;
+      color: var(--dim);
+      font-family: inherit;
+      font-size: 14px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .btn.on {
+      border-color: rgba(242, 164, 136, 0.6);
+      background: rgba(242, 164, 136, 0.1);
+      color: var(--coral);
+    }
+
+    .aviso-calc {
+      margin-top: 16px;
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--faint);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section id="vistaLista">
+      <a class="volver" href="/">&larr; Volver</a>
+
+      <h1>Recetas</h1>
+      <p class="manual">Para cocinar (y comer) juntos</p>
+
+      <input class="buscar" id="buscar" type="search" placeholder="Busca una receta o un ingrediente"
+             autocomplete="off" aria-label="Buscar receta" />
+      <div class="chips" id="chips"></div>
+
+      <ul class="lista" id="lista"></ul>
+      <p class="vacio" id="vacio" hidden>Ninguna receta coincide. Prueba con otra palabra.</p>
+
+      <a class="pedir" id="pedir" target="_blank" rel="noopener">+ ¿Una receta nueva? Mándamela y la apunto</a>
+    </section>
+
+    <section id="vistaReceta" hidden>
+      <a class="atras" href="#">&larr; Todas las recetas</a>
+
+      <div class="rec-cab">
+        <div class="burbuja" id="recEmoji" aria-hidden="true"></div>
+        <h2 id="recTitulo"></h2>
+        <p class="rec-resumen" id="recResumen"></p>
+        <span class="rec-fuente" id="recFuente"></span>
+        <div class="etiquetas" id="recEtiquetas"></div>
+      </div>
+
+      <div class="tiempos">
+        <div><span>Preparación</span><b id="tPrep"></b></div>
+        <div><span>Cocción</span><b id="tCoccion"></b></div>
+        <div><span>Total</span><b id="tTotal"></b></div>
+      </div>
+
+      <div class="raciones">
+        <div class="raciones-txt">Raciones<small id="racionesNota"></small></div>
+        <div class="stepper">
+          <button id="menos" aria-label="Una ración menos">&minus;</button>
+          <output id="nRaciones" aria-live="polite"></output>
+          <button id="mas" aria-label="Una ración más">+</button>
+        </div>
+      </div>
+
+      <div class="macros">
+        <div class="macros-cab">
+          <div class="kcal"><b id="mKcal"></b><span>kcal</span></div>
+          <div class="por">por ración</div>
+        </div>
+        <div class="barra" id="mBarra" aria-hidden="true"></div>
+        <div class="macro-filas">
+          <div class="macro" style="--c: var(--hielo)"><b id="mP"></b><span>Proteína</span><small id="mPpc"></small></div>
+          <div class="macro" style="--c: var(--gold)"><b id="mC"></b><span>Carbos</span><small id="mCpc"></small></div>
+          <div class="macro" style="--c: var(--morado)"><b id="mG"></b><span>Grasa</span><small id="mGpc"></small></div>
+          <div class="macro" style="--c: rgba(245, 242, 234, 0.4)"><b id="mF"></b><span>Fibra</span><small>&nbsp;</small></div>
+        </div>
+        <p class="macros-total" id="mTotal"></p>
+      </div>
+
+      <div class="bloque">
+        <div class="bloque-cab"><h3>Ingredientes</h3><small id="ingrPara"></small></div>
+        <ul class="ingr" id="ingredientes"></ul>
+      </div>
+
+      <div class="bloque">
+        <div class="bloque-cab"><h3>Paso a paso</h3><small>Toca un paso al terminarlo</small></div>
+        <div id="pasos"></div>
+      </div>
+
+      <ul class="notas" id="notas"></ul>
+
+      <details class="desglose">
+        <summary>De dónde salen los macros</summary>
+        <div class="tabla-wrap">
+          <table>
+            <thead><tr><th>Ingrediente</th><th>kcal</th><th>P</th><th>C</th><th>G</th></tr></thead>
+            <tbody id="desglose"></tbody>
+            <tfoot><tr id="desgloseTotal"></tr></tfoot>
+          </table>
+        </div>
+      </details>
+
+      <div class="acciones">
+        <button class="btn" id="pantalla" hidden>🔆 Mantener la pantalla encendida</button>
+        <button class="btn" id="reiniciar">Empezar de cero</button>
+      </div>
+
+      <p class="aviso-calc">Macros calculados ingrediente por ingrediente con valores de referencia (USDA). Son estimaciones: cambian un poco según la marca y el tamaño de las piezas.</p>
+    </section>
+  </main>
+
+  <script type="module" src="/src/analytics.js"></script>
+  <script src="/recetas.js"></script>
+  <script>
+    var RECETAS = window.RECETAS || [];
+    var RACIONES_POR_DEFECTO = 2;            // las recetas son para los dos
+
+    // ---------- utilidades ----------
+    function $(id) { return document.getElementById(id); }
+
+    function el(tag, clase, texto) {
+      var n = document.createElement(tag);
+      if (clase) n.className = clase;
+      if (texto != null) n.textContent = texto;
+      return n;
+    }
+
+    function normal(s) {
+      return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    }
+
+    function leer(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+    function guardar(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+    function sumar(receta) {
+      var t = { kcal: 0, p: 0, c: 0, g: 0, f: 0 };
+      receta.ingredientes.forEach(function (i) {
+        for (var k in t) t[k] += (i.m && i.m[k]) || 0;
+      });
+      return t;
+    }
+
+    function porRacion(receta) {
+      var t = sumar(receta), r = {};
+      for (var k in t) r[k] = t[k] / receta.raciones;
+      return r;
+    }
+
+    function minutos(n) { return n >= 60 ? Math.floor(n / 60) + ' h' + (n % 60 ? ' ' + (n % 60) : '') : n + ' min'; }
+
+    // 0,5 → ½; 1,5 → 1½; métricas redondeadas a algo que se pueda medir
+    var FRACCIONES = { 0.25: '¼', 0.5: '½', 0.75: '¾' };
+    function cantidad(x, ud) {
+      if (ud === 'g' || ud === 'ml') {
+        var paso = x < 20 ? 1 : x < 100 ? 5 : 10;
+        return String(Math.max(paso, Math.round(x / paso) * paso));
+      }
+      if (ud === 'diente') return String(Math.max(1, Math.round(x)));   // nadie pica medio diente
+      var q = Math.round(x * 4) / 4;
+      if (q === 0) q = 0.25;
+      var entero = Math.floor(q), resto = q - entero;
+      return (entero || !resto ? String(entero) : '') + (FRACCIONES[resto] || '');
+    }
+
+    var UNIDADES = {
+      cda: ['cda', 'cdas'], cdta: ['cdta', 'cdtas'], taza: ['taza', 'tazas'],
+      diente: ['diente', 'dientes'], g: ['g', 'g'], ml: ['ml', 'ml']
+    };
+
+    // ---------- lista ----------
+    var filtro = 'Todas';
+
+    function pintarChips() {
+      var todas = ['Todas'];
+      RECETAS.forEach(function (r) {
+        (r.etiquetas || []).forEach(function (e) { if (todas.indexOf(e) < 0) todas.push(e); });
+      });
+      var cont = $('chips');
+      cont.textContent = '';
+      todas.forEach(function (e) {
+        var b = el('button', 'chip' + (e === filtro ? ' on' : ''), e);
+        b.type = 'button';
+        b.addEventListener('click', function () { filtro = e; pintarChips(); pintarLista(); });
+        cont.appendChild(b);
+      });
+    }
+
+    function pintarLista() {
+      var q = normal($('buscar').value.trim());
+      var lista = $('lista');
+      lista.textContent = '';
+      var visibles = RECETAS.filter(function (r) {
+        if (filtro !== 'Todas' && (r.etiquetas || []).indexOf(filtro) < 0) return false;
+        if (!q) return true;
+        var texto = [r.titulo, r.resumen].concat(r.etiquetas || [])
+          .concat(r.ingredientes.map(function (i) { return i.n; })).join(' ');
+        return normal(texto).indexOf(q) >= 0;
+      });
+
+      visibles.forEach(function (r) {
+        var m = porRacion(r);
+        var a = el('a', 'tarjeta');
+        a.href = '#' + r.id;
+        a.appendChild(el('span', 'burbuja', r.emoji || '🍽️'));
+        var txt = el('span', 'tarjeta-txt');
+        txt.appendChild(el('span', 'tarjeta-titulo', r.titulo));
+        var meta = el('span', 'tarjeta-meta');
+        meta.appendChild(el('span', null, '⏱ ' + minutos(r.tiempo.prep + r.tiempo.coccion)));
+        var k = el('span'); k.appendChild(el('b', null, Math.round(m.kcal) + ' kcal')); k.append(' por ración');
+        meta.appendChild(k);
+        meta.appendChild(el('span', null, Math.round(m.p) + ' g proteína'));
+        txt.appendChild(meta);
+        a.appendChild(txt);
+        a.appendChild(el('span', 'flecha', '›'));
+        var li = el('li');
+        li.appendChild(a);
+        lista.appendChild(li);
+      });
+
+      $('vacio').hidden = visibles.length > 0;
+    }
+
+    // ---------- receta ----------
+    var actual = null;
+    var estado = null;
+
+    function claveEstado(r) { return 'receta-' + r.id; }
+
+    function abrirReceta(r) {
+      actual = r;
+      estado = leer(claveEstado(r)) || {};
+      estado.raciones = estado.raciones || RACIONES_POR_DEFECTO;
+      estado.ingr = estado.ingr || [];
+      estado.pasos = estado.pasos || [];
+
+      $('recEmoji').textContent = r.emoji || '🍽️';
+      $('recTitulo').textContent = r.titulo;
+      $('recResumen').textContent = r.resumen || '';
+      var fuente = $('recFuente');
+      fuente.textContent = '';
+      if (r.fuente) {
+        fuente.append('Receta original: ');
+        var a = el('a', null, r.fuente.nombre);
+        a.href = r.fuente.url; a.target = '_blank'; a.rel = 'noopener';
+        fuente.appendChild(a);
+      }
+      var et = $('recEtiquetas');
+      et.textContent = '';
+      (r.etiquetas || []).forEach(function (e) { et.appendChild(el('span', 'etiqueta', e)); });
+
+      $('tPrep').textContent = minutos(r.tiempo.prep);
+      $('tCoccion').textContent = minutos(r.tiempo.coccion);
+      $('tTotal').textContent = minutos(r.tiempo.prep + r.tiempo.coccion);
+      $('racionesNota').textContent = 'La receta original es para ' + r.raciones;
+
+      var notas = $('notas');
+      notas.textContent = '';
+      (r.notas || []).forEach(function (n) { notas.appendChild(el('li', null, n)); });
+      notas.hidden = !(r.notas && r.notas.length);
+
+      pintarCantidades();
+      pintarPasos();
+      document.title = r.titulo + ' 🐧';
+    }
+
+    function pintarCantidades() {
+      var r = actual, n = estado.raciones, f = n / r.raciones;
+      $('nRaciones').textContent = n;
+      $('menos').disabled = n <= 1;
+      $('mas').disabled = n >= 12;
+      $('ingrPara').textContent = 'para ' + n + (n === 1 ? ' ración' : ' raciones');
+
+      // macros por ración (no cambian con las raciones) y total de lo que vais a cocinar
+      var m = porRacion(r);
+      var kcalMacros = m.p * 4 + m.c * 4 + m.g * 9 || 1;
+      $('mKcal').textContent = Math.round(m.kcal);
+      $('mP').textContent = Math.round(m.p) + ' g';
+      $('mC').textContent = Math.round(m.c) + ' g';
+      $('mG').textContent = Math.round(m.g) + ' g';
+      $('mF').textContent = Math.round(m.f) + ' g';
+      var pc = { p: m.p * 4 / kcalMacros, c: m.c * 4 / kcalMacros, g: m.g * 9 / kcalMacros };
+      $('mPpc').textContent = Math.round(pc.p * 100) + '% kcal';
+      $('mCpc').textContent = Math.round(pc.c * 100) + '% kcal';
+      $('mGpc').textContent = Math.round(pc.g * 100) + '% kcal';
+      var barra = $('mBarra');
+      barra.textContent = '';
+      [['p', 'var(--hielo)'], ['c', 'var(--gold)'], ['g', 'var(--morado)']].forEach(function (x) {
+        var i = el('i');
+        i.style.width = (pc[x[0]] * 100) + '%';
+        i.style.background = x[1];
+        barra.appendChild(i);
+      });
+      var total = $('mTotal');
+      total.textContent = '';
+      total.append('Todo lo que vais a cocinar (' + n + (n === 1 ? ' ración' : ' raciones') + '): ');
+      total.appendChild(el('b', null, Math.round(m.kcal * n) + ' kcal'));
+      total.append(' · ' + Math.round(m.p * n) + ' g de proteína');
+
+      // ingredientes escalados
+      var ul = $('ingredientes');
+      ul.textContent = '';
+      r.ingredientes.forEach(function (ing, idx) {
+        var li = el('li');
+        var label = el('label');
+        var cb = el('input');
+        cb.type = 'checkbox';
+        cb.checked = estado.ingr.indexOf(idx) >= 0;
+        cb.addEventListener('change', function () { marcar('ingr', idx, cb.checked); });
+        label.appendChild(cb);
+        label.appendChild(el('span', 'check', '✓'));
+
+        var txt = el('span', 'ingr-txt');
+        if (ing.cant != null) {
+          var c = ing.cant * f;
+          var mucho = c > 1;
+          if (ing.ud === 'ud') {
+            txt.appendChild(el('span', 'cant', cantidad(c, 'ud')));
+            txt.append(' ' + (mucho && ing.pl ? ing.pl : ing.n));
+          } else {
+            var u = UNIDADES[ing.ud] || [ing.ud, ing.ud];
+            txt.appendChild(el('span', 'cant', cantidad(c, ing.ud) + ' ' + (mucho ? u[1] : u[0])));
+            txt.append(' de ' + ing.n);
+          }
+          if (ing.met) txt.appendChild(el('span', 'met', ' (' + cantidad(ing.met[0] * f, ing.met[1]) + ' ' + ing.met[1] + ')'));
+        } else {
+          txt.append(ing.n.charAt(0).toUpperCase() + ing.n.slice(1));
+        }
+        if (ing.nota) txt.appendChild(el('span', 'nota', ' · ' + ing.nota));
+        label.appendChild(txt);
+        li.appendChild(label);
+        ul.appendChild(li);
+      });
+
+      // desglose de macros, para las raciones elegidas
+      var tb = $('desglose');
+      tb.textContent = '';
+      r.ingredientes.forEach(function (ing) {
+        if (!ing.m || !ing.m.kcal) return;
+        var tr = el('tr');
+        tr.appendChild(el('td', null, ing.n.charAt(0).toUpperCase() + ing.n.slice(1)));
+        ['kcal', 'p', 'c', 'g'].forEach(function (k) {
+          var v = ing.m[k] * f;
+          tr.appendChild(el('td', null, k === 'kcal' ? Math.round(v) : (Math.round(v * 10) / 10).toLocaleString('es')));
+        });
+        tb.appendChild(tr);
+      });
+      var t = sumar(r), tf = $('desgloseTotal');
+      tf.textContent = '';
+      tf.appendChild(el('td', null, 'Total (' + n + ')'));
+      ['kcal', 'p', 'c', 'g'].forEach(function (k) {
+        tf.appendChild(el('td', null, Math.round(t[k] * f)));
+      });
+    }
+
+    function pintarPasos() {
+      var cont = $('pasos');
+      cont.textContent = '';
+      var num = 0;
+      actual.pasos.forEach(function (sec) {
+        if (sec.seccion) cont.appendChild(el('p', 'seccion', sec.seccion));
+        var ol = el('ol', 'pasos');
+        sec.items.forEach(function (texto) {
+          var idx = num++;
+          var li = el('li', 'paso');
+          var label = el('label');
+          var cb = el('input');
+          cb.type = 'checkbox';
+          cb.checked = estado.pasos.indexOf(idx) >= 0;
+          cb.addEventListener('change', function () { marcar('pasos', idx, cb.checked); });
+          label.appendChild(cb);
+          label.appendChild(el('span', 'num', idx + 1));
+          label.appendChild(el('span', 'paso-txt', texto));
+          li.appendChild(label);
+          ol.appendChild(li);
+        });
+        cont.appendChild(ol);
+      });
+    }
+
+    function marcar(lista, idx, si) {
+      var l = estado[lista];
+      var pos = l.indexOf(idx);
+      if (si && pos < 0) l.push(idx);
+      if (!si && pos >= 0) l.splice(pos, 1);
+      guardar(claveEstado(actual), estado);
+    }
+
+    $('menos').addEventListener('click', function () {
+      if (estado.raciones > 1) { estado.raciones--; guardar(claveEstado(actual), estado); pintarCantidades(); }
+    });
+    $('mas').addEventListener('click', function () {
+      if (estado.raciones < 12) { estado.raciones++; guardar(claveEstado(actual), estado); pintarCantidades(); }
+    });
+    $('reiniciar').addEventListener('click', function () {
+      estado.ingr = [];
+      estado.pasos = [];
+      guardar(claveEstado(actual), estado);
+      pintarCantidades();
+      pintarPasos();
+      window.scrollTo(0, 0);
+    });
+
+    // ---------- pantalla encendida mientras se cocina ----------
+    var bloqueo = null;
+    var quiereBloqueo = false;
+    var btnPantalla = $('pantalla');
+
+    function pintarPantalla() {
+      btnPantalla.classList.toggle('on', !!bloqueo);
+      btnPantalla.textContent = bloqueo ? '🔆 Pantalla encendida mientras cocináis' : '🔆 Mantener la pantalla encendida';
+    }
+
+    function pedirBloqueo() {
+      return navigator.wakeLock.request('screen').then(function (b) {
+        bloqueo = b;
+        b.addEventListener('release', function () { bloqueo = null; pintarPantalla(); });
+        pintarPantalla();
+      }).catch(function () { quiereBloqueo = false; pintarPantalla(); });
+    }
+
+    function soltarBloqueo() {
+      quiereBloqueo = false;
+      if (bloqueo) bloqueo.release();
+    }
+
+    if ('wakeLock' in navigator) {
+      btnPantalla.hidden = false;
+      btnPantalla.addEventListener('click', function () {
+        if (bloqueo) soltarBloqueo();
+        else { quiereBloqueo = true; pedirBloqueo(); }
+      });
+      // el navegador lo suelta al cambiar de app; al volver, se pide otra vez
+      document.addEventListener('visibilitychange', function () {
+        if (quiereBloqueo && !bloqueo && document.visibilityState === 'visible') pedirBloqueo();
+      });
+    }
+
+    // ---------- navegación: #id abre una receta ----------
+    function enrutar() {
+      var id = decodeURIComponent(location.hash.slice(1));
+      var r = RECETAS.filter(function (x) { return x.id === id; })[0];
+      $('vistaLista').hidden = !!r;
+      $('vistaReceta').hidden = !r;
+      if (r) {
+        abrirReceta(r);
+      } else {
+        soltarBloqueo();
+        document.title = 'Recetas para comer juntos 🐧';
+        pintarLista();
+      }
+      window.scrollTo(0, 0);
+    }
+
+    $('buscar').addEventListener('input', pintarLista);
+    $('pedir').href = 'https://wa.me/?text=' + encodeURIComponent('Apunta esta receta en nuestra web 🍳 ');
+    window.addEventListener('hashchange', enrutar);
+
+    pintarChips();
+    enrutar();
+  </script>
+</body>
+</html>
