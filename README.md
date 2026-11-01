@@ -15,11 +15,15 @@ giratorio de "distancia y tiempo" con su foto en el centro.
   delante — el 26/12/2026 cae precisamente en sábado, así que el último que
   cuenta es el del reencuentro
 - Emblema giratorio (círculo de flechas "Distancia y Tiempo") con la foto de Mariapnel 🐧 en el centro
-- Botón **"Presiona para desbloquear sorpresas 🐧"** con la misión provisional
-- Botón **"Quiero entrenar 🐧"**, que lleva a `/entrenar`: su plan semanal
-  con checklist (ver más abajo)
-- Botón **"Recetas para comer juntos 🍳"**, que lleva a `/recetas`: las
-  recetas con sus macros por ración (ver más abajo)
+- **El menú**: tres entradas del mismo tamaño, cada una con su icono, su
+  título, una línea que dice qué hay dentro y su color:
+  - 🎁 **Desbloquear sorpresas** (dorado): "Presiona para abrir las 7
+    casillas". Abre y cierra aquí mismo el panel de las casillas; la flecha
+    gira al abrirlo.
+  - 🏋️‍♀️ **Quiero entrenar** (azul hielo): lleva a `/entrenar`, su plan
+    semanal con checklist (ver más abajo).
+  - 🍳 **Recetas para comer juntos** (coral): lleva a `/recetas`, las recetas
+    con sus macros por ración y el «sorpréndeme» (ver más abajo).
 - **Cómo hacer feliz a Mariapnel 🐧**: un salvavidas 🛟 flota en la esquina
   inferior izquierda, con una luz de aviso. Al tocarlo ("¿Necesitas ayuda?
   Clica aquí") abre una ventana (`#ayudaModal`) con cinco preguntas y su
@@ -325,6 +329,11 @@ basta con editar ahí el texto; no hay nada más que tocar.
 el botón **"Recetas para comer juntos 🍳"** de la portada, justo debajo del de
 entrenar.
 
+- **"No sé qué cocinar hoy · Sorpréndeme"**, arriba del todo: sortea una
+  receta y la enseña en una tarjeta con "Ver la receta" y "Otra 🎲". Si hay
+  un filtro puesto, sortea dentro de él; si no, según la hora del móvil:
+  desayuno de 5 a 11, almuerzo de 11 a 17 y cena el resto. Nunca repite la
+  que acaba de proponer.
 - **La lista**: buscador (por nombre, ingrediente o etiqueta, como
   "airfryer") y filtros por momento del día: Desayuno, Almuerzo, Cena y
   Pre-entreno. Una tarjeta por receta con el tiempo, las kcal por ración y la

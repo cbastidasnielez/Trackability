@@ -80,6 +80,137 @@
       color: var(--dim);
     }
 
+    /* ---------- sorpréndeme ---------- */
+    .sorprendeme {
+      appearance: none;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      min-height: 76px;
+      margin-top: 24px;
+      padding: 14px 18px;
+      border: 1px solid rgba(242, 164, 136, 0.55);
+      border-radius: 18px;
+      background: linear-gradient(150deg, rgba(242, 164, 136, 0.16), rgba(227, 192, 122, 0.05));
+      color: var(--ink);
+      font-family: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease, transform 0.15s ease;
+    }
+
+    .sorprendeme:hover { box-shadow: 0 0 34px rgba(242, 164, 136, 0.2); }
+    .sorprendeme:active { transform: scale(0.98); }
+
+    .dado {
+      flex: none;
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: rgba(242, 164, 136, 0.18);
+      font-size: 24px;
+    }
+
+    .sorprendeme.tirando .dado { animation: tirar 0.6s ease; }
+
+    @keyframes tirar {
+      0%   { transform: rotate(0) scale(1); }
+      50%  { transform: rotate(200deg) scale(1.15); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    .sorprendeme b {
+      display: block;
+      font-size: 15.5px;
+      font-weight: 400;
+      color: var(--coral);
+    }
+
+    .sorprendeme small {
+      display: block;
+      margin-top: 3px;
+      font-size: 12.5px;
+      color: var(--dim);
+    }
+
+    .sugerencia {
+      margin-top: 12px;
+      padding: 16px;
+      border: 1px solid rgba(242, 164, 136, 0.35);
+      border-radius: 18px;
+      background: rgba(242, 164, 136, 0.05);
+      animation: aparecer 0.35s ease;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .sug-cab {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--coral);
+    }
+
+    .sug-cuerpo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .sug-cuerpo b {
+      display: block;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    .sug-cuerpo span.sug-meta {
+      display: block;
+      margin-top: 5px;
+      font-size: 12.5px;
+      color: var(--dim);
+    }
+
+    .sug-botones {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn-sug {
+      appearance: none;
+      display: grid;
+      place-items: center;
+      min-height: 48px;
+      padding: 10px;
+      border: none;
+      border-radius: 12px;
+      background: var(--coral);
+      color: #1a0f0b;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .btn-sug.secundario {
+      background: transparent;
+      border: 1px solid rgba(242, 164, 136, 0.45);
+      color: var(--coral);
+      font-weight: 400;
+    }
+
     /* ---------- lista ---------- */
     .buscar {
       display: block;
@@ -646,6 +777,10 @@
       color: var(--faint);
       text-align: center;
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sorprendeme.tirando .dado, .sugerencia { animation: none; }
+    }
   </style>
 </head>
 <body>
@@ -655,6 +790,23 @@
 
       <h1>Recetas</h1>
       <p class="manual">Para cocinar (y comer) juntos</p>
+
+      <button class="sorprendeme" id="sorprendeme" type="button">
+        <span class="dado" aria-hidden="true">🎲</span>
+        <span><b>No sé qué cocinar hoy</b><small>Sorpréndeme con una receta</small></span>
+      </button>
+
+      <div class="sugerencia" id="sugerencia" hidden aria-live="polite">
+        <span class="sug-cab" id="sugCab"></span>
+        <div class="sug-cuerpo">
+          <span class="burbuja" id="sugEmoji" aria-hidden="true"></span>
+          <div><b id="sugTitulo"></b><span class="sug-meta" id="sugMeta"></span></div>
+        </div>
+        <div class="sug-botones">
+          <a class="btn-sug" id="sugVer" href="#">Ver la receta</a>
+          <button class="btn-sug secundario" id="sugOtra" type="button">Otra 🎲</button>
+        </div>
+      </div>
 
       <input class="buscar" id="buscar" type="search" placeholder="Busca una receta o un ingrediente"
              autocomplete="off" aria-label="Buscar receta" />
@@ -896,6 +1048,47 @@
 
       $('vacio').hidden = visibles.length > 0;
     }
+
+    // ---------- no sé qué cocinar hoy: sorpréndeme ----------
+    // Si hay un filtro puesto, sortea dentro de él; si no, según la hora:
+    // desayuno por la mañana, almuerzo a mediodía y cena por la tarde-noche.
+    var ultimaSugerida = null;
+
+    function momentoDeAhora() {
+      var h = new Date().getHours();
+      if (h >= 5 && h < 11) return 'desayuno';
+      if (h >= 11 && h < 17) return 'almuerzo';
+      return 'cena';
+    }
+
+    var CABECERAS = { desayuno: 'Para desayunar hoy', almuerzo: 'Para almorzar hoy', cena: 'Para cenar hoy', pre: 'Antes de entrenar' };
+
+    function sorprender() {
+      var momento = filtro !== 'Todas' ? filtro : momentoDeAhora();
+      var candidatas = RECETAS.filter(function (r) { return (r.momento || []).indexOf(momento) >= 0; });
+      if (!candidatas.length) candidatas = RECETAS.slice();
+      if (candidatas.length > 1) candidatas = candidatas.filter(function (r) { return r.id !== ultimaSugerida; });
+      var r = candidatas[Math.floor(Math.random() * candidatas.length)];
+      ultimaSugerida = r.id;
+
+      var m = porRacion(r);
+      $('sugCab').textContent = (CABECERAS[momento] || 'Hoy toca') + '…';
+      $('sugEmoji').textContent = r.emoji || '🍽️';
+      $('sugTitulo').textContent = r.titulo;
+      $('sugMeta').textContent = (totalMin(r) ? '⏱ ' + minutos(totalMin(r)) + ' · ' : '') +
+        Math.round(m.kcal) + ' kcal · ' + Math.round(m.p) + ' g de proteína por ración';
+      $('sugVer').href = '#' + r.id;
+
+      var caja = $('sugerencia');
+      caja.hidden = false;
+      // reinicia la animación para que se note que ha cambiado
+      caja.style.animation = 'none'; void caja.offsetWidth; caja.style.animation = '';
+      var boton = $('sorprendeme');
+      boton.classList.remove('tirando'); void boton.offsetWidth; boton.classList.add('tirando');
+    }
+
+    $('sorprendeme').addEventListener('click', sorprender);
+    $('sugOtra').addEventListener('click', sorprender);
 
     // ---------- receta ----------
     var actual = null;
