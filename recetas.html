@@ -271,6 +271,7 @@
     }
 
     .tiempos div + div { border-left: 1px solid var(--line); }
+    .tiempos.solo-total { grid-template-columns: 1fr; }
 
     .tiempos span {
       display: block;
@@ -386,6 +387,8 @@
       background: rgba(0, 0, 0, 0.25);
       text-align: center;
     }
+
+    .macro-filas.sin-fibra { grid-template-columns: repeat(3, 1fr); }
 
     .macro b {
       display: block;
@@ -529,9 +532,32 @@
     .paso input:checked + .num { background: var(--coral); color: #1a0f0b; }
     .paso input:checked ~ .paso-txt { color: var(--faint); }
 
+    .truco {
+      margin-top: 26px;
+      padding: 14px 16px;
+      border: 1px solid rgba(242, 164, 136, 0.3);
+      border-radius: 14px;
+      background: rgba(242, 164, 136, 0.06);
+    }
+
+    .truco span {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--coral);
+    }
+
+    .truco p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(245, 242, 234, 0.85);
+    }
+
     .notas {
       list-style: none;
-      margin-top: 26px;
+      margin-top: 14px;
       padding: 14px 16px;
       border-left: 2px solid var(--gold);
       border-radius: 0 12px 12px 0;
@@ -651,10 +677,10 @@
         <div class="etiquetas" id="recEtiquetas"></div>
       </div>
 
-      <div class="tiempos">
-        <div><span>Preparación</span><b id="tPrep"></b></div>
-        <div><span>Cocción</span><b id="tCoccion"></b></div>
-        <div><span>Total</span><b id="tTotal"></b></div>
+      <div class="tiempos" id="tiempos">
+        <div id="tPrepBox"><span>Preparación</span><b id="tPrep"></b></div>
+        <div id="tCoccionBox"><span>Cocción</span><b id="tCoccion"></b></div>
+        <div><span>Tiempo total</span><b id="tTotal"></b></div>
       </div>
 
       <div class="raciones">
@@ -672,11 +698,11 @@
           <div class="por">por ración</div>
         </div>
         <div class="barra" id="mBarra" aria-hidden="true"></div>
-        <div class="macro-filas">
+        <div class="macro-filas" id="macroFilas">
           <div class="macro" style="--c: var(--hielo)"><b id="mP"></b><span>Proteína</span><small id="mPpc"></small></div>
           <div class="macro" style="--c: var(--gold)"><b id="mC"></b><span>Carbos</span><small id="mCpc"></small></div>
           <div class="macro" style="--c: var(--morado)"><b id="mG"></b><span>Grasa</span><small id="mGpc"></small></div>
-          <div class="macro" style="--c: rgba(245, 242, 234, 0.4)"><b id="mF"></b><span>Fibra</span><small>&nbsp;</small></div>
+          <div class="macro" id="mFbox" style="--c: rgba(245, 242, 234, 0.4)"><b id="mF"></b><span>Fibra</span><small>&nbsp;</small></div>
         </div>
         <p class="macros-total" id="mTotal"></p>
       </div>
@@ -691,9 +717,11 @@
         <div id="pasos"></div>
       </div>
 
+      <div class="truco" id="truco"><span>El truco</span><p id="trucoTxt"></p></div>
+
       <ul class="notas" id="notas"></ul>
 
-      <details class="desglose">
+      <details class="desglose" id="desgloseBox">
         <summary>De dónde salen los macros</summary>
         <div class="tabla-wrap">
           <table>
@@ -709,7 +737,7 @@
         <button class="btn" id="reiniciar">Empezar de cero</button>
       </div>
 
-      <p class="aviso-calc">Macros calculados ingrediente por ingrediente con valores de referencia (USDA). Son estimaciones: cambian un poco según la marca y el tamaño de las piezas.</p>
+      <p class="aviso-calc" id="avisoCalc"></p>
     </section>
   </main>
 
@@ -736,15 +764,38 @@
     function leer(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
     function guardar(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
+    var MOMENTOS = [['desayuno', 'Desayuno'], ['almuerzo', 'Almuerzo'], ['cena', 'Cena'], ['pre', 'Pre-entreno']];
+
+    function etiquetaMomento(id) {
+      var m = MOMENTOS.filter(function (x) { return x[0] === id; })[0];
+      return m ? m[1] : id;
+    }
+
+    // si los macros vienen por ingrediente se pueden desglosar; si no, vienen ya por ración
+    function porIngrediente(receta) {
+      return !receta.macros && receta.ingredientes.some(function (i) { return i.m; });
+    }
+
+    function totalMin(r) {
+      if (!r.tiempo) return null;
+      return r.tiempo.total || (r.tiempo.prep || 0) + (r.tiempo.coccion || 0);
+    }
+
+    function textoIngr(i) { return typeof i === 'string' ? i : i.n; }
+
     function sumar(receta) {
       var t = { kcal: 0, p: 0, c: 0, g: 0, f: 0 };
       receta.ingredientes.forEach(function (i) {
-        for (var k in t) t[k] += (i.m && i.m[k]) || 0;
+        for (var k in t) t[k] += (i && i.m && i.m[k]) || 0;
       });
       return t;
     }
 
     function porRacion(receta) {
+      if (receta.macros) {
+        var m = receta.macros;
+        return { kcal: m.kcal, p: m.p, c: m.c, g: m.g, f: m.f };
+      }
       var t = sumar(receta), r = {};
       for (var k in t) r[k] = t[k] / receta.raciones;
       return r;
@@ -766,6 +817,27 @@
       return (entero || !resto ? String(entero) : '') + (FRACCIONES[resto] || '');
     }
 
+    // ingredientes escritos como texto: se escalan los números con unidad
+    // métrica y los que cuentan dientes, limas, yemas, huevos o lonchas
+    var CONTABLES = [['diente', 'dientes'], ['lima', 'limas'], ['yema', 'yemas'], ['huevo', 'huevos'], ['loncha', 'lonchas']];
+    function numero(s) {
+      return s === '½' ? 0.5 : s === '¼' ? 0.25 : s === '¾' ? 0.75 : parseFloat(s.replace(',', '.'));
+    }
+    function escalarTexto(s, f) {
+      if (f === 1) return s;
+      s = s.replace(/(\d+(?:[.,]\d+)?)(?:(\s*[–-]\s*)(\d+(?:[.,]\d+)?))?(\s*)(g|ml|kg)\b/g,
+        function (_, a, sep, b, esp, u) {
+          var ud = u === 'kg' ? 'ud' : u;
+          return cantidad(numero(a) * f, ud) + (b ? sep + cantidad(numero(b) * f, ud) : '') + esp + u;
+        });
+      return s.replace(/(^|[\s(:,])(½|¼|¾|\d+)\s+(dientes?|limas?|yemas?|huevos?|lonchas?)\b/g,
+        function (_, antes, n, palabra) {
+          var formas = CONTABLES.filter(function (x) { return x[0] === palabra || x[1] === palabra; })[0];
+          var c = numero(n) * f;
+          return antes + cantidad(c, formas[0] === 'diente' ? 'diente' : 'ud') + ' ' + formas[c > 1 ? 1 : 0];
+        });
+    }
+
     var UNIDADES = {
       cda: ['cda', 'cdas'], cdta: ['cdta', 'cdtas'], taza: ['taza', 'tazas'],
       diente: ['diente', 'dientes'], g: ['g', 'g'], ml: ['ml', 'ml']
@@ -775,16 +847,16 @@
     var filtro = 'Todas';
 
     function pintarChips() {
-      var todas = ['Todas'];
-      RECETAS.forEach(function (r) {
-        (r.etiquetas || []).forEach(function (e) { if (todas.indexOf(e) < 0) todas.push(e); });
-      });
+      // un filtro por momento del día, solo los que tienen alguna receta
+      var opciones = [['Todas', 'Todas (' + RECETAS.length + ')']].concat(MOMENTOS.filter(function (m) {
+        return RECETAS.some(function (r) { return (r.momento || []).indexOf(m[0]) >= 0; });
+      }));
       var cont = $('chips');
       cont.textContent = '';
-      todas.forEach(function (e) {
-        var b = el('button', 'chip' + (e === filtro ? ' on' : ''), e);
+      opciones.forEach(function (o) {
+        var b = el('button', 'chip' + (o[0] === filtro ? ' on' : ''), o[1]);
         b.type = 'button';
-        b.addEventListener('click', function () { filtro = e; pintarChips(); pintarLista(); });
+        b.addEventListener('click', function () { filtro = o[0]; pintarChips(); pintarLista(); });
         cont.appendChild(b);
       });
     }
@@ -794,10 +866,11 @@
       var lista = $('lista');
       lista.textContent = '';
       var visibles = RECETAS.filter(function (r) {
-        if (filtro !== 'Todas' && (r.etiquetas || []).indexOf(filtro) < 0) return false;
+        if (filtro !== 'Todas' && (r.momento || []).indexOf(filtro) < 0) return false;
         if (!q) return true;
         var texto = [r.titulo, r.resumen].concat(r.etiquetas || [])
-          .concat(r.ingredientes.map(function (i) { return i.n; })).join(' ');
+          .concat((r.momento || []).map(etiquetaMomento))
+          .concat(r.ingredientes.map(textoIngr)).join(' ');
         return normal(texto).indexOf(q) >= 0;
       });
 
@@ -809,7 +882,7 @@
         var txt = el('span', 'tarjeta-txt');
         txt.appendChild(el('span', 'tarjeta-titulo', r.titulo));
         var meta = el('span', 'tarjeta-meta');
-        meta.appendChild(el('span', null, '⏱ ' + minutos(r.tiempo.prep + r.tiempo.coccion)));
+        if (totalMin(r)) meta.appendChild(el('span', null, '⏱ ' + minutos(totalMin(r))));
         var k = el('span'); k.appendChild(el('b', null, Math.round(m.kcal) + ' kcal')); k.append(' por ración');
         meta.appendChild(k);
         meta.appendChild(el('span', null, Math.round(m.p) + ' g proteína'));
@@ -840,22 +913,48 @@
       $('recEmoji').textContent = r.emoji || '🍽️';
       $('recTitulo').textContent = r.titulo;
       $('recResumen').textContent = r.resumen || '';
+      $('recResumen').hidden = !r.resumen;
       var fuente = $('recFuente');
       fuente.textContent = '';
       if (r.fuente) {
         fuente.append('Receta original: ');
-        var a = el('a', null, r.fuente.nombre);
-        a.href = r.fuente.url; a.target = '_blank'; a.rel = 'noopener';
-        fuente.appendChild(a);
+        if (r.fuente.url) {
+          var a = el('a', null, r.fuente.nombre);
+          a.href = r.fuente.url; a.target = '_blank'; a.rel = 'noopener';
+          fuente.appendChild(a);
+        } else {
+          fuente.append(r.fuente.nombre);
+        }
       }
       var et = $('recEtiquetas');
       et.textContent = '';
-      (r.etiquetas || []).forEach(function (e) { et.appendChild(el('span', 'etiqueta', e)); });
+      (r.momento || []).map(etiquetaMomento).concat(r.etiquetas || []).forEach(function (e) {
+        et.appendChild(el('span', 'etiqueta', e));
+      });
 
-      $('tPrep').textContent = minutos(r.tiempo.prep);
-      $('tCoccion').textContent = minutos(r.tiempo.coccion);
-      $('tTotal').textContent = minutos(r.tiempo.prep + r.tiempo.coccion);
-      $('racionesNota').textContent = 'La receta original es para ' + r.raciones;
+      // tiempos: preparación y cocción si los hay; si no, solo el total
+      var t = r.tiempo || {};
+      var detalle = t.prep != null && t.coccion != null;
+      $('tiempos').hidden = !totalMin(r);
+      $('tiempos').classList.toggle('solo-total', !detalle);
+      $('tPrepBox').hidden = !detalle;
+      $('tCoccionBox').hidden = !detalle;
+      if (detalle) {
+        $('tPrep').textContent = minutos(t.prep);
+        $('tCoccion').textContent = minutos(t.coccion);
+      }
+      if (totalMin(r)) $('tTotal').textContent = minutos(totalMin(r));
+      $('racionesNota').textContent = r.raciones === 1
+        ? 'Las cantidades escritas son para 1'
+        : 'La receta original es para ' + r.raciones;
+
+      $('truco').hidden = !r.truco;
+
+      var desglosable = porIngrediente(r);
+      $('desgloseBox').hidden = !desglosable;
+      $('avisoCalc').textContent = desglosable
+        ? 'Macros calculados ingrediente por ingrediente con valores de referencia (USDA). Son estimaciones: cambian un poco según la marca y el tamaño de las piezas.'
+        : 'Macros aproximados por ración, con valores de referencia (BEDCA y etiquetas). Son estimaciones: cambian un poco según la marca y el tamaño de las piezas.';
 
       var notas = $('notas');
       notas.textContent = '';
@@ -873,6 +972,7 @@
       $('menos').disabled = n <= 1;
       $('mas').disabled = n >= 12;
       $('ingrPara').textContent = 'para ' + n + (n === 1 ? ' ración' : ' raciones');
+      $('trucoTxt').textContent = r.truco ? escalarTexto(r.truco, f) : '';
 
       // macros por ración (no cambian con las raciones) y total de lo que vais a cocinar
       var m = porRacion(r);
@@ -881,7 +981,10 @@
       $('mP').textContent = Math.round(m.p) + ' g';
       $('mC').textContent = Math.round(m.c) + ' g';
       $('mG').textContent = Math.round(m.g) + ' g';
-      $('mF').textContent = Math.round(m.f) + ' g';
+      var conFibra = m.f != null && !isNaN(m.f) && (r.macros ? r.macros.f != null : m.f > 0);
+      $('mFbox').hidden = !conFibra;
+      $('macroFilas').classList.toggle('sin-fibra', !conFibra);
+      if (conFibra) $('mF').textContent = Math.round(m.f) + ' g';
       var pc = { p: m.p * 4 / kcalMacros, c: m.c * 4 / kcalMacros, g: m.g * 9 / kcalMacros };
       $('mPpc').textContent = Math.round(pc.p * 100) + '% kcal';
       $('mCpc').textContent = Math.round(pc.c * 100) + '% kcal';
@@ -914,7 +1017,9 @@
         label.appendChild(el('span', 'check', '✓'));
 
         var txt = el('span', 'ingr-txt');
-        if (ing.cant != null) {
+        if (typeof ing === 'string') {
+          txt.append(escalarTexto(ing, f));
+        } else if (ing.cant != null) {
           var c = ing.cant * f;
           var mucho = c > 1;
           if (ing.ud === 'ud') {
@@ -939,7 +1044,7 @@
       var tb = $('desglose');
       tb.textContent = '';
       r.ingredientes.forEach(function (ing) {
-        if (!ing.m || !ing.m.kcal) return;
+        if (!ing || !ing.m || !ing.m.kcal) return;
         var tr = el('tr');
         tr.appendChild(el('td', null, ing.n.charAt(0).toUpperCase() + ing.n.slice(1)));
         ['kcal', 'p', 'c', 'g'].forEach(function (k) {
@@ -960,7 +1065,10 @@
       var cont = $('pasos');
       cont.textContent = '';
       var num = 0;
-      actual.pasos.forEach(function (sec) {
+      var f = estado.raciones / actual.raciones;
+      // los pasos pueden venir sueltos o agrupados por secciones
+      var secciones = typeof actual.pasos[0] === 'string' ? [{ items: actual.pasos }] : actual.pasos;
+      secciones.forEach(function (sec) {
         if (sec.seccion) cont.appendChild(el('p', 'seccion', sec.seccion));
         var ol = el('ol', 'pasos');
         sec.items.forEach(function (texto) {
@@ -973,7 +1081,7 @@
           cb.addEventListener('change', function () { marcar('pasos', idx, cb.checked); });
           label.appendChild(cb);
           label.appendChild(el('span', 'num', idx + 1));
-          label.appendChild(el('span', 'paso-txt', texto));
+          label.appendChild(el('span', 'paso-txt', escalarTexto(texto, f)));
           li.appendChild(label);
           ol.appendChild(li);
         });
@@ -990,10 +1098,10 @@
     }
 
     $('menos').addEventListener('click', function () {
-      if (estado.raciones > 1) { estado.raciones--; guardar(claveEstado(actual), estado); pintarCantidades(); }
+      if (estado.raciones > 1) { estado.raciones--; guardar(claveEstado(actual), estado); pintarCantidades(); pintarPasos(); }
     });
     $('mas').addEventListener('click', function () {
-      if (estado.raciones < 12) { estado.raciones++; guardar(claveEstado(actual), estado); pintarCantidades(); }
+      if (estado.raciones < 12) { estado.raciones++; guardar(claveEstado(actual), estado); pintarCantidades(); pintarPasos(); }
     });
     $('reiniciar').addEventListener('click', function () {
       estado.ingr = [];

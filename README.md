@@ -325,33 +325,40 @@ basta con editar ahí el texto; no hay nada más que tocar.
 el botón **"Recetas para comer juntos 🍳"** de la portada, justo debajo del de
 entrenar.
 
-- **La lista**: buscador (por nombre o por ingrediente), filtros por etiqueta
-  (Cena, Rápida, Alta en proteína…) y una tarjeta por receta con el tiempo,
-  las kcal por ración y la proteína.
+- **La lista**: buscador (por nombre, ingrediente o etiqueta, como
+  "airfryer") y filtros por momento del día: Desayuno, Almuerzo, Cena y
+  Pre-entreno. Una tarjeta por receta con el tiempo, las kcal por ración y la
+  proteína.
 - **Cada receta** se abre en `/recetas#<id>`, así que el botón de atrás del
   móvil vuelve a la lista y se puede mandar el enlace de una receta concreta.
-  Lleva los tiempos, un selector de raciones (empieza en 2, para los dos), los
-  macros por ración (kcal, proteína, carbos, grasa y fibra, con el reparto de
-  calorías en una barra), los ingredientes como checklist y el paso a paso,
-  que se va tachando al tocarlo. Debajo, notas, un desplegable con los macros
-  ingrediente por ingrediente y un botón para que la pantalla no se apague
-  mientras se cocina (donde el navegador lo permita).
-- Al cambiar las raciones se escalan las cantidades (en medidas de cocina y
-  en gramos/ml) y el total de lo que se va a cocinar. Lo marcado y las
-  raciones se guardan en el navegador (`receta-<id>` en `localStorage`).
+  Lleva el tiempo, un selector de raciones (empieza en 2, para los dos), los
+  macros por ración (kcal, proteína, carbos, grasa y, si se sabe, fibra, con
+  el reparto de calorías en una barra), los ingredientes como checklist, el
+  paso a paso que se va tachando al tocarlo, el truco y las notas. Un botón
+  mantiene la pantalla encendida mientras se cocina (donde el navegador lo
+  permita).
+- Al cambiar las raciones se escalan los ingredientes, las cantidades que
+  salen en los pasos y el truco, y el total de lo que se va a cocinar. Lo
+  marcado y las raciones se guardan en el navegador (`receta-<id>` en
+  `localStorage`).
 - Abajo de la lista, "¿Una receta nueva? Mándamela" abre WhatsApp para pasar
   el enlace.
 
-Las recetas viven en `public/recetas.js` (`window.RECETAS`). Los macros se
-apuntan **por ingrediente**, para la receta entera, y la página los suma y
-los divide por ración: añadir una receta es copiar un objeto y rellenarlo. El
-formato está explicado al principio del archivo.
+Las recetas viven en `public/recetas.js` (`window.RECETAS`); el formato está
+explicado al principio del archivo. Los macros se apuntan de dos maneras:
 
-Recetas apuntadas:
-
-| Receta | Origen | Por ración |
-| --- | --- | --- |
-| Pollo al ajo y mantequilla con calabacín y maíz | [Julia's Album](https://juliasalbum.com/chicken-with-zucchini-and-corn/) | 436 kcal · 29 P · 17 C · 29 G |
+- **Por ingrediente**, cada uno con sus macros (valores USDA): la página los
+  suma, los divide por ración y enseña el desglose. Es lo que se usa para las
+  recetas nuevas que llegan de una web, como el pollo al ajo de
+  [Julia's Album](https://juliasalbum.com/chicken-with-zucchini-and-corn/)
+  (436 kcal · 29 P · 17 C · 29 G por ración).
+- **Ya calculados por ración** (`macros`): así vienen las 37 recetas del
+  recetario de Carlos, copiadas de `src/lib/entreno/recetas.ts` del
+  repositorio `tracking_finance`. Al pasarlas se cambió "AOVE" por "aceite de
+  oliva" y "zumo" por "jugo", los ingredientes que empiezan por un número de
+  piezas ("1 plátano") pasaron a objeto para que se escalen bien, y las notas
+  que solo tenían sentido en su plan de dieta se reescribieron. Las cantidades
+  son las de una ración de su dieta (salvo los pancakes, escritos para 2).
 
 ## Gánatelo: el producto que se vende (`/demo`, `/r/<id>`, `/legal`)
 
