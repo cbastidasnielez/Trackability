@@ -18,6 +18,8 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 - Botón **"Presiona para desbloquear sorpresas 🐧"** con la misión provisional
 - Botón **"Quiero entrenar 🐧"**, que lleva a `/entrenar`: su plan semanal
   con checklist (ver más abajo)
+- Botón **"Recetas para comer juntos 🍳"**, que lleva a `/recetas`: las
+  recetas con sus macros por ración (ver más abajo)
 - **Cómo hacer feliz a Mariapnel 🐧**: un salvavidas 🛟 flota en la esquina
   inferior izquierda, con una luz de aviso. Al tocarlo ("¿Necesitas ayuda?
   Clica aquí") abre una ventana (`#ayudaModal`) con cinco preguntas y su
@@ -316,6 +318,40 @@ el botón **"Quiero entrenar 🐧"** de la portada.
 
 El plan vive en `PLAN` dentro de `entrenar.html`. Para cambiar un ejercicio
 basta con editar ahí el texto; no hay nada más que tocar.
+
+## Recetas para comer juntos
+
+`/recetas.html` (en Vercel también `/recetas`) es el recetario. Se llega desde
+el botón **"Recetas para comer juntos 🍳"** de la portada, justo debajo del de
+entrenar.
+
+- **La lista**: buscador (por nombre o por ingrediente), filtros por etiqueta
+  (Cena, Rápida, Alta en proteína…) y una tarjeta por receta con el tiempo,
+  las kcal por ración y la proteína.
+- **Cada receta** se abre en `/recetas#<id>`, así que el botón de atrás del
+  móvil vuelve a la lista y se puede mandar el enlace de una receta concreta.
+  Lleva los tiempos, un selector de raciones (empieza en 2, para los dos), los
+  macros por ración (kcal, proteína, carbos, grasa y fibra, con el reparto de
+  calorías en una barra), los ingredientes como checklist y el paso a paso,
+  que se va tachando al tocarlo. Debajo, notas, un desplegable con los macros
+  ingrediente por ingrediente y un botón para que la pantalla no se apague
+  mientras se cocina (donde el navegador lo permita).
+- Al cambiar las raciones se escalan las cantidades (en medidas de cocina y
+  en gramos/ml) y el total de lo que se va a cocinar. Lo marcado y las
+  raciones se guardan en el navegador (`receta-<id>` en `localStorage`).
+- Abajo de la lista, "¿Una receta nueva? Mándamela" abre WhatsApp para pasar
+  el enlace.
+
+Las recetas viven en `public/recetas.js` (`window.RECETAS`). Los macros se
+apuntan **por ingrediente**, para la receta entera, y la página los suma y
+los divide por ración: añadir una receta es copiar un objeto y rellenarlo. El
+formato está explicado al principio del archivo.
+
+Recetas apuntadas:
+
+| Receta | Origen | Por ración |
+| --- | --- | --- |
+| Pollo al ajo y mantequilla con calabacín y maíz | [Julia's Album](https://juliasalbum.com/chicken-with-zucchini-and-corn/) | 436 kcal · 29 P · 17 C · 29 G |
 
 ## Gánatelo: el producto que se vende (`/demo`, `/r/<id>`, `/legal`)
 
