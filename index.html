@@ -583,32 +583,28 @@
       align-items: center;
     }
 
-    /* en el móvil, uno debajo de otro separados por una línea; en pantallas
-       anchas, los tres en fila con una línea vertical entre medias */
-    .timer { padding: 30px 12px; }
-    .timer:first-child { padding-top: 0; }
-    .timer + .timer { border-top: 1px solid rgba(245, 242, 234, 0.1); }
-
-    @media (min-width: 820px) {
-      .timers { grid-template-columns: repeat(3, 1fr); }
-      .timer, .timer:first-child { padding: 6px 26px; }
-      .timer + .timer {
-        border-top: none;
-        border-left: 1px solid rgba(245, 242, 234, 0.1);
-      }
+    /* siempre tres columnas, también en el móvil, con una línea vertical
+       entre medias; cada columna dice lo mismo en el mismo orden:
+       qué, cuánto, de qué y el detalle */
+    .timers {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: 900px;
+      margin-top: 36px;
     }
+    .timer { padding: 4px clamp(4px, 2.6vw, 26px); }
+    .timer + .timer { border-left: 1px solid rgba(245, 242, 234, 0.1); }
 
     .timer-lead {
-      font-size: 12px;
-      letter-spacing: 0.4em;
-      text-indent: 0.4em;
+      font-size: clamp(9.5px, 2.6vw, 12px);
+      letter-spacing: clamp(0.18em, 1vw, 0.4em);
+      text-indent: clamp(0.18em, 1vw, 0.4em);
       text-transform: uppercase;
       color: var(--dim);
       margin-bottom: 10px;
     }
 
     .timer-num {
-      font-size: clamp(3.4rem, 15vw, 5rem);
+      font-size: clamp(2.5rem, 11.5vw, 4.6rem);
       font-weight: 100;
       line-height: 1;
       letter-spacing: 0.04em;
@@ -616,21 +612,79 @@
     }
 
     .timer-cap {
-      font-size: clamp(0.95rem, 3.6vw, 1.1rem);
+      font-size: clamp(11.5px, 3.1vw, 1.1rem);
       font-weight: 300;
-      letter-spacing: 0.1em;
-      margin-top: 12px;
+      letter-spacing: clamp(0.01em, 0.3vw, 0.06em);
+      line-height: 1.35;
+      margin-top: 10px;
       color: var(--ink);
     }
 
     .timer-clock {
       font-variant-numeric: tabular-nums;
-      font-size: 14px;
-      letter-spacing: 0.32em;
-      text-indent: 0.32em;
+      font-size: clamp(10px, 2.7vw, 14px);
+      letter-spacing: clamp(0.02em, 0.8vw, 0.32em);
+      text-indent: clamp(0.02em, 0.8vw, 0.32em);
+      white-space: nowrap;
       color: var(--dim);
-      margin-top: 14px;
+      margin-top: auto;
+      padding-top: 12px;
     }
+
+    /* la línea común bajo las tres columnas */
+    /* en el móvil, "16 : 37 : 32" sin tanto aire para que quepa en su columna */
+    @media (max-width: 520px) {
+      .timer-clock { word-spacing: -0.18em; }
+      #tiempo .emblem-wrap { width: min(300px, 68vw); }
+    }
+
+    /* el emblema y las cifras: uno encima de otro en el móvil; en el
+       ordenador, el emblema a la izquierda y las tres columnas a su lado */
+    .tiempo-rejilla,
+    .tiempo-datos {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    @media (min-width: 900px) {
+      .tiempo-rejilla {
+        display: grid;
+        grid-template-columns: 300px minmax(0, 1fr);
+        align-items: center;
+        gap: 44px;
+        max-width: 1000px;
+      }
+      #tiempo .emblem-wrap { width: 300px; }
+      .tiempo-datos .timers { margin-top: 0; }
+    }
+
+    .timer-cap { text-wrap: balance; }
+
+    .timers-pie {
+      width: 100%;
+      max-width: 620px;
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(245, 242, 234, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .timers-pie-linea {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: baseline;
+      gap: 6px 16px;
+    }
+
+    .timers-pie .timer-sabados,
+    .timers-pie .timer-flight { margin-top: 0; }
+    .timers-pie .timer-sabados:empty { display: none; }
 
     /* ---------- páginas de nuestra historia ---------- */
     /* es el tercer contador: comparte forma con los otros dos (.timer-*) */
@@ -639,8 +693,8 @@
 
 
     .paginas-chiste {
-      margin-top: 14px;
-      max-width: 300px;
+      margin-top: 0;
+      max-width: 460px;
       font-family: Georgia, "Times New Roman", serif;
       font-style: italic;
       font-size: 14px;
@@ -3412,6 +3466,11 @@
     }
 
     .emblem-wrap { margin-bottom: 0; }
+    .hero .wave-divider { margin-bottom: 0; }
+
+    /* Para ti va justo debajo del nombre: sin el hueco grande de las demás */
+    .bloque.bloque-primero { padding-top: clamp(30px, 5vw, 48px); }
+    .bloque-primero .sec-cab { margin-bottom: clamp(22px, 4vw, 36px); }
 
     .bloque {
       width: 100%;
@@ -3604,8 +3663,8 @@
   <header class="topbar">
     <a class="topbar-marca" href="#inicio">Mariapnel 🐧</a>
     <nav class="topbar-nav" aria-label="Índice">
-      <a href="#tiempo">Tiempo</a>
       <a href="#para-ti">Para ti</a>
+      <a href="#tiempo">Tiempo</a>
       <a href="#sorpresas">Sorpresas</a>
       <a href="#lecturas">Lecturas</a>
     </nav>
@@ -3621,73 +3680,12 @@
       <path class="wave-path" fill="none" stroke="#f5f2ea" stroke-width="1.5" />
     </svg>
 
-    <div class="emblem-wrap">
-      <svg class="ring" viewBox="0 0 400 400" aria-hidden="true">
-       <g class="ring-spin">
-        <!-- el círculo se abre arriba y abajo para dejar sitio a las lecturas -->
-        <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
-          <path d="M 316.4 102.3 A 152 152 0 0 1 316.4 297.7" />
-          <path d="M 83.6 297.7 A 152 152 0 0 1 83.6 102.3" />
-        </g>
-        <!-- flechas en sentido horario -->
-        <g fill="currentColor">
-          <path d="M -9 -7 L 9 0 L -9 7 Z" transform="translate(352 200) rotate(90)" />
-          <path d="M -9 -7 L 9 0 L -9 7 Z" transform="translate(316.4 297.7) rotate(130)" />
-          <path d="M -9 -7 L 9 0 L -9 7 Z" transform="translate(83.6 102.3) rotate(310)" />
-        </g>
-        <!-- arriba, lo que falta para vernos -->
-        <path id="arcTiempo" d="M 83.6 102.3 A 152 152 0 0 1 316.4 102.3" fill="none" />
-        <text><textPath href="#arcTiempo" startOffset="50%" text-anchor="middle">TIEMPO <tspan class="ring-val" id="ringTiempo">–</tspan></textPath></text>
-        <!-- abajo, lo que nos separa -->
-        <path id="arcDistancia" d="M 83.6 297.7 A 152 152 0 0 0 316.4 297.7" fill="none" />
-        <text><textPath href="#arcDistancia" startOffset="50%" text-anchor="middle">DISTANCIA <tspan class="ring-val" id="ringDistancia">–</tspan></textPath></text>
-       </g>
-      </svg>
-      <div class="photo">
-        <img src="/mariapnel.jpeg" alt="Mariapnel 🐧" />
-      </div>
-    </div>
     </section>
 
-    <!-- 01 · las tres cifras, en fila y con la misma forma -->
-    <section class="bloque" id="tiempo">
+    <!-- 01 · las tres puertas: lo que más usa, lo primero -->
+    <section class="bloque bloque-primero" id="para-ti">
       <header class="sec-cab">
         <span class="sec-num">01</span>
-        <h2 class="sec-titulo">El tiempo</h2>
-        <p class="sec-sub">Hora de Orlando, Florida</p>
-      </header>
-
-    <div class="timers">
-      <div class="timer">
-        <span class="timer-lead" id="lead">Faltan</span>
-        <span class="timer-num" id="days">–</span>
-        <span class="timer-cap" id="caption">días para tu cumpleaños 🐧</span>
-        <span class="timer-clock" id="clock"></span>
-      </div>
-
-      <div class="timer">
-        <span class="timer-lead" id="meetLead">Faltan</span>
-        <span class="timer-num" id="meetDays">–</span>
-        <span class="timer-cap" id="meetCaption">días para vernos 🐧</span>
-        <span class="timer-clock" id="meetClock"></span>
-        <span class="timer-sabados" id="meetSabados"></span>
-        <span class="timer-flight">26 dic &middot; BCN 10:55 &rarr; MCO 19:10</span>
-      </div>
-
-      <div class="timer paginas">
-        <span class="timer-lead">Llevamos</span>
-        <span class="timer-num paginas-num" id="paginasDias">–</span>
-        <span class="timer-cap paginas-cap" id="paginasCap">páginas de nuestra historia</span>
-        <span class="timer-flight">Una por día &middot; desde el 26 jul 2026</span>
-        <p class="paginas-chiste">Que es también el número de días que llevo dándome con una piedra en los dientes por no haberte buscado antes.</p>
-      </div>
-    </div>
-    </section>
-
-    <!-- 02 · las tres puertas -->
-    <section class="bloque" id="para-ti">
-      <header class="sec-cab">
-        <span class="sec-num">02</span>
         <h2 class="sec-titulo">Para ti</h2>
         <p class="sec-sub">Tres puertas, una a la vez</p>
       </header>
@@ -3726,6 +3724,78 @@
         <ul class="boxes" id="boxes"></ul>
         <div class="box-open" id="boxOpen" hidden></div>
       </div>
+    </div>
+    </section>
+
+    <!-- 02 · el tiempo: el emblema y las tres cifras en tres columnas -->
+    <section class="bloque" id="tiempo">
+      <header class="sec-cab">
+        <span class="sec-num">02</span>
+        <h2 class="sec-titulo">El tiempo</h2>
+        <p class="sec-sub">Hora de Orlando, Florida</p>
+      </header>
+
+    <div class="tiempo-rejilla">
+    <div class="emblem-wrap">
+      <svg class="ring" viewBox="0 0 400 400" aria-hidden="true">
+       <g class="ring-spin">
+        <!-- el círculo se abre arriba y abajo para dejar sitio a las lecturas -->
+        <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+          <path d="M 316.4 102.3 A 152 152 0 0 1 316.4 297.7" />
+          <path d="M 83.6 297.7 A 152 152 0 0 1 83.6 102.3" />
+        </g>
+        <!-- flechas en sentido horario -->
+        <g fill="currentColor">
+          <path d="M -9 -7 L 9 0 L -9 7 Z" transform="translate(352 200) rotate(90)" />
+          <path d="M -9 -7 L 9 0 L -9 7 Z" transform="translate(316.4 297.7) rotate(130)" />
+          <path d="M -9 -7 L 9 0 L -9 7 Z" transform="translate(83.6 102.3) rotate(310)" />
+        </g>
+        <!-- arriba, lo que falta para vernos -->
+        <path id="arcTiempo" d="M 83.6 102.3 A 152 152 0 0 1 316.4 102.3" fill="none" />
+        <text><textPath href="#arcTiempo" startOffset="50%" text-anchor="middle">TIEMPO <tspan class="ring-val" id="ringTiempo">–</tspan></textPath></text>
+        <!-- abajo, lo que nos separa -->
+        <path id="arcDistancia" d="M 83.6 297.7 A 152 152 0 0 0 316.4 297.7" fill="none" />
+        <text><textPath href="#arcDistancia" startOffset="50%" text-anchor="middle">DISTANCIA <tspan class="ring-val" id="ringDistancia">–</tspan></textPath></text>
+       </g>
+      </svg>
+      <div class="photo">
+        <img src="/mariapnel.jpeg" alt="Mariapnel 🐧" />
+      </div>
+    </div>
+
+    <div class="tiempo-datos">
+    <div class="timers">
+      <div class="timer">
+        <span class="timer-lead" id="lead">Faltan</span>
+        <span class="timer-num" id="days">–</span>
+        <span class="timer-cap" id="caption">días para tu cumpleaños 🐧</span>
+        <span class="timer-clock" id="clock"></span>
+      </div>
+
+      <div class="timer">
+        <span class="timer-lead" id="meetLead">Faltan</span>
+        <span class="timer-num" id="meetDays">–</span>
+        <span class="timer-cap" id="meetCaption">días para vernos 🐧</span>
+        <span class="timer-clock" id="meetClock"></span>
+      </div>
+
+      <div class="timer paginas">
+        <span class="timer-lead">Llevamos</span>
+        <span class="timer-num paginas-num" id="paginasDias">–</span>
+        <span class="timer-cap paginas-cap" id="paginasCap">páginas de nuestra historia</span>
+        <span class="timer-clock">desde 26 jul</span>
+      </div>
+    </div>
+
+    <!-- lo que no cabe en una columna estrecha va debajo, para las tres -->
+    <div class="timers-pie">
+      <p class="timers-pie-linea">
+        <span class="timer-sabados" id="meetSabados"></span>
+        <span class="timer-flight">26 dic &middot; BCN 10:55 &rarr; MCO 19:10</span>
+      </p>
+      <p class="paginas-chiste">Una página por día desde el 26 de julio de 2026. Que es también el número de días que llevo dándome con una piedra en los dientes por no haberte buscado antes.</p>
+    </div>
+    </div>
     </div>
     </section>
 
@@ -4118,8 +4188,8 @@
   <footer class="pie">
     <span class="pie-marca">Mariapnel 🐧</span>
     <nav class="pie-nav" aria-label="Índice">
-      <a href="#tiempo">Tiempo</a>
       <a href="#para-ti">Para ti</a>
+      <a href="#tiempo">Tiempo</a>
       <a href="#sorpresas">Sorpresas</a>
       <a href="#lecturas">Lecturas</a>
     </nav>
