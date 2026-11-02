@@ -10,15 +10,17 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 ## Qué hay ahora
 
 **Cómo está ordenada la portada.** Una barra fija arriba con el índice
-(Tiempo · Para ti · Sorpresas · Lecturas, marca dónde estás) y, bajo el
-emblema, cuatro secciones con el mismo encabezado (número dorado, título en
-serif y subtítulo): **01 El tiempo** (los tres contadores en fila),
-**02 Para ti** (las tres puertas, en fila en escritorio), **03 Sorpresas
+(Para ti · Tiempo · Sorpresas · Lecturas, marca dónde estás) y, bajo el
+nombre, cuatro secciones con el mismo encabezado (número dorado, título en
+serif y subtítulo): **01 Para ti** (las tres puertas, lo que más se usa,
+justo debajo del nombre y a la vista sin bajar), **02 El tiempo** (el
+emblema y los tres contadores en tres columnas, también en el móvil; los
+sábados, el vuelo y el chiste van en una línea común debajo; en el ordenador
+el emblema queda a la izquierda y las columnas a su lado), **03 Sorpresas
 reveladas** (la sorpresa y la carta) y **04 Lo que está escrito** (Maktub y
 Por qué un pingüino, lado a lado). Todo comparte una rejilla de 1040 px, un
-mismo hueco entre secciones y un único estilo de tarjeta; en el móvil todo
-pasa a una columna. Las reglas viven al final del `<style>`, en el bloque
-"ORDEN DE LA PORTADA".
+mismo hueco entre secciones y un único estilo de tarjeta. Las reglas viven
+al final del `<style>`, en el bloque "ORDEN DE LA PORTADA".
 
 - Dos contadores en vivo (días y horas : minutos : segundos): el cumpleaños
   (25/08) y el reencuentro, que apunta al aterrizaje en Orlando del 26/12 a
