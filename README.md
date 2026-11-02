@@ -318,6 +318,24 @@ el botón **"Quiero entrenar 🐧"** de la portada.
   sesiones de Hyrox por semana: el jueves sustituye al descanso activo.
 - Botones **"Marcar todo el día"** y **"Reiniciar día"**, y un contador
   semanal (días hechos / 7).
+- **Pensada para usarla entrenando**, con el móvil en una mano:
+  - cada ejercicio es una tarjeta con un botón grande de hecho ✓; el que
+    toca lleva la etiqueta **Ahora** y, al terminarlo, el siguiente sube
+    solo a la vista. Los hechos se pliegan a una línea (tocándolos se abren);
+  - **series**: un círculo por serie ("3 × 12" → 3). Tocarlo marca la serie
+    y arranca el descanso; al completar todas, el ejercicio queda hecho.
+    Tocar una ya hecha la deshace. Se guardan solo en ese móvil
+    (`entreno-series-<lunes>`);
+  - **peso**: − [ 65 kg ] + Guardar, relleno con el último peso para
+    repetirlo de un toque; los botones suman o restan 2,5 kg (5 lb);
+  - **barra de abajo**: el ejercicio que toca y el descanso (60 s, 90 s o
+    2 min). Durante el descanso muestra la cuenta atrás, ±15 s y "Listo";
+    al acabar vibra, pita y avisa;
+  - **pantalla encendida** mientras la página está abierta (Wake Lock, si el
+    navegador lo permite). Unidad, descanso por defecto y pantalla están en
+    "Ajustes", plegado en el móvil.
+- En el ordenador, la semana y el día quedan fijos a la izquierda y los
+  ejercicios a la derecha.
 - Lo marcado se guarda en el navegador por semana (`entreno-<lunes>` en
   `localStorage`). Cada lunes la lista empieza limpia; las semanas anteriores
   quedan guardadas por si algún día se quieren consultar.
