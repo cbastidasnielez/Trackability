@@ -379,14 +379,14 @@
       margin: 0 auto 18px;
     }
 
-    .porque h2 {
-      font-size: 10px;
-      font-weight: 300;
-      letter-spacing: 0.34em;
-      text-indent: 0.34em;
-      text-transform: uppercase;
-      color: var(--hielo);
-      margin-bottom: 18px;
+    .porque-titulo {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.6rem, 5vw, 2rem);
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 26px;
     }
 
     .porque-datos {
@@ -574,7 +574,7 @@
       width: 100%;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 38px;
+      gap: 0;
     }
 
     .timer {
@@ -583,16 +583,19 @@
       align-items: center;
     }
 
-    /* en pantallas anchas, uno al lado del otro con una línea entre medias */
-    @media (min-width: 620px) {
-      .timers {
-        grid-template-columns: 1fr 1fr;
-        gap: 0;
-      }
+    /* en el móvil, uno debajo de otro separados por una línea; en pantallas
+       anchas, los tres en fila con una línea vertical entre medias */
+    .timer { padding: 30px 12px; }
+    .timer:first-child { padding-top: 0; }
+    .timer + .timer { border-top: 1px solid rgba(245, 242, 234, 0.1); }
+
+    @media (min-width: 820px) {
+      .timers { grid-template-columns: repeat(3, 1fr); }
+      .timer, .timer:first-child { padding: 6px 26px; }
       .timer + .timer {
-        border-left: 1px solid rgba(245, 242, 234, 0.14);
+        border-top: none;
+        border-left: 1px solid rgba(245, 242, 234, 0.1);
       }
-      .timer { padding: 0 18px; }
     }
 
     .timer-lead {
@@ -630,45 +633,14 @@
     }
 
     /* ---------- páginas de nuestra historia ---------- */
-    .paginas {
-      width: 100%;
-      max-width: 420px;
-      margin-top: 40px;
-      padding-top: 30px;
-      border-top: 1px solid rgba(245, 242, 234, 0.12);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
+    /* es el tercer contador: comparte forma con los otros dos (.timer-*) */
 
-    .paginas-titulo {
-      font-size: 10px;
-      letter-spacing: 0.36em;
-      text-indent: 0.36em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 14px;
-    }
 
-    .paginas-num {
-      font-size: clamp(2.8rem, 12vw, 4rem);
-      font-weight: 100;
-      line-height: 1;
-      letter-spacing: 0.04em;
-      text-shadow: 0 0 30px var(--glow);
-    }
 
-    .paginas-cap {
-      margin-top: 10px;
-      font-size: 13px;
-      letter-spacing: 0.08em;
-      color: var(--dim);
-    }
 
     .paginas-chiste {
       margin-top: 14px;
-      max-width: 340px;
+      max-width: 300px;
       font-family: Georgia, "Times New Roman", serif;
       font-style: italic;
       font-size: 14px;
@@ -692,14 +664,6 @@
       opacity: 0.85;
     }
 
-    .tz-note {
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-indent: 0.3em;
-      text-transform: uppercase;
-      color: var(--faint);
-      margin-top: 22px;
-    }
 
     /* ---------- menú: sorpresas, entrenar y recetas ---------- */
     /* Las tres entradas miden lo mismo: icono, título, una línea que dice qué
@@ -2373,15 +2337,6 @@
       margin-top: 46px;
     }
 
-    .revealed-title {
-      font-size: 10px;
-      font-weight: 300;
-      letter-spacing: 0.35em;
-      text-indent: 0.35em;
-      text-transform: uppercase;
-      color: var(--dim);
-      margin-bottom: 16px;
-    }
 
     /* ---------- la sorpresa ---------- */
     /* la sorpresa se lee primero y el formulario queda debajo, aunque en el
@@ -3339,17 +3294,6 @@
       .campana.sin-leer svg { animation: none; }
     }
 
-    footer {
-      position: relative;
-      z-index: 1;
-      padding: 0 24px 34px;
-      font-size: 10px;
-      letter-spacing: 0.35em;
-      text-indent: 0.35em;
-      text-transform: uppercase;
-      color: var(--faint);
-      text-align: center;
-    }
 
     @media (prefers-reduced-motion: reduce) {
       .ring-spin, .photo, .lights i { animation: none; }
@@ -3358,6 +3302,292 @@
       .bola-nieve i { animation: none !important; }
       .bola.revelando .bola-triangulo { animation: none; opacity: 1; }
       .snow { display: none; }
+    }
+
+    /* =========================================================
+       ORDEN DE LA PORTADA
+       Una sola rejilla (--ancho), un solo tipo de encabezado de
+       sección (número, título, subtítulo), un solo tipo de
+       tarjeta y el mismo hueco entre secciones. Lo que se lee de
+       corrido va en una columna (--estrecho); lo que se compara,
+       en fila.
+       ========================================================= */
+    :root {
+      --ancho: 1040px;
+      --estrecho: 520px;
+      --hueco: clamp(76px, 11vw, 124px);
+      --radio: 18px;
+      --linea: rgba(245, 242, 234, 0.1);
+      --tarjeta-borde: rgba(245, 242, 234, 0.14);
+      /* opaca: que la onda del fondo no cruce el texto */
+      --tarjeta-fondo: linear-gradient(170deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.008)), #0a0a0b;
+    }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    /* ---------- barra superior ---------- */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+      padding: 15px max(24px, calc((100% - var(--ancho)) / 2));
+      background: rgba(5, 5, 5, 0.74);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--linea);
+    }
+
+    .topbar-marca {
+      justify-self: start;
+      font-size: 12px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .topbar-nav,
+    .pie-nav {
+      display: flex;
+      justify-content: center;
+      gap: clamp(18px, 3.4vw, 42px);
+    }
+
+    .topbar-nav a,
+    .pie-nav a {
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      font-size: 10.5px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: var(--dim);
+      text-decoration: none;
+      transition: color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .topbar-nav a:hover,
+    .pie-nav a:hover,
+    .topbar-nav a.activo {
+      color: var(--ink);
+      border-bottom-color: var(--gold);
+    }
+
+    .topbar-fecha {
+      justify-self: end;
+      font-size: 10.5px;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+    }
+
+    @media (max-width: 640px) {
+      .topbar { grid-template-columns: 1fr; padding: 13px 16px; }
+      .topbar-marca, .topbar-fecha { display: none; }
+      .topbar-nav { gap: 18px; }
+      .topbar-nav a { font-size: 10px; letter-spacing: 0.2em; }
+    }
+
+    /* ---------- rejilla ---------- */
+    main {
+      max-width: var(--ancho);
+      padding: 44px 24px 0;
+    }
+
+    @media (max-width: 480px) {
+      main { padding: 36px 16px 0; }
+    }
+
+    .hero {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .emblem-wrap { margin-bottom: 0; }
+
+    .bloque {
+      width: 100%;
+      padding-top: var(--hueco);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ---------- encabezado de sección: igual en las cuatro ---------- */
+    .sec-cab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: clamp(34px, 5vw, 52px);
+    }
+
+    .sec-num {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 10.5px;
+      letter-spacing: 0.4em;
+      text-indent: 0.4em;
+      color: var(--gold);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sec-num::before,
+    .sec-num::after {
+      content: "";
+      width: 26px;
+      height: 1px;
+      background: rgba(227, 192, 122, 0.45);
+    }
+
+    .sec-titulo {
+      margin-top: 16px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.75rem, 5.5vw, 2.4rem);
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      line-height: 1.15;
+      color: var(--ink);
+    }
+
+    .sec-sub {
+      margin-top: 12px;
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      text-indent: 0.32em;
+      text-transform: uppercase;
+      color: rgba(245, 242, 234, 0.4);
+    }
+
+    /* ---------- 02 · las tres puertas ---------- */
+    .menu {
+      max-width: var(--estrecho);
+      margin-top: 0;
+    }
+
+    @media (min-width: 820px) {
+      .menu {
+        max-width: var(--ancho);
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+      }
+      .menu-btn {
+        position: relative;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 22px;
+        min-height: 196px;
+        padding: 26px 26px 24px;
+      }
+      .menu-ico { width: 52px; height: 52px; font-size: 26px; }
+      .menu-txt { display: flex; flex-direction: column; justify-content: flex-end; }
+      .menu-titulo { font-size: 17px; }
+      .menu-sub { margin-top: 6px; font-size: 13px; }
+      .menu-flecha { position: absolute; top: 40px; right: 26px; }
+    }
+
+    .surprise { max-width: var(--estrecho); }
+    .boxes-card, .surprise-card { max-width: none; }
+
+    /* ---------- 03 · sorpresas ---------- */
+    .revealed { max-width: var(--estrecho); margin-top: 0; }
+    .carta { max-width: var(--estrecho); margin-top: 20px; }
+    .agenda { max-width: var(--estrecho); margin-top: 20px; }
+
+    /* ---------- 04 · las dos lecturas, en fila ---------- */
+    .lecturas {
+      width: 100%;
+      max-width: var(--estrecho);
+      display: grid;
+      gap: 20px;
+    }
+
+    @media (min-width: 900px) {
+      .lecturas {
+        max-width: var(--ancho);
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+    }
+
+    .maktub,
+    .porque {
+      max-width: none;
+      margin-top: 0;
+      padding: clamp(30px, 4vw, 42px) clamp(22px, 3.4vw, 38px);
+    }
+
+    .maktub-palabra { font-size: clamp(1.6rem, 5vw, 2rem); letter-spacing: 0.08em; text-indent: 0.08em; }
+    .pareja { max-width: 220px; margin-bottom: 22px; }
+
+    /* el texto de corrido se lee mejor alineado a la izquierda */
+    .maktub p, .porque p { text-align: left; }
+    .maktub .firma { text-align: center; }
+
+    /* la firma baja al pie de la tarjeta cuando las dos van en fila */
+    .maktub { display: flex; flex-direction: column; }
+    .maktub .firma { margin-top: auto; padding-top: 24px; }
+
+    /* ---------- una sola tarjeta para todo ---------- */
+    .surprise-card,
+    .boxes-card,
+    .carta,
+    .agenda,
+    .maktub,
+    .porque {
+      border: 1px solid var(--tarjeta-borde);
+      border-radius: var(--radio);
+      background: var(--tarjeta-fondo);
+    }
+
+    .maktub-trad { border-bottom-color: var(--linea); }
+    .porque-datos { border-bottom-color: var(--linea); }
+
+    /* ---------- pie ---------- */
+    .pie {
+      position: relative;
+      z-index: 1;
+      width: calc(100% - 48px);
+      max-width: calc(var(--ancho) - 48px);
+      margin-top: var(--hueco);
+      padding: 34px 0 calc(100px + env(safe-area-inset-bottom, 0px));
+      border-top: 1px solid var(--linea);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .pie-marca {
+      font-size: 12px;
+      letter-spacing: 0.32em;
+      text-indent: 0.32em;
+      text-transform: uppercase;
+    }
+
+    .pie-nota {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    @media (min-width: 820px) {
+      .pie {
+        flex-direction: row;
+        justify-content: space-between;
+        padding-bottom: 88px;
+      }
     }
   </style>
 </head>
@@ -3370,7 +3600,20 @@
     <path class="wave-path" fill="none" stroke="#f5f2ea" stroke-width="1.5" />
   </svg>
 
+  <!-- barra fija: el índice de la página, como el menú de una tienda ordenada -->
+  <header class="topbar">
+    <a class="topbar-marca" href="#inicio">Mariapnel 🐧</a>
+    <nav class="topbar-nav" aria-label="Índice">
+      <a href="#tiempo">Tiempo</a>
+      <a href="#para-ti">Para ti</a>
+      <a href="#sorpresas">Sorpresas</a>
+      <a href="#lecturas">Lecturas</a>
+    </nav>
+    <span class="topbar-fecha">25&thinsp;·&thinsp;08</span>
+  </header>
+
   <main>
+    <section class="hero" id="inicio">
     <div class="side-label">Side A &middot; Track 01 &middot; 25&thinsp;/&thinsp;08</div>
     <h1>Mariapnel 🐧</h1>
 
@@ -3404,6 +3647,15 @@
         <img src="/mariapnel.jpeg" alt="Mariapnel 🐧" />
       </div>
     </div>
+    </section>
+
+    <!-- 01 · las tres cifras, en fila y con la misma forma -->
+    <section class="bloque" id="tiempo">
+      <header class="sec-cab">
+        <span class="sec-num">01</span>
+        <h2 class="sec-titulo">El tiempo</h2>
+        <p class="sec-sub">Hora de Orlando, Florida</p>
+      </header>
 
     <div class="timers">
       <div class="timer">
@@ -3421,16 +3673,24 @@
         <span class="timer-sabados" id="meetSabados"></span>
         <span class="timer-flight">26 dic &middot; BCN 10:55 &rarr; MCO 19:10</span>
       </div>
-    </div>
 
-    <div class="tz-note">Hora de Orlando, Florida</div>
-
-    <div class="paginas">
-      <span class="paginas-titulo">Páginas de nuestra historia</span>
-      <span class="paginas-num" id="paginasDias">–</span>
-      <span class="paginas-cap" id="paginasCap">días desde el 26 de julio de 2026</span>
-      <p class="paginas-chiste">Que es también el número de días que llevo dándome con una piedra en los dientes por no haberte buscado antes.</p>
+      <div class="timer paginas">
+        <span class="timer-lead">Llevamos</span>
+        <span class="timer-num paginas-num" id="paginasDias">–</span>
+        <span class="timer-cap paginas-cap" id="paginasCap">páginas de nuestra historia</span>
+        <span class="timer-flight">Una por día &middot; desde el 26 jul 2026</span>
+        <p class="paginas-chiste">Que es también el número de días que llevo dándome con una piedra en los dientes por no haberte buscado antes.</p>
+      </div>
     </div>
+    </section>
+
+    <!-- 02 · las tres puertas -->
+    <section class="bloque" id="para-ti">
+      <header class="sec-cab">
+        <span class="sec-num">02</span>
+        <h2 class="sec-titulo">Para ti</h2>
+        <p class="sec-sub">Tres puertas, una a la vez</p>
+      </header>
 
     <nav class="menu" aria-label="Secciones">
       <button class="menu-btn menu-sorpresas" id="unlockBtn" type="button" aria-expanded="false" aria-controls="surprise">
@@ -3467,9 +3727,17 @@
         <div class="box-open" id="boxOpen" hidden></div>
       </div>
     </div>
+    </section>
 
-    <section class="revealed">
-      <h2 class="revealed-title">Sorpresas reveladas</h2>
+    <!-- 03 · lo que ya se ha abierto -->
+    <section class="bloque" id="sorpresas">
+      <header class="sec-cab">
+        <span class="sec-num">03</span>
+        <h2 class="sec-titulo">Sorpresas reveladas</h2>
+        <p class="sec-sub">Lo que ya se ha abierto</p>
+      </header>
+
+    <div class="revealed">
 
       <div class="surprise-card">
         <div class="lights" aria-hidden="true"></div>
@@ -3543,7 +3811,7 @@
         <p class="reveal-foot">Nos vemos en Orlando 🐧</p>
         <span class="stay-tuned">Esto es solo la introducción &middot; Stay tuned 🐧</span>
       </div>
-    </section>
+    </div>
 
     <details class="carta" id="carta">
       <summary class="carta-resumen">
@@ -3594,9 +3862,18 @@
       <span class="agenda-sub" id="agendaSub"></span>
       <ul class="dates-list" id="datesList"></ul>
     </section>
+    </section>
 
+    <!-- 04 · las dos lecturas, una al lado de la otra -->
+    <section class="bloque" id="lecturas">
+      <header class="sec-cab">
+        <span class="sec-num">04</span>
+        <h2 class="sec-titulo">Lo que está escrito</h2>
+        <p class="sec-sub">Para leer despacio</p>
+      </header>
 
-    <section class="maktub">
+    <div class="lecturas">
+    <article class="maktub">
       <div class="maktub-palabra">Maktub</div>
       <span class="maktub-arabe" lang="ar" dir="rtl">مكتوب</span>
       <span class="maktub-trad">Está escrito</span>
@@ -3608,9 +3885,9 @@
       <p>Puede que estuviera escrito desde el principio. O puede que lo hayamos ido escribiendo nosotros y solo se note al mirar hacia atrás. A mí las dos me sirven.</p>
 
       <p class="firma">Maktub.</p>
-    </section>
+    </article>
 
-    <section class="porque">
+    <article class="porque">
       <svg class="pareja" viewBox="0 0 200 124" aria-hidden="true">
         <defs>
           <g id="peng">
@@ -3639,7 +3916,7 @@
         <use href="#peng" transform="translate(126 99) rotate(-7 0 -20)" />
       </svg>
 
-      <h2>Por qué un pingüino</h2>
+      <h3 class="porque-titulo">Por qué un pingüino</h3>
 
       <div class="porque-datos">
         <div><strong>80–90 %</strong><span>Vuelven a la<br />misma pareja</span></div>
@@ -3654,6 +3931,8 @@
       <p>Y ellos también se van. Los de Magallanes migran miles de kilómetros y pasan meses solos en mar abierto, cada uno por su cuenta. La fidelidad no está en no marcharse: está en volver, y en que al volver no haya que empezar de cero.</p>
 
       <p>Nosotros nos separamos. Cada uno vivió su vida, en países distintos, durante años. Y nos hemos vuelto a encontrar sin tener que cortejarnos otra vez. En diciembre vuelvo al mismo sitio 🐧</p>
+    </article>
+    </div>
     </section>
     <!--
       Próximamente: convertir las casillas en raspaditos de verdad. 🐧
@@ -3836,8 +4115,40 @@
 
   <div class="print-area" id="printArea" aria-hidden="true"></div>
 
-  <footer>Stay tuned &middot; 🐧</footer>
+  <footer class="pie">
+    <span class="pie-marca">Mariapnel 🐧</span>
+    <nav class="pie-nav" aria-label="Índice">
+      <a href="#tiempo">Tiempo</a>
+      <a href="#para-ti">Para ti</a>
+      <a href="#sorpresas">Sorpresas</a>
+      <a href="#lecturas">Lecturas</a>
+    </nav>
+    <span class="pie-nota">Side A &middot; Stay tuned &middot; 🐧</span>
+  </footer>
 
+  <script>
+    /* la barra marca en qué sección estás */
+    (function () {
+      var enlaces = document.querySelectorAll('.topbar-nav a');
+      if (!('IntersectionObserver' in window) || !enlaces.length) return;
+      var visibles = {};
+      var obs = new IntersectionObserver(function (entradas) {
+        entradas.forEach(function (e) { visibles[e.target.id] = e.isIntersecting; });
+        var actual = null;
+        enlaces.forEach(function (a) {
+          var id = a.getAttribute('href').slice(1);
+          if (!actual && visibles[id]) actual = id;
+        });
+        enlaces.forEach(function (a) {
+          a.classList.toggle('activo', a.getAttribute('href') === '#' + actual);
+        });
+      }, { rootMargin: '-45% 0px -50% 0px' });
+      enlaces.forEach(function (a) {
+        var sec = document.getElementById(a.getAttribute('href').slice(1));
+        if (sec) obs.observe(sec);
+      });
+    })();
+  </script>
   <script type="module" src="/src/analytics.js"></script>
   <script src="/flappy.js"></script>
   <script>
@@ -4002,7 +4313,7 @@
       var n = Math.max(0, Math.round((hoy - desde) / 86400000));
       if (paginasDias.textContent !== String(n)) {
         paginasDias.textContent = n;
-        paginasCap.textContent = (n === 1 ? 'día' : 'días') + ' desde el 26 de julio de 2026';
+        paginasCap.textContent = (n === 1 ? 'página' : 'páginas') + ' de nuestra historia';
       }
     }
 
