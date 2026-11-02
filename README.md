@@ -9,6 +9,17 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 
 ## Qué hay ahora
 
+**Cómo está ordenada la portada.** Una barra fija arriba con el índice
+(Tiempo · Para ti · Sorpresas · Lecturas, marca dónde estás) y, bajo el
+emblema, cuatro secciones con el mismo encabezado (número dorado, título en
+serif y subtítulo): **01 El tiempo** (los tres contadores en fila),
+**02 Para ti** (las tres puertas, en fila en escritorio), **03 Sorpresas
+reveladas** (la sorpresa y la carta) y **04 Lo que está escrito** (Maktub y
+Por qué un pingüino, lado a lado). Todo comparte una rejilla de 1040 px, un
+mismo hueco entre secciones y un único estilo de tarjeta; en el móvil todo
+pasa a una columna. Las reglas viven al final del `<style>`, en el bloque
+"ORDEN DE LA PORTADA".
+
 - Dos contadores en vivo (días y horas : minutos : segundos): el cumpleaños
   (25/08) y el reencuentro, que apunta al aterrizaje en Orlando del 26/12 a
   las 19:10 (`ENCUENTRO` en `index.html`), con los sábados que quedan por
@@ -30,7 +41,8 @@ giratorio de "distancia y tiempo" con su foto en el centro.
   respuesta, todas a la vista: cuidar de quien cuida, reconocer sus logros,
   no quedarse en un «estoy bien», planes que la relajan y hablar los
   desacuerdos con cariño. La página no dice de dónde salen.
-- **Páginas de nuestra historia**: bajo los dos contadores, los días que han
+- **Páginas de nuestra historia**: el tercer contador, al lado de los otros
+  dos ("Llevamos 99 páginas de nuestra historia"), con los días que han
   pasado desde el 26/07/2026 (`HISTORIA_DESDE`), el día en que le escribí lo
   que sentía. Cuenta con la fecha de Orlando: el 26 de julio es el día 0 y
   sube a medianoche de allí. Debajo, el chiste: es también el número de días
