@@ -28,6 +28,14 @@ al final del `<style>`, en el bloque "ORDEN DE LA PORTADA".
   delante — el 26/12/2026 cae precisamente en sábado, así que el último que
   cuenta es el del reencuentro
 - Emblema giratorio (círculo de flechas "Distancia y Tiempo") con la foto de Mariapnel 🐧 en el centro
+- **El saludo**: bajo el nombre, "Buenos días / Buenas tardes / Buenas
+  noches" según la hora de Orlando (5–12, 12–20 y el resto), con el día y la
+  hora de allí encima y uno de sus motes: Pinguina, mi luna, princesa, cara e
+  nalga, mi Arya Stark, mi niña oreo, mi tóxica, pervertida, adicta a la rosa,
+  mi Tryhard, y la frase "Eres la mejor" (esa va tras un punto, no tras una
+  coma). Sale uno al azar que no repite el de la última visita, y tocándolo
+  sale el siguiente. La lista está en `MOTES`, en el último `<script>` de
+  `index.html`.
 - **El menú**: tres entradas del mismo tamaño, cada una con su icono, su
   título, una línea que dice qué hay dentro y su color:
   - 🎁 **Desbloquear sorpresas** (dorado): "Presiona para abrir las 7
