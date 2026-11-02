@@ -70,6 +70,25 @@ al final del `<style>`, en el bloque "ORDEN DE LA PORTADA".
 - Las fechas viven en el navegador (`localStorage`) y cualquier cambio se
   envía por email vía Formspree
 
+## Como app en el iPhone
+
+En Safari: abrir la web → botón **Compartir** (el cuadrado con la flecha) →
+**Añadir a pantalla de inicio** → **Añadir**. Queda un icono con el pingüino
+llamado "Mariapnel" que abre la web a pantalla completa, sin barras de
+Safari, y desde ahí se va a `/entrenar` y `/recetas` sin salir de la app.
+
+- `public/manifest.json`: nombre, colores y modo `standalone`. Lo enlazan
+  la portada, `/entrenar`, `/recetas` y `/juego`, así que se puede instalar
+  desde cualquiera de ellas.
+- `public/apple-touch-icon.png` (180 px) e `icon-192.png` / `icon-512.png`:
+  el pingüino de `icon-512.svg` en PNG, porque el iPhone no usa SVG como
+  icono de la pantalla de inicio.
+- `public/sw.js`: modo sin conexión prudente. Siempre pide primero la
+  versión nueva a internet, así que lo que se publica se ve al momento; solo
+  si no hay conexión, o la página tarda más de 4 s, abre la última copia
+  guardada. No toca `/api`, Supabase ni el audio. Para forzar que se borren
+  las copias viejas, se sube el número de `CACHE` (`mariapnel-v1` → `v2`).
+
 ## Recibir las fechas por email (Formspree)
 
 1. Crea una cuenta gratis en [formspree.io](https://formspree.io) y añade un
