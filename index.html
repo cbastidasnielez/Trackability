@@ -3468,6 +3468,73 @@
     .emblem-wrap { margin-bottom: 0; }
     .hero .wave-divider { margin-bottom: 0; }
 
+    /* ---------- saludo según la hora ---------- */
+    .saludo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .saludo[hidden] { display: none; }
+
+    .saludo-hora {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    .saludo-txt {
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-size: clamp(1.15rem, 4.8vw, 1.6rem);
+      line-height: 1.35;
+      color: var(--ink);
+      text-wrap: balance;
+    }
+
+    .saludo-mote {
+      appearance: none;
+      border: none;
+      background: none;
+      padding: 0 2px;
+      font: inherit;
+      color: var(--gold);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* subrayado discontinuo solo bajo el mote: se toca para cambiarlo */
+    .saludo-mote-txt {
+      border-bottom: 1px dashed rgba(227, 192, 122, 0.45);
+      transition: border-color 0.2s ease;
+    }
+
+    .saludo-mote:hover .saludo-mote-txt { border-bottom-color: var(--gold); }
+
+    .saludo-otro {
+      display: inline-block;
+      margin-left: 6px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-style: normal;
+      font-size: 0.6em;
+      vertical-align: 0.25em;
+      opacity: 0.6;
+      transition: transform 0.4s ease;
+    }
+
+    .saludo-mote:active .saludo-otro { transform: rotate(180deg); }
+
+    .saludo-txt.cambia #saludoMoteTxt { animation: mote 0.35s ease; }
+
+    @keyframes mote {
+      from { opacity: 0; filter: blur(4px); }
+      to   { opacity: 1; filter: none; }
+    }
+
     /* Para ti va justo debajo del nombre: sin el hueco grande de las demás */
     .bloque.bloque-primero { padding-top: clamp(30px, 5vw, 48px); }
     .bloque-primero .sec-cab { margin-bottom: clamp(22px, 4vw, 36px); }
@@ -3679,6 +3746,15 @@
     <svg class="wave-divider" viewBox="0 0 420 60" aria-hidden="true">
       <path class="wave-path" fill="none" stroke="#f5f2ea" stroke-width="1.5" />
     </svg>
+
+    <!-- saludo según la hora de Orlando, con uno de sus motes; tocándolo sale otro -->
+    <div class="saludo" id="saludo" hidden>
+      <span class="saludo-hora" id="saludoHora"></span>
+      <p class="saludo-txt" aria-live="polite">
+        <span id="saludoInicio"></span><button class="saludo-mote" id="saludoMote" type="button"
+          title="Otro"><span class="saludo-mote-txt" id="saludoMoteTxt"></span><span id="saludoEmoji"></span><span class="saludo-otro" aria-hidden="true">↻</span></button>
+      </p>
+    </div>
 
     </section>
 
@@ -4196,6 +4272,92 @@
     <span class="pie-nota">Side A &middot; Stay tuned &middot; 🐧</span>
   </footer>
 
+  <script>
+    /* el saludo: según la hora de Orlando y con uno de sus motes.
+       Un mote ("mi luna") va tras una coma: "Buenos días, mi luna".
+       Una frase ("Eres la mejor") va tras un punto: "Buenos días. Eres la mejor". */
+    (function () {
+      var MOTES = [
+        { t: 'Pinguina' },
+        { t: 'mi luna' },
+        { t: 'Eres la mejor', frase: true },
+        { t: 'princesa' },
+        { t: 'cara e nalga' },
+        { t: 'mi Arya Stark' },
+        { t: 'mi niña oreo' },
+        { t: 'mi tóxica' },
+        { t: 'pervertida' },
+        { t: 'adicta a la rosa' },
+        { t: 'mi Tryhard' }
+      ];
+      var CLAVE = 'saludo-ultimo';
+      var DIAS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+      var caja = document.getElementById('saludo');
+      var horaEl = document.getElementById('saludoHora');
+      var inicioEl = document.getElementById('saludoInicio');
+      var moteBtn = document.getElementById('saludoMote');
+      var moteTxt = document.getElementById('saludoMoteTxt');
+      if (!caja) return;
+      var txtEl = caja.querySelector('.saludo-txt');
+      var emojiEl = document.getElementById('saludoEmoji');
+
+      // la hora de allí, sea donde sea que se abra la página
+      function orlando() {
+        var partes = {};
+        try {
+          new Intl.DateTimeFormat('en-US', {
+            timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit', weekday: 'short', hourCycle: 'h23'
+          }).formatToParts(new Date()).forEach(function (p) { partes[p.type] = p.value; });
+        } catch (e) {
+          var d = new Date();
+          return { h: d.getHours(), m: d.getMinutes(), dia: d.getDay() };
+        }
+        var sem = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(partes.weekday);
+        return { h: Number(partes.hour) % 24, m: Number(partes.minute), dia: sem < 0 ? new Date().getDay() : sem };
+      }
+
+      function franja(h) {
+        if (h >= 5 && h < 12) return { txt: 'Buenos días', emoji: ' ☀️' };
+        if (h >= 12 && h < 20) return { txt: 'Buenas tardes', emoji: ' 🌇' };
+        return { txt: 'Buenas noches', emoji: ' 🌙' };
+      }
+
+      function leerUltimo() { try { return Number(localStorage.getItem(CLAVE)); } catch (e) { return -1; } }
+      function guardarUltimo(i) { try { localStorage.setItem(CLAVE, String(i)); } catch (e) {} }
+
+      // uno al azar, que no repita el último que vio
+      var actual = (function () {
+        var antes = leerUltimo(), i;
+        do { i = Math.floor(Math.random() * MOTES.length); } while (MOTES.length > 1 && i === antes);
+        guardarUltimo(i);
+        return i;
+      })();
+
+      var franjaPintada = '';
+      function pintar(animar) {
+        var o = orlando(), f = franja(o.h), mote = MOTES[actual];
+        horaEl.textContent = DIAS[o.dia] + ' · ' + o.h + ':' + String(o.m).padStart(2, '0') + ' en Orlando';
+        inicioEl.textContent = f.txt + (mote.frase ? '. ' : ', ');
+        moteTxt.textContent = mote.t;
+        emojiEl.textContent = f.emoji;
+        moteBtn.setAttribute('aria-label', mote.t + '. Tocar para otro');
+        franjaPintada = f.txt;
+        if (animar) { txtEl.classList.remove('cambia'); void txtEl.offsetWidth; txtEl.classList.add('cambia'); }
+      }
+
+      moteBtn.addEventListener('click', function () {
+        actual = (actual + 1) % MOTES.length;
+        guardarUltimo(actual);
+        pintar(true);
+      });
+
+      pintar(false);
+      caja.hidden = false;
+      // la hora del rótulo cada minuto; si cambia la franja, cambia el saludo
+      setInterval(function () { pintar(franja(orlando().h).txt !== franjaPintada); }, 30000);
+    })();
+  </script>
   <script>
     /* la barra marca en qué sección estás */
     (function () {
