@@ -550,21 +550,67 @@
     .peso-ult.err { color: var(--rojo); }
     .vez { font-size: 12px; color: var(--faint); }
 
-    .hist summary {
-      display: inline-flex;
+    /* desplegables (progreso, rutina): que parezcan lo que son, un botón
+       que abre algo. Caja con borde, icono, "Ver …", el dato y una flecha
+       que gira al abrir. */
+    .despliega > summary {
+      display: flex;
       align-items: center;
-      min-height: 32px;
-      cursor: pointer;
+      gap: 12px;
+      min-height: var(--toque);
+      padding: 8px 14px 8px 10px;
+      border: 1px solid rgba(158, 201, 230, 0.32);
+      border-radius: 14px;
+      background: rgba(158, 201, 230, 0.07);
       list-style: none;
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.12s ease;
+    }
+
+    .despliega > summary::-webkit-details-marker { display: none; }
+    .despliega > summary:hover { background: rgba(158, 201, 230, 0.12); border-color: rgba(158, 201, 230, 0.5); }
+    .despliega > summary:active { transform: scale(0.985); }
+    .despliega[open] > summary {
+      border-color: rgba(158, 201, 230, 0.5);
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+
+    .desp-ico {
+      flex: none;
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: rgba(158, 201, 230, 0.14);
       color: var(--hielo);
     }
 
-    .hist summary::-webkit-details-marker { display: none; }
-    .hist summary::before { content: "+ "; color: var(--gold); white-space: pre; }
-    .hist[open] summary::before { content: "– "; }
+    .desp-ico svg { width: 16px; height: 16px; }
+
+    .desp-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .desp-titulo { font-size: 14px; font-weight: 400; color: var(--hielo); }
+    .desp-meta { font-size: 12px; color: var(--dim); }
+
+    .desp-flecha {
+      flex: none;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid rgba(158, 201, 230, 0.35);
+      color: var(--hielo);
+      transition: transform 0.25s ease;
+    }
+
+    .desp-flecha svg { width: 12px; height: 12px; }
+    .despliega[open] .desp-flecha { transform: rotate(180deg); }
+
+    /* lo de dentro, pegado al botón */
+    .despliega > :not(summary) { padding-left: 4px; padding-right: 4px; }
     .hist-resumen { margin: 8px 0 4px; font-size: 12.5px; color: var(--dim); line-height: 1.5; }
     .hist svg { display: block; width: 100%; max-width: 380px; height: auto; margin: 8px 0; }
     .hist-lista { list-style: none; margin-top: 4px; font-size: 13px; }
@@ -613,21 +659,6 @@
       justify-self: start;
     }
 
-    .rutina summary {
-      display: inline-flex;
-      align-items: center;
-      min-height: 32px;
-      cursor: pointer;
-      list-style: none;
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--hielo);
-    }
-
-    .rutina summary::-webkit-details-marker { display: none; }
-    .rutina summary::before { content: "+ "; color: var(--gold); white-space: pre; }
-    .rutina[open] summary::before { content: "– "; }
     .rut-lista { list-style: none; margin-top: 8px; }
 
     .rut-fila {
@@ -1150,6 +1181,27 @@
     }
 
 
+    // el <summary> de un desplegable con forma de botón: icono, título, dato y flecha
+    var ICONOS = {
+      grafica: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 13h12"/><path d="M3 10l3.5-3.5 2.5 2.5L13 4.5"/><path d="M10 4.5h3v3"/></svg>',
+      lista: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 4h8M6 8h8M6 12h8"/><circle cx="2.6" cy="4" r=".9" fill="currentColor" stroke="none"/><circle cx="2.6" cy="8" r=".9" fill="currentColor" stroke="none"/><circle cx="2.6" cy="12" r=".9" fill="currentColor" stroke="none"/></svg>'
+    };
+    var FLECHA = '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg>';
+
+    function botonDespliega(icono, titulo, meta) {
+      var sum = document.createElement('summary');
+      var ico = document.createElement('span'); ico.className = 'desp-ico'; ico.innerHTML = ICONOS[icono];
+      ico.setAttribute('aria-hidden', 'true');
+      var txt = document.createElement('span'); txt.className = 'desp-txt';
+      var t = document.createElement('span'); t.className = 'desp-titulo'; t.textContent = titulo;
+      var m = document.createElement('span'); m.className = 'desp-meta'; m.textContent = meta;
+      txt.appendChild(t); txt.appendChild(m);
+      var fl = document.createElement('span'); fl.className = 'desp-flecha'; fl.innerHTML = FLECHA;
+      fl.setAttribute('aria-hidden', 'true');
+      sum.appendChild(ico); sum.appendChild(txt); sum.appendChild(fl);
+      return sum;
+    }
+
     var borradores = {};  // lo escrito y aún sin guardar, para no perderlo al repintar
 
     // gráfica de progreso: una línea con los últimos registros
@@ -1174,11 +1226,10 @@
     }
 
     function pintarHistorial(d, nombre, regs, refrescar) {
-      var det = document.createElement('details'); det.className = 'hist';
+      var det = document.createElement('details'); det.className = 'hist despliega';
       var vals = regs.map(valorDe), mejor = Math.max.apply(null, vals);
-      var sum = document.createElement('summary');
-      sum.textContent = 'Progreso · ' + regs.length + (regs.length === 1 ? ' registro' : ' registros') + ' · mejor ' + mejor + ' ' + unidad;
-      det.appendChild(sum);
+      det.appendChild(botonDespliega('grafica', 'Ver mi progreso',
+        regs.length + (regs.length === 1 ? ' registro' : ' registros') + ' · mejor ' + mejor + ' ' + unidad));
 
       if (regs.length > 1) {
         var dif = redondear(vals[vals.length - 1] - vals[0]);
@@ -1762,11 +1813,9 @@
       var segundos = lista.reduce(function (acc, r) { return acc + (r.descanso || r.t || 0); }, 0);
       var min = Math.floor(segundos / 60), seg = segundos % 60;
 
-      var det = document.createElement('details'); det.className = 'rutina';
-      var sum = document.createElement('summary');
-      sum.textContent = 'La rutina exacta · ' + ejercicios.length + ' ejercicios · ' +
-                        min + ' min' + (seg ? ' ' + seg + ' s' : '');
-      det.appendChild(sum);
+      var det = document.createElement('details'); det.className = 'rutina despliega';
+      det.appendChild(botonDespliega('lista', 'Ver la rutina exacta',
+        ejercicios.length + ' ejercicios · ' + min + ' min' + (seg ? ' ' + seg + ' s' : '')));
 
       var ol = document.createElement('ol'); ol.className = 'rut-lista';
       var num = 0;
