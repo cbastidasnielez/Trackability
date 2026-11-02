@@ -408,6 +408,30 @@
       text-transform: uppercase;
     }
 
+    .ej-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+    .ej-tags .ej-tag { margin-bottom: 0; }
+
+    /* opcional: borde discontinuo y etiqueta azul hielo, para que se vea
+       que es un extra y que el día está completo sin él */
+    .ej.opcional { border-style: dashed; border-color: rgba(158, 201, 230, 0.4); }
+    .ej.opcional.ahora { border-color: rgba(227, 192, 122, 0.6); }
+    .ej-tag.opc { background: rgba(158, 201, 230, 0.14); color: var(--hielo); letter-spacing: 0.16em; }
+
+    .ej-notas {
+      display: grid;
+      gap: 6px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(158, 201, 230, 0.06);
+      list-style: none;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: var(--dim);
+    }
+
+    .ej-notas li { position: relative; padding-left: 14px; }
+    .ej-notas li::before { content: "·"; position: absolute; left: 2px; color: var(--hielo); font-weight: 700; }
+
     .ej-nombre { font-size: 17px; font-weight: 400; line-height: 1.3; }
 
     .ej-det { margin-top: 4px; font-size: 13.5px; line-height: 1.45; color: var(--dim); }
@@ -897,7 +921,15 @@
           { n: 'Leg curl', d: '3 × 12, aguantando 2 s' },
           { n: 'Jalón al pecho', d: '4 × 12' },
           { n: 'Remo con mancuerna', d: '3 × 12 por brazo' },
-          { n: 'Curl de bíceps o martillo', d: '3 × 12' }
+          { n: 'Curl de bíceps o martillo', d: '3 × 12' },
+          { n: 'Bombeo de bíceps · curl en polea baja', opcional: true, pausa: 30,
+            d: '2 × 20–25, 30 s de descanso. Drop set en la última: al acabar, baja el peso a la mitad y sigue hasta el fallo',
+            notas: [
+              'Justo después del curl, sin otro ejercicio en medio',
+              'Peso: el 40–50 % del del curl',
+              'Sin bloquear el codo abajo; aprieta 1 s arriba y baja en 2 s',
+              'Sin polea libre: «21» con barra ligera, 2 rondas (7 abajo-mitad, 7 mitad-arriba, 7 completas)'
+            ] }
         ] }] },
       { dia: 'Martes', corto: 'M', tipo: 'Pilates + abdominales', foco: 'Sesión completa y extra de abdominales',
         bloques: [{ ejercicios: [
@@ -941,7 +973,15 @@
           { n: 'Extensiones de cuádriceps', d: '3 × 15' },
           { n: 'Press de hombro con mancuernas', d: '4 × 12' },
           { n: 'Elevaciones laterales', d: '3 × 12' },
-          { n: 'Tríceps en polea', d: '3 × 15' }
+          { n: 'Tríceps en polea', d: '3 × 15' },
+          { n: 'Bombeo de tríceps · extensión por encima de la cabeza con cuerda', opcional: true, pausa: 30,
+            d: '2 × 20–25, 30 s de descanso. Drop set en la última: al acabar, baja el peso a la mitad y sigue hasta el fallo',
+            notas: [
+              'Justo después del tríceps en polea, sin otro ejercicio en medio',
+              'Peso: el 40–50 % del del tríceps en polea',
+              'Tensión continua: sin bloquear el codo; aprieta 1 s arriba y baja en 2 s',
+              'Sin polea libre: flexiones diamante al fallo, 2 series (en rodillas si hace falta)'
+            ] }
         ] }] },
       { dia: 'Jueves', corto: 'J', tipo: 'Hyrox', foco: 'Segunda sesión Hyrox de la semana',
         hyrox: true,
@@ -1005,10 +1045,11 @@
     var hoyIdx = (new Date().getDay() + 6) % 7;
     var activo = hoyIdx;
 
+    // los ejercicios que cuentan para el día; los opcionales (bombeo) no
     function idsDe(d) {
       var ids = [];
       PLAN[d].bloques.forEach(function (b, bi) {
-        b.ejercicios.forEach(function (e, ei) { ids.push(e.id || bi + '-' + ei); });
+        b.ejercicios.forEach(function (e, ei) { if (!e.opcional) ids.push(e.id || bi + '-' + ei); });
       });
       return ids;
     }
@@ -1313,12 +1354,13 @@
       return Math.min(series[d + '|' + id] || 0, total);
     }
 
-    function tocarSerie(d, id, i, total) {
+    // pausa: los segundos de descanso propios del ejercicio (el bombeo, 30)
+    function tocarSerie(d, id, i, total, pausa) {
       var antes = seriesHechas(d, id, total);
       var n = i < antes ? i : i + 1;      // tocar una ya hecha la deshace (y las de después)
       series[d + '|' + id] = n;
       guardarSeries();
-      if (n > antes) iniciarDescanso(descansoPref);
+      if (n > antes) iniciarDescanso(pausa || descansoPref);
       if (n === total && !estaHecho(d, id)) marcar(d, id, true);
       else if (n < total && estaHecho(d, id)) marcar(d, id, false, true);
       else pintar();
@@ -1327,7 +1369,7 @@
     // ---------- descanso entre series ----------
     var DESC_KEY = 'entreno-descanso';
     var DESC_ACTIVO = 'entreno-descanso-activo';
-    var OPCIONES_DESC = [60, 90, 120];
+    var OPCIONES_DESC = [30, 60, 90, 120];
     var descansoPref = 90;
     try {
       var dp = Number(localStorage.getItem(DESC_KEY));
@@ -1547,16 +1589,18 @@
     }
 
     // el siguiente ejercicio sin hacer del día
+    // (primero lo obligatorio; cuando eso está hecho, el opcional que quede)
     function siguiente(d) {
-      var r = null;
+      var r = null, opc = null;
       PLAN[d].bloques.some(function (b, bi) {
         return b.ejercicios.some(function (e, ei) {
           var id = e.id || bi + '-' + ei;
-          if (!estaHecho(d, id)) { r = { id: id, n: e.n }; return true; }
-          return false;
+          if (estaHecho(d, id)) return false;
+          if (e.opcional) { if (!opc) opc = { id: id, n: e.n, opcional: true }; return false; }
+          r = { id: id, n: e.n }; return true;
         });
       });
-      return r;
+      return r || opc;
     }
 
     function pintarDia() {
@@ -1595,9 +1639,12 @@
       todo.type = 'button';
       todo.disabled = pr.pct === 100;
       todo.addEventListener('click', function () {
-        var antes = estado[activo] || [];
-        sincronizarHechos(activo, listaEj(activo).filter(function (x) { return antes.indexOf(x.id) === -1; }), true);
-        estado[activo] = idsDe(activo); guardar(estado); pintar();
+        var antes = estado[activo] || [], cuentan = idsDe(activo);
+        sincronizarHechos(activo, listaEj(activo).filter(function (x) {
+          return cuentan.indexOf(x.id) !== -1 && antes.indexOf(x.id) === -1;
+        }), true);
+        estado[activo] = antes.concat(cuentan.filter(function (id) { return antes.indexOf(id) === -1; }));
+        guardar(estado); pintar();
       });
       var limpiar = el('button', 'btn', 'Reiniciar día');
       limpiar.type = 'button';
@@ -1616,13 +1663,18 @@
     function pintarEjercicio(e, id, numero, sig, gym) {
       var d = activo, hecho = estaHecho(d, id);
       var li = el('li', 'tarjeta ej' + (hecho ? ' ok' : '') + (sig && sig.id === id ? ' ahora' : '')
-                       + (abiertas[id] ? ' abierta' : ''));
+                       + (abiertas[id] ? ' abierta' : '') + (e.opcional ? ' opcional' : ''));
       li.dataset.id = id;
 
       var cab = el('div', 'ej-cab');
       cab.appendChild(el('span', 'ej-num', pad(numero)));
       var txt = el('div', 'ej-txt');
-      if (sig && sig.id === id) txt.appendChild(el('span', 'ej-tag', 'Ahora'));
+      if ((sig && sig.id === id) || e.opcional) {
+        var tags = el('div', 'ej-tags');
+        if (sig && sig.id === id) tags.appendChild(el('span', 'ej-tag', 'Ahora'));
+        if (e.opcional) tags.appendChild(el('span', 'ej-tag opc', 'Opcional · no cuenta para el día'));
+        txt.appendChild(tags);
+      }
       txt.appendChild(el('div', 'ej-nombre', e.n));
       if (e.d) txt.appendChild(el('div', 'ej-det', e.d));
 
@@ -1660,9 +1712,14 @@
         cuerpo.appendChild(ea);
       }
       if (e.rutina) cuerpo.appendChild(pintarRutina(e.rutina));
+      if (e.notas) {
+        var ul = el('ul', 'ej-notas');
+        e.notas.forEach(function (t) { ul.appendChild(el('li', null, t)); });
+        cuerpo.appendChild(ul);
+      }
 
       var total = numSeries(e);
-      if (total && !PLAN[d].descanso) cuerpo.appendChild(pintarSeries(d, id, total, e.n));
+      if (total && !PLAN[d].descanso) cuerpo.appendChild(pintarSeries(d, id, total, e.n, e.pausa));
 
       if (gym) {
         cuerpo.appendChild(pintarPeso(d, e.n, id, regs));
@@ -1675,7 +1732,7 @@
       return li;
     }
 
-    function pintarSeries(d, id, total, nombre) {
+    function pintarSeries(d, id, total, nombre, pausa) {
       var hechas = seriesHechas(d, id, total);
       var fila = el('div', 'series');
       fila.setAttribute('role', 'group');
@@ -1688,7 +1745,7 @@
           b.type = 'button';
           b.setAttribute('aria-pressed', String(i < hechas));
           b.setAttribute('aria-label', 'Serie ' + (i + 1) + ' de ' + total + (i < hechas ? ', hecha' : ''));
-          b.addEventListener('click', function () { tocarSerie(d, id, i, total); });
+          b.addEventListener('click', function () { tocarSerie(d, id, i, total, pausa); });
           fila.appendChild(b);
         })(i);
       }
@@ -1786,7 +1843,9 @@
       barraEl.classList.remove('descansando');
       barraGasto.style.width = '0';
       var sig = siguiente(activo);
-      barraLbl.textContent = sig ? (activo === hoyIdx ? 'Ahora' : 'Primero sin hacer') : 'Todo hecho';
+      barraLbl.textContent = !sig ? 'Todo hecho'
+        : sig.opcional ? 'Día hecho · queda el opcional'
+        : (activo === hoyIdx ? 'Ahora' : 'Primero sin hacer');
       barraVal.textContent = sig ? sig.n : 'Día completado 🐧';
       OPCIONES_DESC.forEach(function (s) {
         var b = el('button', 'chip' + (s === descansoPref ? ' pref' : ''), s < 120 ? s + 's' : s / 60 + 'm');

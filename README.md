@@ -361,8 +361,20 @@ el botón **"Quiero entrenar 🐧"** de la portada.
   Chloe Ting: 17 ejercicios de 30 s con 10 s de descanso cada dos, unos 10
   minutos. Se ve entera en un desplegable bajo el enlace al vídeo. Es una
   sola casilla: la rutina se lee, no se marca ejercicio a ejercicio.
+- **Bombeo opcional de brazos**: el lunes, tras el curl, *Bombeo de bíceps ·
+  curl en polea baja*; el miércoles, tras el tríceps en polea, *Bombeo de
+  tríceps · extensión por encima de la cabeza con cuerda*. Los dos son
+  2 × 20–25 con 30 s de descanso y drop set en la última, con sus notas
+  (peso al 40–50 %, tensión continua, alternativa sin polea). Llevan la
+  etiqueta **Opcional · no cuenta para el día** y borde discontinuo: no
+  cuentan en el anillo ni en el día completado, "Marcar todo el día" no los
+  marca, y cuando lo obligatorio está hecho la barra dice "Día hecho · queda
+  el opcional". Sus series arrancan un descanso de 30 s (nueva opción de
+  descanso, junto a 60, 90 y 120).
 - Un ejercicio puede llevar `enlace: { url, texto }`, `rutina: [...]` (como
-  el martes) y un `id` propio. El jueves usa `hyrox-jueves`, para que lo que
+  el martes) y un `id` propio,
+  `opcional: true` (no cuenta para el día), `pausa` (segundos de descanso
+  propios) y `notas: [...]` (consejos en una caja). El jueves usa `hyrox-jueves`, para que lo que
   se marcara como descanso activo no cuente como sesión de Hyrox hecha.
 
 El plan vive en `PLAN` dentro de `entrenar.html`. Para cambiar un ejercicio
