@@ -720,7 +720,7 @@
 
 
     /* ---------- menú: sorpresas, entrenar y recetas ---------- */
-    /* Las tres entradas miden lo mismo: icono, título, una línea que dice qué
+    /* Las cuatro entradas miden lo mismo: icono, título, una línea que dice qué
        hay dentro y una flecha. Cada una con su color. */
     .menu {
       width: 100%;
@@ -772,6 +772,15 @@
       --acento-suave: rgba(158, 201, 230, 0.1);
       --acento-borde: rgba(158, 201, 230, 0.4);
     }
+
+    .menu-macro {
+      --acento: var(--morado);
+      --acento-suave: rgba(169, 139, 216, 0.1);
+      --acento-borde: rgba(169, 139, 216, 0.4);
+    }
+
+    /* sale de la web hacia la app: flecha en diagonal y algo más pequeña */
+    .menu-flecha-fuera { font-size: 16px; }
 
     .menu-recetas {
       --acento: #f2a488;
@@ -3593,7 +3602,7 @@
       color: rgba(245, 242, 234, 0.4);
     }
 
-    /* ---------- 02 · las tres puertas ---------- */
+    /* ---------- 01 · las cuatro puertas ---------- */
     .menu {
       max-width: var(--estrecho);
       margin-top: 0;
@@ -3602,7 +3611,7 @@
     @media (min-width: 820px) {
       .menu {
         max-width: var(--ancho);
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 22px;
       }
       .menu-btn {
@@ -3618,6 +3627,15 @@
       .menu-titulo { font-size: 17px; }
       .menu-sub { margin-top: 6px; font-size: 13px; }
       .menu-flecha { position: absolute; top: 40px; right: 26px; }
+    }
+
+    /* las cuatro en fila cuando hay sitio; si no, dos y dos */
+    @media (min-width: 1000px) {
+      .menu { grid-template-columns: repeat(4, 1fr); gap: 18px; }
+      .menu-btn { padding: 24px 22px 22px; min-height: 180px; }
+      .menu-flecha { right: 22px; }
+      /* los cuatro títulos a la misma altura, aunque alguno ocupe dos líneas */
+      .menu-txt { justify-content: flex-start; }
     }
 
     .surprise { max-width: var(--estrecho); }
@@ -3758,12 +3776,12 @@
 
     </section>
 
-    <!-- 01 · las tres puertas: lo que más usa, lo primero -->
+    <!-- 01 · las cuatro puertas: lo que más usa, lo primero -->
     <section class="bloque bloque-primero" id="para-ti">
       <header class="sec-cab">
         <span class="sec-num">01</span>
         <h2 class="sec-titulo">Para ti</h2>
-        <p class="sec-sub">Tres puertas, una a la vez</p>
+        <p class="sec-sub">Cuatro puertas, una a la vez</p>
       </header>
 
     <nav class="menu" aria-label="Secciones">
@@ -3790,6 +3808,15 @@
           <span class="menu-sub">Con sus macros, y un «sorpréndeme»</span>
         </span>
         <span class="menu-flecha" aria-hidden="true">›</span>
+      </a>
+      <!-- abre la app de MacroFactor en el iPhone; si no está, su ficha de la App Store -->
+      <a class="menu-btn menu-macro" href="com.sbs.diet://" id="open-macrofactor">
+        <span class="menu-ico" aria-hidden="true">📊</span>
+        <span class="menu-txt">
+          <span class="menu-titulo">Abrir MacroFactor</span>
+          <span class="menu-sub">Apunta tus macros de hoy</span>
+        </span>
+        <span class="menu-flecha menu-flecha-fuera" aria-hidden="true">↗</span>
       </a>
     </nav>
 
@@ -4272,6 +4299,39 @@
     <span class="pie-nota">Side A &middot; Stay tuned &middot; 🐧</span>
   </footer>
 
+  <script>
+    /* Abrir MacroFactor: en el iPhone intenta abrir la app con su enlace
+       (com.sbs.diet://). Si en un momento la página sigue a la vista, es que
+       no se abrió (no está instalada), y entonces va a su ficha de la App
+       Store. Fuera del iPhone abre la ficha en la web. */
+    (function () {
+      var boton = document.getElementById('open-macrofactor');
+      if (!boton) return;
+      var APP = 'com.sbs.diet://';
+      var TIENDA_APP = 'itms-apps://apps.apple.com/app/id1553503471';
+      var TIENDA_WEB = 'https://apps.apple.com/app/macrofactor-macro-tracker/id1553503471';
+      var esIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+      boton.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        if (!esIOS) { window.open(TIENDA_WEB, '_blank', 'noopener'); return; }
+
+        var plan = setTimeout(function () {
+          if (!document.hidden) location.href = TIENDA_APP;
+        }, 1600);
+        function cancelar() {
+          clearTimeout(plan);
+          document.removeEventListener('visibilitychange', alOcultar);
+        }
+        function alOcultar() { if (document.hidden) cancelar(); }
+        document.addEventListener('visibilitychange', alOcultar);
+        window.addEventListener('pagehide', cancelar, { once: true });
+
+        location.href = APP;
+      });
+    })();
+  </script>
   <script>
     /* el saludo: según la hora de Orlando y con uno de sus motes.
        Un mote ("mi luna") va tras una coma: "Buenos días, mi luna".

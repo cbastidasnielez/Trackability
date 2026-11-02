@@ -12,7 +12,7 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 **Cómo está ordenada la portada.** Una barra fija arriba con el índice
 (Para ti · Tiempo · Sorpresas · Lecturas, marca dónde estás) y, bajo el
 nombre, cuatro secciones con el mismo encabezado (número dorado, título en
-serif y subtítulo): **01 Para ti** (las tres puertas, lo que más se usa,
+serif y subtítulo): **01 Para ti** (las cuatro puertas, lo que más se usa,
 justo debajo del nombre y a la vista sin bajar), **02 El tiempo** (el
 emblema y los tres contadores en tres columnas, también en el móvil; los
 sábados, el vuelo y el chiste van en una línea común debajo; en el ordenador
@@ -37,7 +37,7 @@ al final del `<style>`, en el bloque "ORDEN DE LA PORTADA".
   ¿me odias?" ya es un saludo, así que sale sola, sin "Buenos días" delante. Sale uno al azar que no repite el de la última visita, y tocándolo
   sale el siguiente. La lista está en `MOTES`, en el último `<script>` de
   `index.html`.
-- **El menú**: tres entradas del mismo tamaño, cada una con su icono, su
+- **El menú**: cuatro entradas del mismo tamaño, cada una con su icono, su
   título, una línea que dice qué hay dentro y su color:
   - 🎁 **Desbloquear sorpresas** (dorado): "Presiona para abrir las 7
     casillas". Abre y cierra aquí mismo el panel de las casillas; la flecha
@@ -46,6 +46,10 @@ al final del `<style>`, en el bloque "ORDEN DE LA PORTADA".
     semanal con checklist (ver más abajo).
   - 🍳 **Recetas para comer juntos** (coral): lleva a `/recetas`, las recetas
     con sus macros por ración y el «sorpréndeme» (ver más abajo).
+  - 📊 **Abrir MacroFactor** (morado): en el iPhone abre la app MacroFactor
+    con `com.sbs.diet://`. Si a los 1,6 s la página sigue a la vista (la app
+    no está instalada), lleva a su ficha de la App Store (`id1553503471`).
+    En otro dispositivo abre esa ficha en la web.
 - **Cómo hacer feliz a Mariapnel 🐧**: un salvavidas 🛟 flota en la esquina
   inferior izquierda, con una luz de aviso. Al tocarlo ("¿Necesitas ayuda?
   Clica aquí") abre una ventana (`#ayudaModal`) con cinco preguntas y su
