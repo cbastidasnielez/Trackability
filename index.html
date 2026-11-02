@@ -4275,7 +4275,8 @@
   <script>
     /* el saludo: según la hora de Orlando y con uno de sus motes.
        Un mote ("mi luna") va tras una coma: "Buenos días, mi luna".
-       Una frase ("Eres la mejor") va tras un punto: "Buenos días. Eres la mejor". */
+       Una frase ("Eres la mejor") va tras un punto: "Buenos días. Eres la mejor".
+       Con `inicio`, ese texto ocupa el lugar del saludo: "Hola, ¿me odias?". */
     (function () {
       var MOTES = [
         { t: 'Pinguina' },
@@ -4288,7 +4289,11 @@
         { t: 'mi tóxica' },
         { t: 'pervertida' },
         { t: 'adicta a la rosa' },
-        { t: 'mi Tryhard' }
+        { t: 'mi Tryhard' },
+        { t: 'Hannah Montana' },
+        { t: 'Barbie, sé lo que quieras ser', frase: true },
+        // este ya es un saludo: sustituye a "Buenos días"
+        { inicio: 'Hola, ', t: '¿me odias?' }
       ];
       var CLAVE = 'saludo-ultimo';
       var DIAS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
@@ -4338,7 +4343,7 @@
       function pintar(animar) {
         var o = orlando(), f = franja(o.h), mote = MOTES[actual];
         horaEl.textContent = DIAS[o.dia] + ' · ' + o.h + ':' + String(o.m).padStart(2, '0') + ' en Orlando';
-        inicioEl.textContent = f.txt + (mote.frase ? '. ' : ', ');
+        inicioEl.textContent = mote.inicio || (f.txt + (mote.frase ? '. ' : ', '));
         moteTxt.textContent = mote.t;
         emojiEl.textContent = f.emoji;
         moteBtn.setAttribute('aria-label', mote.t + '. Tocar para otro');

@@ -32,8 +32,9 @@ al final del `<style>`, en el bloque "ORDEN DE LA PORTADA".
   noches" según la hora de Orlando (5–12, 12–20 y el resto), con el día y la
   hora de allí encima y uno de sus motes: Pinguina, mi luna, princesa, cara e
   nalga, mi Arya Stark, mi niña oreo, mi tóxica, pervertida, adicta a la rosa,
-  mi Tryhard, y la frase "Eres la mejor" (esa va tras un punto, no tras una
-  coma). Sale uno al azar que no repite el de la última visita, y tocándolo
+  mi Tryhard, Hannah Montana, y las frases "Eres la mejor" y "Barbie, sé lo
+  que quieras ser" (las frases van tras un punto, no tras una coma). "Hola,
+  ¿me odias?" ya es un saludo, así que sale sola, sin "Buenos días" delante. Sale uno al azar que no repite el de la última visita, y tocándolo
   sale el siguiente. La lista está en `MOTES`, en el último `<script>` de
   `index.html`.
 - **El menú**: tres entradas del mismo tamaño, cada una con su icono, su
