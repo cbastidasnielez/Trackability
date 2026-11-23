@@ -3662,6 +3662,40 @@
     .surprise { max-width: var(--estrecho); }
     .boxes-card, .surprise-card { max-width: none; }
 
+    /* ---------- el aviso de un mensaje sin firmar (/felicitacion.js) ----------
+       encima de las cuatro puertas, ocupando todo el ancho y en una línea */
+    .menu-btn.menu-carta {
+      --acento: var(--gold);
+      --acento-suave: rgba(227, 192, 122, 0.14);
+      --acento-borde: rgba(227, 192, 122, 0.7);
+      position: relative;
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+      min-height: 76px;
+      padding: 14px 16px;
+      animation: carta-brillo 2.6s ease-in-out infinite;
+    }
+    .menu-btn.menu-carta[hidden] { display: none; }
+    .menu-carta .menu-txt { display: block; }
+    .menu-carta .menu-flecha { position: static; }
+    .menu-carta-punto {
+      position: absolute;
+      top: 10px;
+      left: 52px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e8a0a0;
+      box-shadow: 0 0 0 3px #0c0c0e;
+    }
+    @keyframes carta-brillo {
+      0%, 100% { box-shadow: 0 0 0 rgba(227, 192, 122, 0); }
+      50% { box-shadow: 0 0 30px rgba(227, 192, 122, 0.28); }
+    }
+    @media (prefers-reduced-motion: reduce) { .menu-btn.menu-carta { animation: none; } }
+
     /* ---------- 03 · sorpresas ---------- */
     .revealed { max-width: var(--estrecho); margin-top: 0; }
     .carta { max-width: var(--estrecho); margin-top: 20px; }
@@ -3806,6 +3840,16 @@
       </header>
 
     <nav class="menu" aria-label="Secciones">
+      <!-- solo si un mensaje con fecha se quedó sin firmar (ver /felicitacion.js) -->
+      <button class="menu-btn menu-carta" id="avisoCarta" type="button" hidden>
+        <span class="menu-carta-punto" aria-hidden="true"></span>
+        <span class="menu-ico" aria-hidden="true">💌</span>
+        <span class="menu-txt">
+          <span class="menu-titulo">Tienes un mensaje sin leer</span>
+          <span class="menu-sub" id="avisoCartaSub">Léelo y fírmalo 🐧</span>
+        </span>
+        <span class="menu-flecha" aria-hidden="true">›</span>
+      </button>
       <button class="menu-btn menu-sorpresas" id="unlockBtn" type="button" aria-expanded="false" aria-controls="surprise">
         <span class="menu-ico" aria-hidden="true">🎁</span>
         <span class="menu-txt">
@@ -4479,6 +4523,32 @@
   </script>
   <script type="module" src="/src/analytics.js"></script>
   <script src="/flappy.js"></script>
+  <script src="/felicitacion.js"></script>
+  <script>
+    // ---------- un mensaje con fecha que se quedó sin firmar ----------
+    // El día del mensaje no se avisa aquí (se abre en /entrenar al completar
+    // el entreno). Desde el día siguiente, hora de Orlando, si no lo ha
+    // firmado, sale este aviso encima de las puertas; al firmarlo se va.
+    (function () {
+      var aviso = document.getElementById('avisoCarta');
+      if (!window.Felicita || !aviso) return;
+      var hoy = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit'
+      }).format(new Date());
+      var fecha = Felicita.pendiente(hoy);
+      if (!fecha) return;
+      var d = fecha.split('-');
+      var f = new Date(Date.UTC(+d[0], +d[1] - 1, +d[2]));
+      var dia = f.toLocaleDateString('es-ES', { timeZone: 'UTC', weekday: 'long' }) + ' ' +
+                f.toLocaleDateString('es-ES', { timeZone: 'UTC', day: 'numeric', month: 'long' });
+      document.getElementById('avisoCartaSub').textContent = 'Te lo dejé el ' + dia + ' · Léelo y fírmalo 🐧';
+      aviso.hidden = false;
+      aviso.addEventListener('click', function () { Felicita.abrir(fecha, 'portada'); });
+      document.addEventListener('felicita:firmada', function (ev) {
+        if (ev.detail.fecha === fecha) aviso.hidden = true;
+      });
+    })();
+  </script>
   <script>
     // ---------- nieve de fondo ----------
     (function () {

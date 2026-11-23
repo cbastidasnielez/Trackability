@@ -402,16 +402,30 @@ el botón **"Quiero entrenar 🐧"** de la portada.
   propios) y `notas: [...]` (consejos en una caja). El jueves usa `hyrox-jueves`, para que lo que
   se marcara como descanso activo no cuente como sesión de Hyrox hecha.
 
-- **Felicitaciones con fecha**: `FELICITACIONES` en `entrenar.html` guarda
-  mensajes para un día concreto (`'AAAA-MM-DD'`). Cuando ese día queda hecho
-  entero (lo obligatorio), el mensaje se abre en grande con un botón
-  "Gracias 🐧" y después queda en la tarjeta del día en lugar de "Día hecho".
-  Cada uno tiene `titulo`, `texto` (párrafos), `reflexion` (opcional, un texto o
-  varios párrafos; sale
-  en cursiva con una línea dorada) y `firma`. Ahora hay uno: el lunes
-  23/11/2026, felicitando a Mari y deseándole un buen día de trabajo, con
-  una reflexión sobre qué es el éxito, a partir de *¿Tener o ser?* de Erich
-  Fromm y del «convertirse en persona» de Carl Rogers.
+- **Felicitaciones con fecha, con firma**: los mensajes viven en
+  `public/felicitacion.js` (`MENSAJES`, por fecha `'AAAA-MM-DD'`), que usan
+  `/entrenar` y la portada. Cuando ese día queda hecho entero (lo
+  obligatorio), el mensaje se abre en grande y después queda en la tarjeta
+  del día en lugar de "Día hecho". Cada uno tiene `titulo`, `texto`,
+  `reflexion` (uno o varios párrafos, en cursiva con una línea dorada),
+  `eco` (una nota bajo la casilla), `firma` y una variante `portada` (título
+  y texto para cuando se lee otro día).
+  - **La firma**: al final, una casilla «He leído este mensaje, lo he
+    entendido y lo guardaré en mi corazón» y un recuadro para firmar con el
+    dedo. "Firmar" solo se activa con las dos cosas. Firmado, queda un sello
+    con su firma, la fecha y la hora de Orlando. Se guarda en ese móvil
+    (`felicitacion-firmada-<fecha>`) y llega un correo por Formspree (el
+    mismo formulario que las fechas, sin la imagen de la firma); sin
+    conexión, se reintenta al volver a abrir.
+  - **Si no lo ve ese día**: desde el día siguiente (hora de Orlando) y
+    mientras no lo firme, la portada muestra encima de las cuatro puertas
+    «Tienes un mensaje sin leer», que lo abre para leerlo y firmarlo. Al
+    firmar, el aviso desaparece.
+  - Ahora hay uno: el lunes 23/11/2026, felicitando a Mari y deseándole un
+    buen día de trabajo, con una reflexión sobre qué es el éxito a partir de
+    *¿Tener o ser?* de Erich Fromm, Mateo 6:21 y el «convertirse en persona»
+    de Carl Rogers; bajo la casilla, Lucas 2:19 («María guardaba todas estas
+    cosas, meditándolas en su corazón»).
 
 El plan vive en `PLAN` dentro de `entrenar.html`. Para cambiar un ejercicio
 basta con editar ahí el texto; no hay nada más que tocar.
