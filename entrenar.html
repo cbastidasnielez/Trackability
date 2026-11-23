@@ -360,6 +360,59 @@
     }
     .hecho-msg:empty { display: none; }
 
+    /* ---------- felicitaciones con fecha (FELICITACIONES) ---------- */
+    .felicita {
+      margin-top: 14px;
+      padding: 16px 16px 14px;
+      border: 1px solid rgba(227, 192, 122, 0.35);
+      border-radius: 14px;
+      background: linear-gradient(170deg, rgba(227, 192, 122, 0.09), rgba(227, 192, 122, 0.02));
+      text-align: left;
+    }
+    .felicita h3 {
+      margin: 0 0 8px;
+      font-family: var(--serif);
+      font-weight: normal;
+      font-size: 19px;
+      color: var(--gold);
+    }
+    .felicita p { margin: 0 0 8px; font-size: 14px; line-height: 1.55; color: var(--ink); }
+    .felicita .reflexion {
+      margin: 12px 0 8px;
+      padding-left: 12px;
+      border-left: 2px solid rgba(227, 192, 122, 0.45);
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--dim);
+    }
+    .felicita .firma { margin: 4px 0 0; text-align: right; font-family: var(--serif); color: var(--gold); }
+
+    .felicita-capa {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.72);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .felicita-capa.visible { opacity: 1; }
+    .felicita-capa .felicita {
+      width: min(440px, 100%);
+      max-height: calc(100vh - 32px);
+      overflow-y: auto;
+      margin: 0;
+      padding: 22px 20px 18px;
+      background: linear-gradient(170deg, rgba(227, 192, 122, 0.12), rgba(227, 192, 122, 0.03)), #0d0c0a;
+      transform: translateY(12px);
+      transition: transform 0.3s ease;
+    }
+    .felicita-capa.visible .felicita { transform: none; }
+    .felicita-capa h3 { font-size: 23px; }
+    .felicita-capa .btn { width: 100%; margin-top: 14px; }
+
     /* ---------- los ejercicios ---------- */
     .lista { display: grid; gap: 12px; align-content: start; min-width: 0; }
 
@@ -1040,6 +1093,27 @@
 
     var KEY = 'entreno-' + claveSemana();
 
+    // Mensajes para un día concreto ('AAAA-MM-DD'): salen cuando ese día
+    // queda hecho entero. Al completarlo en el momento se abre en grande; luego
+    // queda en la tarjeta del día. `reflexion` es opcional (vacía, no sale).
+    var FELICITACIONES = {
+      '2026-11-23': {
+        titulo: '¡Lunes completado, Mari! 🐧',
+        texto: [
+          'Hoy, 23 de noviembre, lo has hecho todo. Empezar la semana así dice mucho de ti, y me encanta verlo.',
+          'Ahora te toca el trabajo: que tengas un día bonito, que todo te salga fácil y que te sobren motivos para sonreír. Feliz lunes, Pinguina.'
+        ],
+        reflexion: '',
+        firma: 'Carlos'
+      }
+    };
+
+    // la fecha (AAAA-MM-DD) del día d de esta semana
+    function fechaDia(d) {
+      var f = lunesDe(new Date()); f.setDate(f.getDate() + d);
+      return f.getFullYear() + '-' + pad(f.getMonth() + 1) + '-' + pad(f.getDate());
+    }
+
     function cargar() {
       try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
     }
@@ -1574,8 +1648,45 @@
         resumenEl.appendChild(aj);
       }
 
-      resumenEl.appendChild(el('div', 'hecho-msg', pr.pct === 100
+      var fel = pr.pct === 100 && FELICITACIONES[fechaDia(activo)];
+      if (fel) resumenEl.appendChild(tarjetaFelicita(fel));
+      else resumenEl.appendChild(el('div', 'hecho-msg', pr.pct === 100
         ? (p.descanso ? 'Descansado. Eso también cuenta 🐧' : 'Día hecho. Cuerpa en marcha 🐧') : ''));
+    }
+
+    function tarjetaFelicita(f) {
+      var c = el('div', 'felicita');
+      c.appendChild(el('h3', null, f.titulo));
+      f.texto.forEach(function (t) { c.appendChild(el('p', null, t)); });
+      if (f.reflexion) c.appendChild(el('p', 'reflexion', f.reflexion));
+      if (f.firma) c.appendChild(el('p', 'firma', '— ' + f.firma));
+      return c;
+    }
+
+    // se abre en grande en el momento en que el día queda hecho
+    function abrirFelicita(d) {
+      var f = FELICITACIONES[fechaDia(d)];
+      if (!f || document.querySelector('.felicita-capa')) return;
+      var capa = el('div', 'felicita-capa');
+      capa.setAttribute('role', 'dialog');
+      capa.setAttribute('aria-modal', 'true');
+      capa.setAttribute('aria-label', f.titulo);
+      var c = tarjetaFelicita(f);
+      var ok = el('button', 'btn primario', 'Gracias 🐧'); ok.type = 'button';
+      c.appendChild(ok);
+      capa.appendChild(c);
+      var cerrar = function () {
+        capa.classList.remove('visible');
+        document.removeEventListener('keydown', alTeclear);
+        setTimeout(function () { capa.remove(); }, 300);
+      };
+      var alTeclear = function (ev) { if (ev.key === 'Escape') cerrar(); };
+      ok.addEventListener('click', cerrar);
+      capa.addEventListener('click', function (ev) { if (ev.target === capa) cerrar(); });
+      document.addEventListener('keydown', alTeclear);
+      document.body.appendChild(capa);
+      requestAnimationFrame(function () { capa.classList.add('visible'); ok.focus(); });
+      if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
     }
 
     // una fila "Etiqueta   [a][b][c]"
@@ -1652,6 +1763,7 @@
         }), true);
         estado[activo] = antes.concat(cuentan.filter(function (id) { return antes.indexOf(id) === -1; }));
         guardar(estado); pintar();
+        abrirFelicita(activo);
       });
       var limpiar = el('button', 'btn', 'Reiniciar día');
       limpiar.type = 'button';
@@ -1916,6 +2028,7 @@
 
     // quieto: no mover la pantalla (al deshacer una serie, por ejemplo)
     function marcar(d, id, on, quieto) {
+      var yaHecho = progreso(d).pct === 100;
       var arr = estado[d] || [];
       if (on && arr.indexOf(id) === -1) arr.push(id);
       if (!on) arr = arr.filter(function (x) { return x !== id; });
@@ -1923,7 +2036,8 @@
       guardar(estado);
       sincronizarHechos(d, listaEj(d).filter(function (x) { return x.id === id; }), on);
       pintar();
-      if (on && !quieto) llevarAlSiguiente();
+      if (on && !yaHecho && progreso(d).pct === 100) abrirFelicita(d);
+      else if (on && !quieto) llevarAlSiguiente();
     }
 
     // al terminar un ejercicio, el siguiente sube a la vista si no lo está

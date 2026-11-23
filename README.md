@@ -396,6 +396,14 @@ el botón **"Quiero entrenar 🐧"** de la portada.
   propios) y `notas: [...]` (consejos en una caja). El jueves usa `hyrox-jueves`, para que lo que
   se marcara como descanso activo no cuente como sesión de Hyrox hecha.
 
+- **Felicitaciones con fecha**: `FELICITACIONES` en `entrenar.html` guarda
+  mensajes para un día concreto (`'AAAA-MM-DD'`). Cuando ese día queda hecho
+  entero (lo obligatorio), el mensaje se abre en grande con un botón
+  "Gracias 🐧" y después queda en la tarjeta del día en lugar de "Día hecho".
+  Cada uno tiene `titulo`, `texto` (párrafos), `reflexion` (opcional, sale
+  en cursiva con una línea dorada) y `firma`. Ahora hay uno: el lunes
+  23/11/2026, felicitando a Mari y deseándole un buen día de trabajo.
+
 El plan vive en `PLAN` dentro de `entrenar.html`. Para cambiar un ejercicio
 basta con editar ahí el texto; no hay nada más que tocar.
 
