@@ -408,8 +408,8 @@ el botón **"Quiero entrenar 🐧"** de la portada.
   obligatorio), el mensaje se abre en grande y después queda en la tarjeta
   del día en lugar de "Día hecho". Cada uno tiene `titulo`, `texto`,
   `reflexion` (uno o varios párrafos, en cursiva con una línea dorada),
-  `eco` (una nota bajo la casilla), `firma` y una variante `portada` (título
-  y texto para cuando se lee otro día).
+  `eco` (una nota bajo la casilla), `firma` y, opcional, una variante
+  `portada` (título y texto distintos para el aviso de la portada).
   - **La firma**: al final, una casilla «He leído este mensaje, lo he
     entendido y lo guardaré en mi corazón» y un recuadro para firmar con el
     dedo. "Firmar" solo se activa con las dos cosas. Firmado, queda un sello
@@ -417,10 +417,11 @@ el botón **"Quiero entrenar 🐧"** de la portada.
     (`felicitacion-firmada-<fecha>`) y llega un correo por Formspree (el
     mismo formulario que las fechas, sin la imagen de la firma); sin
     conexión, se reintenta al volver a abrir.
-  - **Si no lo ve ese día**: desde el día siguiente (hora de Orlando) y
-    mientras no lo firme, la portada muestra encima de las cuatro puertas
-    «Tienes un mensaje sin leer», que lo abre para leerlo y firmarlo. Al
-    firmar, el aviso desaparece.
+  - **Si no lo vio al completar** (por ejemplo, porque completó el día
+    antes de publicarse el mensaje): la primera vez que abra la portada o
+    `/entrenar` se abre solo (`felicitacion-vista-<fecha>`), y mientras no
+    lo firme la portada muestra encima de las cuatro puertas «Tienes un
+    mensaje sin leer». Al firmar, el aviso desaparece.
   - Ahora hay uno: el lunes 23/11/2026, felicitando a Mari y deseándole un
     buen día de trabajo, con una reflexión sobre qué es el éxito a partir de
     *¿Tener o ser?* de Erich Fromm, Mateo 6:21 y el «convertirse en persona»

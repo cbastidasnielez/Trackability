@@ -4526,9 +4526,9 @@
   <script src="/felicitacion.js"></script>
   <script>
     // ---------- un mensaje con fecha que se quedó sin firmar ----------
-    // El día del mensaje no se avisa aquí (se abre en /entrenar al completar
-    // el entreno). Desde el día siguiente, hora de Orlando, si no lo ha
-    // firmado, sale este aviso encima de las puertas; al firmarlo se va.
+    // Si hay un mensaje de hoy o de antes sin firmar (hora de Orlando), sale
+    // este aviso encima de las puertas, y la primera vez se abre solo.
+    // Al firmarlo, el aviso se va.
     (function () {
       var aviso = document.getElementById('avisoCarta');
       if (!window.Felicita || !aviso) return;
@@ -4543,7 +4543,8 @@
                 f.toLocaleDateString('es-ES', { timeZone: 'UTC', day: 'numeric', month: 'long' });
       document.getElementById('avisoCartaSub').textContent = 'Te lo dejé el ' + dia + ' · Léelo y fírmalo 🐧';
       aviso.hidden = false;
-      aviso.addEventListener('click', function () { Felicita.abrir(fecha, 'portada'); });
+      aviso.addEventListener('click', function () { Felicita.abrir(fecha, 'entreno'); });
+      if (!Felicita.vista(fecha)) setTimeout(function () { Felicita.abrir(fecha, 'entreno'); }, 700);
       document.addEventListener('felicita:firmada', function (ev) {
         if (ev.detail.fecha === fecha) aviso.hidden = true;
       });

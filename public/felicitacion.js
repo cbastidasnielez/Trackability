@@ -8,12 +8,14 @@
      .firma(fecha)              lo guardado al firmar, o null
      .tarjeta(fecha, variante)  la tarjeta ('entreno' o 'portada')
      .abrir(fecha, variante)    la tarjeta en grande, por encima de todo
-     .pendiente(hoy)            el primer mensaje ya pasado y sin firmar
+     .vista(fecha)              si ya se abrió en grande alguna vez
+     .pendiente(hoy)            el primer mensaje de hoy o anterior sin firmar
    Al firmar se lanza el evento 'felicita:firmada' en document. */
 (function () {
   // el mismo formulario que las fechas de la portada: te llega un correo
   var FORMSPREE_ID = 'xzdnwwqa';
   var CLAVE = 'felicitacion-firmada-';
+  var VISTA = 'felicitacion-vista-';
   var PACTO = 'He leído este mensaje, lo he entendido y lo guardaré en mi corazón.';
 
   var MENSAJES = {
@@ -23,13 +25,6 @@
         'Hoy, 23 de noviembre, lo has hecho todo. Empezar la semana así dice mucho de ti, y me encanta verlo.',
         'Ahora te toca el trabajo: que tengas un día bonito, que todo te salga fácil y que te sobren motivos para sonreír. Feliz lunes, Pinguina.'
       ],
-      // en la portada, si no lo vio el día: no dice que completó el entreno
-      portada: {
-        titulo: 'Un mensaje que te dejé el lunes\u00a0🐧',
-        texto: [
-          'Lo guardé para cuando terminaras el entreno del lunes 23 de noviembre, pero no quería que te lo perdieras. Va con un deseo que sigue valiendo cualquier día: que el trabajo te trate bonito y que te sobren motivos para sonreír.'
-        ]
-      },
       reflexion: [
         'Todo el mundo te dirá qué es el éxito: una casa, un carro, vivir sola, ganar dinero, tener buen cuerpo. Erich Fromm, psicólogo y filósofo, vio la trampa que hay ahí: «Si yo soy lo que tengo, y si lo que tengo se pierde, ¿quién soy entonces?». Todo eso se puede tener y se puede perder. Lo que eres, no.',
         'Mucho antes, Jesús lo dijo a su manera: no acumules tesoros en la tierra, donde la polilla y el óxido los destruyen, «porque donde esté tu tesoro, allí estará también tu corazón» (Mateo 6:21). La riqueza de verdad no se guarda en una casa ni en una cuenta: se guarda en el corazón.',
@@ -293,9 +288,14 @@
     return c;
   }
 
+  function vista(fecha) {
+    try { return !!localStorage.getItem(VISTA + fecha); } catch (e) { return false; }
+  }
+
   function abrir(fecha, variante) {
     var m = MENSAJES[fecha];
     if (!m || document.querySelector('.fel-capa')) return;
+    try { localStorage.setItem(VISTA + fecha, new Date().toISOString()); } catch (e) {}
     var capa = document.createElement('div');
     capa.className = 'fel-capa';
     capa.setAttribute('role', 'dialog');
@@ -332,16 +332,17 @@
     if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
   }
 
-  // el primer mensaje cuyo día ya pasó (hoy > fecha) y sigue sin firmar
+  // el primer mensaje de hoy o de antes que sigue sin firmar
   function pendiente(hoy) {
     var fs = Object.keys(MENSAJES).sort();
-    for (var i = 0; i < fs.length; i++) if (hoy > fs[i] && !leer(fs[i])) return fs[i];
+    for (var i = 0; i < fs.length; i++) if (hoy >= fs[i] && !leer(fs[i])) return fs[i];
     return null;
   }
 
   window.Felicita = {
     mensaje: function (fecha) { return MENSAJES[fecha] || null; },
     firma: leer,
+    vista: vista,
     tarjeta: tarjeta,
     abrir: abrir,
     pendiente: pendiente
