@@ -385,6 +385,8 @@
       font-style: italic;
       color: var(--dim);
     }
+    .felicita .reflexion p { margin: 0 0 8px; color: inherit; }
+    .felicita .reflexion p:last-child { margin-bottom: 0; }
     .felicita .firma { margin: 4px 0 0; text-align: right; font-family: var(--serif); color: var(--gold); }
 
     .felicita-capa {
@@ -1095,7 +1097,7 @@
 
     // Mensajes para un día concreto ('AAAA-MM-DD'): salen cuando ese día
     // queda hecho entero. Al completarlo en el momento se abre en grande; luego
-    // queda en la tarjeta del día. `reflexion` es opcional (vacía, no sale).
+    // queda en la tarjeta del día. `reflexion` es opcional (un texto o varios párrafos).
     var FELICITACIONES = {
       '2026-11-23': {
         titulo: '¡Lunes completado, Mari! 🐧',
@@ -1103,7 +1105,10 @@
           'Hoy, 23 de noviembre, lo has hecho todo. Empezar la semana así dice mucho de ti, y me encanta verlo.',
           'Ahora te toca el trabajo: que tengas un día bonito, que todo te salga fácil y que te sobren motivos para sonreír. Feliz lunes, Pinguina.'
         ],
-        reflexion: 'Carl Rogers, uno de los grandes de la psicología, escribió: «La curiosa paradoja es que cuando me acepto tal como soy, entonces puedo cambiar». Lo que vales no está en tachar todo de la lista: eso ya lo tienes, tengas el día que tengas. Pero justo desde ahí, sin tener que demostrar nada, es desde donde se crece de verdad. Un poco más cada día, no para ser perfecta, sino para ser cada vez más tú.',
+        reflexion: [
+          'Todo el mundo te dirá qué es el éxito: una casa, un carro, vivir sola, ganar dinero, tener buen cuerpo. Erich Fromm, psicólogo y filósofo, vio la trampa que hay ahí: «Si yo soy lo que tengo, y si lo que tengo se pierde, ¿quién soy entonces?». Todo eso se puede tener y se puede perder. Lo que eres, no.',
+          'Por eso no entrenas solo para tener un cuerpo, ni trabajas solo para tener cosas: lo haces para ser. Y ser no se termina nunca. Cada día se puede ser un poco más paciente, más valiente, más generosa, más tú; Carl Rogers lo llamaba «convertirse en persona». Ese es el éxito de verdad, y por eso vale la pena seguir mejorando: no para que el mundo te aplauda, sino para llegar a ser quien quieres ser.'
+        ],
         firma: 'Carlos'
       }
     };
@@ -1658,7 +1663,11 @@
       var c = el('div', 'felicita');
       c.appendChild(el('h3', null, f.titulo));
       f.texto.forEach(function (t) { c.appendChild(el('p', null, t)); });
-      if (f.reflexion) c.appendChild(el('p', 'reflexion', f.reflexion));
+      if (f.reflexion) {
+        var r = el('div', 'reflexion');
+        [].concat(f.reflexion).forEach(function (t) { r.appendChild(el('p', null, t)); });
+        c.appendChild(r);
+      }
       if (f.firma) c.appendChild(el('p', 'firma', '— ' + f.firma));
       return c;
     }

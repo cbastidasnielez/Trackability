@@ -406,11 +406,12 @@ el botón **"Quiero entrenar 🐧"** de la portada.
   mensajes para un día concreto (`'AAAA-MM-DD'`). Cuando ese día queda hecho
   entero (lo obligatorio), el mensaje se abre en grande con un botón
   "Gracias 🐧" y después queda en la tarjeta del día en lugar de "Día hecho".
-  Cada uno tiene `titulo`, `texto` (párrafos), `reflexion` (opcional, sale
+  Cada uno tiene `titulo`, `texto` (párrafos), `reflexion` (opcional, un texto o
+  varios párrafos; sale
   en cursiva con una línea dorada) y `firma`. Ahora hay uno: el lunes
   23/11/2026, felicitando a Mari y deseándole un buen día de trabajo, con
-  una reflexión a partir de Carl Rogers («cuando me acepto tal como soy,
-  entonces puedo cambiar»).
+  una reflexión sobre qué es el éxito, a partir de *¿Tener o ser?* de Erich
+  Fromm y del «convertirse en persona» de Carl Rogers.
 
 El plan vive en `PLAN` dentro de `entrenar.html`. Para cambiar un ejercicio
 basta con editar ahí el texto; no hay nada más que tocar.
