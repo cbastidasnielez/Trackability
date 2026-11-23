@@ -14,8 +14,9 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 nombre, cuatro secciones con el mismo encabezado (número dorado, título en
 serif y subtítulo): **01 Para ti** (las cuatro puertas, lo que más se usa,
 justo debajo del nombre y a la vista sin bajar), **02 El tiempo** (el
-emblema y los tres contadores en tres columnas, también en el móvil; los
-sábados, el vuelo y el chiste van en una línea común debajo; en el ordenador
+emblema y los cuatro contadores: cuatro columnas en el ordenador y dos y dos
+en el móvil; la carrera, los sábados, el vuelo y el chiste van en una línea
+común debajo; en el ordenador
 el emblema queda a la izquierda y las columnas a su lado), **03 Sorpresas
 reveladas** (la sorpresa y la carta) y **04 Lo que está escrito** (Maktub y
 Por qué un pingüino, lado a lado). Todo comparte una rejilla de 1040 px, un
@@ -27,6 +28,11 @@ al final del `<style>`, en el bloque "ORDEN DE LA PORTADA".
   las 19:10 (`ENCUENTRO` en `index.html`), con los sábados que quedan por
   delante — el 26/12/2026 cae precisamente en sábado, así que el último que
   cuenta es el del reencuentro
+- **La graduación**: el cuarto contador, junto al cumpleaños. Mari se gradúa
+  de Marketing y Business Administration el 9/12/2026 (`GRADUACION` en
+  `index.html`); cuenta hasta el comienzo de ese día en Orlando. El mismo
+  día dice "¡Feliz graduación, Mari!" y desde el 10 queda "Ya eres graduada
+  en Marketing y Business Administration" (y se oculta la línea de debajo)
 - Emblema giratorio (círculo de flechas "Distancia y Tiempo") con la foto de Mariapnel 🐧 en el centro
 - **El saludo**: bajo el nombre, "Buenos días / Buenas tardes / Buenas
   noches" según la hora de Orlando (5–12, 12–20 y el resto), con el día y la
@@ -395,6 +401,32 @@ el botón **"Quiero entrenar 🐧"** de la portada.
   `opcional: true` (no cuenta para el día), `pausa` (segundos de descanso
   propios) y `notas: [...]` (consejos en una caja). El jueves usa `hyrox-jueves`, para que lo que
   se marcara como descanso activo no cuente como sesión de Hyrox hecha.
+
+- **Felicitaciones con fecha, con firma**: los mensajes viven en
+  `public/felicitacion.js` (`MENSAJES`, por fecha `'AAAA-MM-DD'`), que usan
+  `/entrenar` y la portada. Cuando ese día queda hecho entero (lo
+  obligatorio), el mensaje se abre en grande y después queda en la tarjeta
+  del día en lugar de "Día hecho". Cada uno tiene `titulo`, `texto`,
+  `reflexion` (uno o varios párrafos, en cursiva con una línea dorada),
+  `eco` (una nota bajo la casilla), `firma` y, opcional, una variante
+  `portada` (título y texto distintos para el aviso de la portada).
+  - **La firma**: al final, una casilla «He leído este mensaje, lo he
+    entendido y lo guardaré en mi corazón» y un recuadro para firmar con el
+    dedo. "Firmar" solo se activa con las dos cosas. Firmado, queda un sello
+    con su firma, la fecha y la hora de Orlando. Se guarda en ese móvil
+    (`felicitacion-firmada-<fecha>`) y llega un correo por Formspree (el
+    mismo formulario que las fechas, sin la imagen de la firma); sin
+    conexión, se reintenta al volver a abrir.
+  - **Si no lo vio al completar** (por ejemplo, porque completó el día
+    antes de publicarse el mensaje): la primera vez que abra la portada o
+    `/entrenar` se abre solo (`felicitacion-vista-<fecha>`), y mientras no
+    lo firme la portada muestra encima de las cuatro puertas «Tienes un
+    mensaje sin leer». Al firmar, el aviso desaparece.
+  - Ahora hay uno: el lunes 23/11/2026, felicitando a Mari y deseándole un
+    buen día de trabajo, con una reflexión sobre qué es el éxito a partir de
+    *¿Tener o ser?* de Erich Fromm, Mateo 6:21 y el «convertirse en persona»
+    de Carl Rogers; bajo la casilla, Lucas 2:19 («María guardaba todas estas
+    cosas, meditándolas en su corazón»).
 
 El plan vive en `PLAN` dentro de `entrenar.html`. Para cambiar un ejercicio
 basta con editar ahí el texto; no hay nada más que tocar.

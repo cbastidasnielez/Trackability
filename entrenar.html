@@ -912,6 +912,7 @@
   </div>
 
   <script type="module" src="/src/analytics.js"></script>
+  <script src="/felicitacion.js"></script>
   <script>
     // ---------- el plan ----------
     var TITULO = 'Manual de cuerpa para que Carlos te coma';
@@ -1039,6 +1040,15 @@
     }
 
     var KEY = 'entreno-' + claveSemana();
+
+    // Los mensajes con fecha y su firma viven en /felicitacion.js (los
+    // comparte con la portada). Se abren al completar ese día.
+
+    // la fecha (AAAA-MM-DD) del día d de esta semana
+    function fechaDia(d) {
+      var f = lunesDe(new Date()); f.setDate(f.getDate() + d);
+      return f.getFullYear() + '-' + pad(f.getMonth() + 1) + '-' + pad(f.getDate());
+    }
 
     function cargar() {
       try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
@@ -1215,7 +1225,7 @@
       if (!usaNube()) { pintar(); alAbrir(); return; }
       cargarRegistros().then(subirPendientes).catch(function () {})
         .then(function () { return cargarHechos().catch(function () {}); })
-        .then(function () { pintar(); alAbrir(); });
+        .then(function () { pintar(); alAbrir(); abrirSiPendiente(); });
     }
 
     // ---- formato
@@ -1574,9 +1584,31 @@
         resumenEl.appendChild(aj);
       }
 
-      resumenEl.appendChild(el('div', 'hecho-msg', pr.pct === 100
+      var fel = pr.pct === 100 && window.Felicita && Felicita.tarjeta(fechaDia(activo), 'entreno');
+      if (fel) resumenEl.appendChild(fel);
+      else resumenEl.appendChild(el('div', 'hecho-msg', pr.pct === 100
         ? (p.descanso ? 'Descansado. Eso también cuenta 🐧' : 'Día hecho. Cuerpa en marcha 🐧') : ''));
     }
+
+    // se abre en grande en el momento en que el día queda hecho
+    function abrirFelicita(d) {
+      if (window.Felicita) Felicita.abrir(fechaDia(d), 'entreno');
+    }
+    // si un día con mensaje ya está hecho (en este móvil o en la nube) y el
+    // mensaje no se ha abierto ni firmado, se abre solo una vez
+    function abrirSiPendiente() {
+      if (!window.Felicita) return;
+      for (var d = 0; d < 7; d++) {
+        var f = fechaDia(d);
+        if (Felicita.mensaje(f) && progreso(d).pct === 100 && !Felicita.firma(f) && !Felicita.vista(f)) {
+          Felicita.abrir(f, 'entreno');
+          return;
+        }
+      }
+    }
+
+    // al firmar, la tarjeta del día pasa a mostrar la firma
+    document.addEventListener('felicita:firmada', function () { pintar(); });
 
     // una fila "Etiqueta   [a][b][c]"
     function opcion(etiqueta, valores, actual, alElegir, rotulo) {
@@ -1652,6 +1684,7 @@
         }), true);
         estado[activo] = antes.concat(cuentan.filter(function (id) { return antes.indexOf(id) === -1; }));
         guardar(estado); pintar();
+        abrirFelicita(activo);
       });
       var limpiar = el('button', 'btn', 'Reiniciar día');
       limpiar.type = 'button';
@@ -1916,6 +1949,7 @@
 
     // quieto: no mover la pantalla (al deshacer una serie, por ejemplo)
     function marcar(d, id, on, quieto) {
+      var yaHecho = progreso(d).pct === 100;
       var arr = estado[d] || [];
       if (on && arr.indexOf(id) === -1) arr.push(id);
       if (!on) arr = arr.filter(function (x) { return x !== id; });
@@ -1923,7 +1957,8 @@
       guardar(estado);
       sincronizarHechos(d, listaEj(d).filter(function (x) { return x.id === id; }), on);
       pintar();
-      if (on && !quieto) llevarAlSiguiente();
+      if (on && !yaHecho && progreso(d).pct === 100) abrirFelicita(d);
+      else if (on && !quieto) llevarAlSiguiente();
     }
 
     // al terminar un ejercicio, el siguiente sube a la vista si no lo está
