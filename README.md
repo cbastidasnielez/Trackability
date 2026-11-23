@@ -14,8 +14,9 @@ giratorio de "distancia y tiempo" con su foto en el centro.
 nombre, cuatro secciones con el mismo encabezado (número dorado, título en
 serif y subtítulo): **01 Para ti** (las cuatro puertas, lo que más se usa,
 justo debajo del nombre y a la vista sin bajar), **02 El tiempo** (el
-emblema y los tres contadores en tres columnas, también en el móvil; los
-sábados, el vuelo y el chiste van en una línea común debajo; en el ordenador
+emblema y los cuatro contadores: cuatro columnas en el ordenador y dos y dos
+en el móvil; la carrera, los sábados, el vuelo y el chiste van en una línea
+común debajo; en el ordenador
 el emblema queda a la izquierda y las columnas a su lado), **03 Sorpresas
 reveladas** (la sorpresa y la carta) y **04 Lo que está escrito** (Maktub y
 Por qué un pingüino, lado a lado). Todo comparte una rejilla de 1040 px, un
@@ -27,6 +28,11 @@ al final del `<style>`, en el bloque "ORDEN DE LA PORTADA".
   las 19:10 (`ENCUENTRO` en `index.html`), con los sábados que quedan por
   delante — el 26/12/2026 cae precisamente en sábado, así que el último que
   cuenta es el del reencuentro
+- **La graduación**: el cuarto contador, junto al cumpleaños. Mari se gradúa
+  de Marketing y Business Administration el 9/12/2026 (`GRADUACION` en
+  `index.html`); cuenta hasta el comienzo de ese día en Orlando. El mismo
+  día dice "¡Feliz graduación, Mari!" y desde el 10 queda "Ya eres graduada
+  en Marketing y Business Administration" (y se oculta la línea de debajo)
 - Emblema giratorio (círculo de flechas "Distancia y Tiempo") con la foto de Mariapnel 🐧 en el centro
 - **El saludo**: bajo el nombre, "Buenos días / Buenas tardes / Buenas
   noches" según la hora de Orlando (5–12, 12–20 y el resto), con el día y la
@@ -402,7 +408,9 @@ el botón **"Quiero entrenar 🐧"** de la portada.
   "Gracias 🐧" y después queda en la tarjeta del día en lugar de "Día hecho".
   Cada uno tiene `titulo`, `texto` (párrafos), `reflexion` (opcional, sale
   en cursiva con una línea dorada) y `firma`. Ahora hay uno: el lunes
-  23/11/2026, felicitando a Mari y deseándole un buen día de trabajo.
+  23/11/2026, felicitando a Mari y deseándole un buen día de trabajo, con
+  una reflexión a partir de Carl Rogers («cuando me acepto tal como soy,
+  entonces puedo cambiar»).
 
 El plan vive en `PLAN` dentro de `entrenar.html`. Para cambiar un ejercicio
 basta con editar ahí el texto; no hay nada más que tocar.

@@ -574,7 +574,7 @@
       to   { transform: rotate(360deg); }
     }
 
-    /* ---------- los dos contadores ---------- */
+    /* ---------- los cuatro contadores ---------- */
     .timers {
       width: 100%;
       display: grid;
@@ -588,16 +588,32 @@
       align-items: center;
     }
 
-    /* siempre tres columnas, también en el móvil, con una línea vertical
-       entre medias; cada columna dice lo mismo en el mismo orden:
-       qué, cuánto, de qué y el detalle */
+    /* cuatro columnas con una línea vertical entre medias; en el móvil,
+       dos y dos (cumpleaños y graduación arriba, vernos y páginas abajo).
+       Cada columna dice lo mismo en el mismo orden: qué, cuánto, de qué y
+       el detalle */
     .timers {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       max-width: 900px;
       margin-top: 36px;
     }
-    .timer { padding: 4px clamp(4px, 2.6vw, 26px); }
+    .timer { padding: 4px clamp(4px, 2vw, 22px); }
     .timer + .timer { border-left: 1px solid rgba(245, 242, 234, 0.1); }
+
+    /* con cuatro columnas, "12 : 59 : 57" más junto para que no choque */
+    @media (min-width: 601px) {
+      .timer-clock { letter-spacing: 0.12em; text-indent: 0.12em; word-spacing: -0.12em; }
+    }
+
+    @media (max-width: 600px) {
+      .timers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .timer:nth-child(odd) { border-left: none; }
+      .timer:nth-child(n+3) {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(245, 242, 234, 0.1);
+      }
+    }
 
     .timer-lead {
       font-size: clamp(9.5px, 2.6vw, 12px);
@@ -636,7 +652,7 @@
       padding-top: 12px;
     }
 
-    /* la línea común bajo las tres columnas */
+    /* la línea común bajo las cuatro columnas */
     /* en el móvil, "16 : 37 : 32" sin tanto aire para que quepa en su columna */
     @media (max-width: 520px) {
       .timer-clock { word-spacing: -0.18em; }
@@ -644,7 +660,7 @@
     }
 
     /* el emblema y las cifras: uno encima de otro en el móvil; en el
-       ordenador, el emblema a la izquierda y las tres columnas a su lado */
+       ordenador, el emblema a la izquierda y las cuatro columnas a su lado */
     .tiempo-rejilla,
     .tiempo-datos {
       width: 100%;
@@ -3835,7 +3851,7 @@
     </div>
     </section>
 
-    <!-- 02 · el tiempo: el emblema y las tres cifras en tres columnas -->
+    <!-- 02 · el tiempo: el emblema y las cuatro cifras en cuatro columnas -->
     <section class="bloque" id="tiempo">
       <header class="sec-cab">
         <span class="sec-num">02</span>
@@ -3881,6 +3897,13 @@
       </div>
 
       <div class="timer">
+        <span class="timer-lead" id="gradLead">Faltan</span>
+        <span class="timer-num" id="gradDays">–</span>
+        <span class="timer-cap" id="gradCaption">días para tu graduación 🎓</span>
+        <span class="timer-clock" id="gradClock"></span>
+      </div>
+
+      <div class="timer">
         <span class="timer-lead" id="meetLead">Faltan</span>
         <span class="timer-num" id="meetDays">–</span>
         <span class="timer-cap" id="meetCaption">días para vernos 🐧</span>
@@ -3895,8 +3918,11 @@
       </div>
     </div>
 
-    <!-- lo que no cabe en una columna estrecha va debajo, para las tres -->
+    <!-- lo que no cabe en una columna estrecha va debajo, para las cuatro -->
     <div class="timers-pie">
+      <p class="timers-pie-linea" id="gradPie">
+        <span class="timer-flight">9 dic &middot; Graduación en Marketing y Business Administration 🎓</span>
+      </p>
       <p class="timers-pie-linea">
         <span class="timer-sabados" id="meetSabados"></span>
         <span class="timer-flight">26 dic &middot; BCN 10:55 &rarr; MCO 19:10</span>
@@ -4540,6 +4566,40 @@
       captionEl.textContent = (days === 1 ? 'día' : 'días') + ' para tu cumpleaños 🐧';
       clockEl.textContent = pad(hrs) + ' : ' + pad(min) + ' : ' + pad(sec);
     }
+    // ---------- cuenta atrás para su graduación ----------
+    // se gradúa de Marketing y Business Administration; se cuenta hasta el
+    // comienzo del día en Orlando (en diciembre, horario de invierno, -05:00)
+    var GRADUACION = '2026-12-09';
+    var graduacionMs = new Date(GRADUACION + 'T00:00:00-05:00').getTime();
+
+    var gradLead = document.getElementById('gradLead');
+    var gradDays = document.getElementById('gradDays');
+    var gradCaption = document.getElementById('gradCaption');
+    var gradClock = document.getElementById('gradClock');
+
+    function tickGraduacion() {
+      var hoy = isoToday();
+      if (hoy >= GRADUACION) {
+        gradLead.textContent = hoy === GRADUACION ? 'Hoy es el día' : 'Ya eres';
+        gradDays.textContent = '🎓';
+        gradCaption.textContent = hoy === GRADUACION
+          ? '¡Feliz graduación, Mari! 🐧'
+          : 'graduada en Marketing y Business Administration';
+        gradClock.textContent = hoy === GRADUACION ? '' : '9 dic 2026';
+        // ya graduada, la columna lo dice todo: la línea de abajo sobra
+        if (hoy > GRADUACION) document.getElementById('gradPie').hidden = true;
+        return;
+      }
+      var diff = graduacionMs - Date.now();
+      var dias = Math.floor(diff / 86400000);
+      gradLead.textContent = 'Faltan';
+      gradDays.textContent = dias;
+      gradCaption.textContent = (dias === 1 ? 'día' : 'días') + ' para tu graduación 🎓';
+      gradClock.textContent = pad(Math.floor(diff / 3600000) % 24) + ' : ' +
+                              pad(Math.floor(diff / 60000) % 60) + ' : ' +
+                              pad(Math.floor(diff / 1000) % 60);
+    }
+
     // ---------- cuenta atrás para vernos ----------
     // el momento exacto es el aterrizaje en Orlando; en diciembre allí
     // rige el horario de invierno (-05:00)
@@ -4620,9 +4680,10 @@
     }
 
     tick();
+    tickGraduacion();
     tickEncuentro();
     tickPaginas();
-    setInterval(function () { tick(); tickEncuentro(); tickPaginas(); }, 1000);
+    setInterval(function () { tick(); tickGraduacion(); tickEncuentro(); tickPaginas(); }, 1000);
 
     // ---------- sorpresa 01, ya revelada ----------
     var TRIP_START = '2026-12-26';
